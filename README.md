@@ -30,6 +30,12 @@ Install for Codex, Claude Code, or another compatible agent:
 npx skills add ElxMaj/app-store-review-skill
 ```
 
+Install the [managed Tessl release](https://tessl.io/registry/elxmaj/app-store-review):
+
+```bash
+npx tessl install elxmaj/app-store-review
+```
+
 Install as a Claude Code marketplace plugin:
 
 ```text
@@ -105,6 +111,7 @@ examples/                        Sample JSON and rendered visual report
 skills/app-store-review/         Cross-agent compatibility entry point
 .claude-plugin/                  Claude Code marketplace files
 .codex-plugin/                   Codex plugin manifest
+.tessl-plugin/                   Tessl registry manifest
 ```
 
 ## Contributing

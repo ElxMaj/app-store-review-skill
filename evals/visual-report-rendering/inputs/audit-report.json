@@ -1,0 +1,118 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-07-17T10:34:00Z",
+  "root": "/Users/dev/projects/FocusFlow",
+  "verdict": "NEEDS_REVIEW",
+  "policy_verified_at": "2026-07-17",
+  "project": {
+    "name": "FocusFlow",
+    "bundle_id": "com.meridianstudio.focusflow",
+    "frameworks": ["xcode"],
+    "native_ios_root": "ios",
+    "targets": [
+      { "name": "FocusFlow", "bundle_id": "com.meridianstudio.focusflow" },
+      { "name": "FocusFlowWidget", "bundle_id": "com.meridianstudio.focusflow.widget" }
+    ]
+  },
+  "counts": {
+    "blocker": 1,
+    "warning": 1,
+    "manual_check": 1,
+    "info": 0
+  },
+  "summary": "FocusFlow has one confirmed blocker (missing privacy manifest for required-reason API use) and a warning about background audio session configuration. A manual check on third-party analytics disclosure is required before submission.",
+  "modes": ["pre_submission"],
+  "findings": [
+    {
+      "id": "ASR-PRIVACY-001",
+      "severity": "blocker",
+      "title": "Missing PrivacyInfo.xcprivacy for file timestamp API use",
+      "guideline": "5.1.1",
+      "evidence_confidence": "official",
+      "evidence": [
+        {
+          "path": "FocusFlow/Storage/SessionStore.swift",
+          "line": 87,
+          "excerpt": "let attrs = try FileManager.default.attributesOfItem(atPath: dbPath)"
+        },
+        {
+          "path": "FocusFlow/Storage/SessionStore.swift",
+          "line": 91,
+          "excerpt": "guard let modified = attrs[.modificationDate] as? Date else { return }"
+        }
+      ],
+      "reason": "The app reads file system timestamps using a required-reason API (NSFileSystemModificationDate) without a PrivacyInfo.xcprivacy declaring the approved reason. This will trigger ITMS-91053 at upload or during review.",
+      "fix": "Add a PrivacyInfo.xcprivacy to the FocusFlow target declaring reason C617.1 under NSPrivacyAccessedAPITypeReasons for NSPrivacyAccessedAPICategoryFileTimestamp.",
+      "verification": "Validate the merged archive Info.plist and confirm ITMS-91053 does not appear at App Store Connect validation."
+    },
+    {
+      "id": "ASR-AUDIO-002",
+      "severity": "warning",
+      "title": "Background audio session category set unconditionally",
+      "guideline": "2.5.4",
+      "evidence_confidence": "observed_pattern",
+      "evidence": [
+        {
+          "path": "FocusFlow/AppDelegate.swift",
+          "line": 34,
+          "excerpt": "try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)"
+        }
+      ],
+      "reason": "Setting AVAudioSession to .playback unconditionally activates the Background Audio capability regardless of whether the user is actively using ambient sounds. Reviewers have flagged apps that interrupt system audio without a clear user-initiated trigger.",
+      "fix": "Activate the audio session only when ambient sound playback is initiated by the user, and deactivate it when playback stops.",
+      "verification": "Launch the app without starting ambient sound and verify it does not appear in the Control Center audio controls."
+    }
+  ],
+  "manual_checks": [
+    {
+      "id": "ASR-PRIV-MC-001",
+      "title": "Third-party analytics SDK data disclosure",
+      "guideline": "5.1.2",
+      "evidence_confidence": "inference",
+      "evidence": [
+        {
+          "path": "FocusFlow.xcodeproj/project.pbxproj",
+          "line": null,
+          "excerpt": "Amplitude-Swift 1.4.2"
+        }
+      ],
+      "question": "Does the App Privacy declaration on App Store Connect accurately reflect all data types collected and shared by the Amplitude SDK, including session identifiers and device data?",
+      "why_check": "The Amplitude SDK collects device identifiers and session data by default. If App Store Connect privacy nutrition labels do not accurately declare these data types and their purposes, the app may be rejected under Guideline 5.1.2."
+    }
+  ],
+  "limitations": [
+    "Archive not supplied; binary-level checks were not performed.",
+    "App Store Connect privacy nutrition labels were not reviewed."
+  ],
+  "reviewer_experience": {
+    "demo_account_required": false,
+    "iap_present": false,
+    "notes": "Core focus-session features are accessible without account creation. Ambient sound library loads on first launch."
+  },
+  "app_review_notes": "FocusFlow is a focus-productivity app using Pomodoro-style sessions with optional ambient soundscapes. All core features are available without login. The app uses file timestamps to detect stale session data; a PrivacyInfo.xcprivacy will be included in the submission build.",
+  "fix_groups": [
+    {
+      "group": "Required before submission",
+      "items": [
+        {
+          "id": "ASR-PRIVACY-001",
+          "action": "Add PrivacyInfo.xcprivacy declaring NSPrivacyAccessedAPICategoryFileTimestamp with reason C617.1."
+        }
+      ]
+    },
+    {
+      "group": "Recommended before submission",
+      "items": [
+        {
+          "id": "ASR-AUDIO-002",
+          "action": "Gate AVAudioSession activation on explicit user playback action."
+        }
+      ]
+    }
+  ],
+  "disclaimer": "Independent review based on supplied evidence and public guidance. Approval is not guaranteed. Not affiliated with Apple.",
+  "scanner": {
+    "name": "app_store_review_scan",
+    "version": "1.1.0"
+  }
+}
