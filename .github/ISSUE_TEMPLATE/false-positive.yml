@@ -1,0 +1,60 @@
+name: Check improvement or false positive
+description: Report a scanner result that is incorrect, incomplete, or too broad.
+title: "[Check]: "
+labels:
+  - false-positive
+body:
+  - type: input
+    id: finding
+    attributes:
+      label: Finding ID or check
+      placeholder: ASR-PERM-001
+    validations:
+      required: true
+  - type: dropdown
+    id: framework
+    attributes:
+      label: Project type
+      options:
+        - Xcode native
+        - Expo
+        - React Native
+        - Flutter
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: revision
+    attributes:
+      label: Skill version or commit
+      description: Use the release tag or commit hash you ran.
+    validations:
+      required: true
+  - type: textarea
+    id: command
+    attributes:
+      label: Command and observed result
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Why the result is incorrect
+      description: Include the expected behavior and the project evidence the check missed.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: Link a small public repository or provide a redacted file tree and relevant snippets.
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy check
+      options:
+        - label: I removed tokens, signing material, personal data, and unpublished app details.
+          required: true

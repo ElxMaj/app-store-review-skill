@@ -1,0 +1,24 @@
+{
+  "name": "app-store-review-skill",
+  "owner": {
+    "name": "Elie Majorel",
+    "url": "https://github.com/ElxMaj"
+  },
+  "metadata": {
+    "description": "Evidence-based App Store review skills"
+  },
+  "plugins": [
+    {
+      "name": "app-store-review",
+      "source": "./",
+      "description": "Audit submissions, recover from rejections, and evaluate Guideline 4.3 craft risks.",
+      "category": "development",
+      "tags": [
+        "ios",
+        "app-store",
+        "compliance",
+        "app-review"
+      ]
+    }
+  ]
+}

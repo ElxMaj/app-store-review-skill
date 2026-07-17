@@ -1,0 +1,4 @@
+interface:
+  display_name: "App Store Review"
+  short_description: "Catch App Store risks and recover rejections"
+  default_prompt: "Use $app-store-review to audit this iOS app before submission and report evidence before proposing fixes."

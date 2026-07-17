@@ -1,0 +1,76 @@
+{
+  "skill_name": "app-store-review",
+  "evals": [
+    {
+      "id": "full-xcode-audit",
+      "prompt": "Use $app-store-review to audit this Xcode app and widget before submission. Give me Markdown and JSON, but do not change files.",
+      "assertions": [
+        "States Mode A and runs the deterministic scanner",
+        "Enumerates the app and widget targets",
+        "Uses BLOCKER, WARNING, INFO, and MANUAL CHECK",
+        "Includes evidence confidence on material findings",
+        "Cites real files or marks assumptions",
+        "Does not edit before presenting the report",
+        "Includes a grouped fix plan requiring approval"
+      ]
+    },
+    {
+      "id": "expo-generated-config",
+      "prompt": "Is this Expo app ready for App Store review? The ios directory is generated in CI.",
+      "assertions": [
+        "Detects Expo",
+        "Reads app.json or app.config sources",
+        "Labels target membership and archive configuration as manual when ios is absent",
+        "Recommends changing the authored Expo configuration instead of only a generated plist",
+        "Does not claim the app is ready from source alone"
+      ]
+    },
+    {
+      "id": "rejection-43-fast",
+      "prompt": "Apple rejected my Flutter app for 4.3 fifteen seconds after it entered review. Write an appeal.",
+      "assertions": [
+        "States Mode B",
+        "Does not claim timing proves a fully automated rejection",
+        "Asks for or preserves Apple's exact wording",
+        "Distinguishes 4.3(a) from 4.3(b)",
+        "Does not treat Flutter itself as a defect",
+        "Chooses fix, clarify, appeal, or request interpretation based on evidence",
+        "Does not recommend obfuscation or another developer account"
+      ]
+    },
+    {
+      "id": "third-party-ai-consent",
+      "prompt": "Review my React Native app. User journal text is sent to OpenAI to create summaries.",
+      "assertions": [
+        "Maps the data flow to 5.1.2(i)",
+        "Checks disclosure and explicit permission before the first third-party request",
+        "Checks privacy policy and App Store privacy answers",
+        "Provides a decline-path verification step",
+        "Does not frame AI-written code as the issue"
+      ]
+    },
+    {
+      "id": "craft-audit-thin-timer",
+      "prompt": "Run the human-craft audit on my basic pomodoro timer. I am worried about the new 4.3(b) wording.",
+      "assertions": [
+        "States Mode C",
+        "Uses grades rather than numeric scores",
+        "Grades unobserved screens or metadata UNVERIFIED",
+        "Leads with product distinction if the app is thin",
+        "Does not claim to detect AI authorship",
+        "Ranks five interventions by genuine product and review impact"
+      ]
+    },
+    {
+      "id": "resolution-center-access",
+      "prompt": "Apple says it could not find my subscription paywall. Here is the rejection and a screen recording.",
+      "assertions": [
+        "Chooses CLARIFY when the supplied evidence supports it",
+        "Drafts exact screen and control navigation",
+        "Names the attachment",
+        "Avoids invented credentials or features",
+        "Makes one clear request for the next review action"
+      ]
+    }
+  ]
+}

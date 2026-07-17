@@ -1,0 +1,41 @@
+{
+  "name": "app-store-review-skill",
+  "version": "1.0.0",
+  "description": "Audit iOS and iPadOS apps before review, recover from rejections, and diagnose 4.3 similarity and craft risks.",
+  "author": {
+    "name": "Elie Majorel",
+    "url": "https://github.com/ElxMaj"
+  },
+  "homepage": "https://github.com/ElxMaj/app-store-review-skill",
+  "repository": "https://github.com/ElxMaj/app-store-review-skill",
+  "license": "MIT",
+  "keywords": [
+    "app-store-review",
+    "ios",
+    "ipados",
+    "app-review",
+    "guideline-4-3",
+    "xcode",
+    "expo",
+    "react-native",
+    "flutter"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "App Store Review",
+    "shortDescription": "Catch rejection risks and recover with evidence.",
+    "longDescription": "Run evidence-tagged iOS and iPadOS pre-submission audits, diagnose App Review rejections, draft factual Resolution Center replies, and audit Guideline 4.3 product similarity and craft risks.",
+    "developerName": "Elie Majorel",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/ElxMaj/app-store-review-skill",
+    "defaultPrompt": [
+      "Audit this iOS app before App Store submission.",
+      "Diagnose this App Review rejection and draft a reply.",
+      "Run a Guideline 4.3 human-craft audit."
+    ]
+  }
+}

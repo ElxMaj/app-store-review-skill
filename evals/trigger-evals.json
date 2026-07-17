@@ -1,0 +1,20 @@
+{
+  "skill_name": "app-store-review",
+  "should_trigger": [
+    "Review my iOS app before I submit it",
+    "Why did Apple reject this build under 4.3?",
+    "Check PrivacyInfo.xcprivacy in my widget",
+    "Does my Expo app need Sign in with Apple?",
+    "Write a factual Resolution Center reply",
+    "Does this Flutter app look too template-built for 4.3(b)?",
+    "Will Apple approve my React Native subscription app?",
+    "Audit third-party AI consent before App Review"
+  ],
+  "should_not_trigger": [
+    "Summarize the latest customer reviews of my app",
+    "Optimize my Google Play listing",
+    "Review this macOS kernel extension for security",
+    "Fix this SwiftUI animation bug without discussing App Review",
+    "Write an ASO keyword strategy only"
+  ]
+}

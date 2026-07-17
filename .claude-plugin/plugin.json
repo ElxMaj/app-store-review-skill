@@ -1,0 +1,22 @@
+{
+  "name": "app-store-review",
+  "version": "1.0.0",
+  "description": "Audit iOS and iPadOS apps before review, recover from rejections, and diagnose 4.3 similarity and craft risks.",
+  "author": {
+    "name": "Elie Majorel",
+    "url": "https://github.com/ElxMaj"
+  },
+  "homepage": "https://github.com/ElxMaj/app-store-review-skill",
+  "repository": "https://github.com/ElxMaj/app-store-review-skill",
+  "license": "MIT",
+  "keywords": [
+    "app-store-review",
+    "ios",
+    "ipados",
+    "guideline-4-3",
+    "xcode",
+    "expo",
+    "react-native",
+    "flutter"
+  ]
+}

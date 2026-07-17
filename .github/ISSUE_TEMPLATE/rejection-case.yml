@@ -1,0 +1,77 @@
+name: Documented rejection case
+description: Contribute a real App Review rejection and its known outcome.
+title: "[Case]: "
+labels:
+  - rejection-case
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Share only evidence you are allowed to publish. Remove names, app identifiers, credentials, and private customer data.
+  - type: input
+    id: guideline
+    attributes:
+      label: Guideline number
+      description: Use the number cited by App Review, such as 4.3(a).
+      placeholder: 4.3(a)
+    validations:
+      required: true
+  - type: textarea
+    id: wording
+    attributes:
+      label: Apple's wording
+      description: Paste the exact rejection wording when available, with sensitive details removed.
+    validations:
+      required: true
+  - type: input
+    id: date
+    attributes:
+      label: Rejection date
+      placeholder: YYYY-MM-DD
+    validations:
+      required: true
+  - type: dropdown
+    id: framework
+    attributes:
+      label: Project type
+      options:
+        - Xcode native
+        - Expo
+        - React Native
+        - Flutter
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: response
+    attributes:
+      label: Changes and Resolution Center response
+      description: List every material change and the substance of each reply or appeal.
+    validations:
+      required: true
+  - type: dropdown
+    id: outcome
+    attributes:
+      label: Final outcome
+      options:
+        - Approved after changes
+        - Approved after clarification
+        - Approved after appeal
+        - Rejection upheld
+        - Still unresolved
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Outcome evidence
+      description: Add a public source URL when one exists, plus dates and relevant follow-up wording.
+    validations:
+      required: true
+  - type: checkboxes
+    id: consent
+    attributes:
+      label: Publication check
+      options:
+        - label: I removed confidential information and permit this evidence to be published under the repository license.
+          required: true
