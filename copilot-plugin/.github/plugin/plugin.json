@@ -1,0 +1,25 @@
+{
+  "name": "app-store-review",
+  "description": "Evidence-based App Store review audits, rejection recovery, and shareable visual reports for iOS and iPadOS projects.",
+  "version": "1.1.1",
+  "keywords": [
+    "ios",
+    "ipados",
+    "app-store",
+    "app-review",
+    "compliance",
+    "expo",
+    "react-native",
+    "flutter"
+  ],
+  "author": {
+    "name": "Elie Majorel",
+    "url": "https://github.com/ElxMaj"
+  },
+  "homepage": "https://github.com/ElxMaj/app-store-review-skill",
+  "repository": "https://github.com/ElxMaj/app-store-review-skill",
+  "license": "MIT",
+  "skills": [
+    "./skills/app-store-review/"
+  ]
+}
