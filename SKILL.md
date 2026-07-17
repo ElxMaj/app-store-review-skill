@@ -1,6 +1,6 @@
 ---
 name: app-store-review
-description: Full-lifecycle Apple App Store review for iOS and iPadOS apps. Use for pre-submission audits, rejection diagnosis and Resolution Center replies, Guideline 4.3 spam or similarity recovery, human-craft and low-effort audits, App Review Notes, privacy manifests, Info.plist permission strings, subscriptions, Sign in with Apple, account deletion, UGC, third-party AI consent, TestFlight or App Store readiness, and vague requests such as "review my app" or "will Apple approve this" when an Xcode, Expo, React Native, or Flutter project is present. Produces evidence-tagged Markdown and JSON findings, runs a read-only deterministic scan first, and only offers grouped fixes after the report.
+description: Full-lifecycle Apple App Store review for iOS and iPadOS apps. Use for pre-submission audits, rejection diagnosis and Resolution Center replies, Guideline 4.3 spam or similarity recovery, human-craft and low-effort audits, App Review Notes, privacy manifests, Info.plist permission strings, subscriptions, Sign in with Apple, account deletion, UGC, third-party AI consent, TestFlight or App Store readiness, and vague requests such as "review my app" or "will Apple approve this" when an Xcode, Expo, React Native, or Flutter project is present. Produces evidence-tagged Markdown, JSON, and a self-contained visual HTML report, runs a read-only deterministic scan first, and only offers grouped fixes after the report.
 ---
 
 # App Store Review
@@ -54,7 +54,7 @@ Identify the project root and framework. Read `references/frameworks.md` before 
 For repository audits, run the bundled scanner before manual review:
 
 ```bash
-python3 scripts/app_store_review_scan.py <project-path> --format both --output-dir <report-directory>
+python3 scripts/app_store_review_scan.py <project-path> --format all --output-dir <report-directory>
 ```
 
 Optional inputs:
@@ -62,11 +62,11 @@ Optional inputs:
 ```bash
 # Compare exact asset reuse with sibling or previously rejected projects.
 python3 scripts/app_store_review_scan.py <project-path> \
-  --compare-root <other-project> --format both --output-dir <report-directory>
+  --compare-root <other-project> --format all --output-dir <report-directory>
 
 # Inspect the actual shipped archive for assistant artifacts and bundled files.
 python3 scripts/app_store_review_scan.py <project-path> \
-  --archive <path-to-ipa-or-zip> --format both --output-dir <report-directory>
+  --archive <path-to-ipa-or-zip> --format all --output-dir <report-directory>
 ```
 
 Treat scanner output as evidence collection, not the final judgment. Read every flagged location and remove false positives before reporting.
@@ -141,6 +141,22 @@ Then provide:
 For each finding include: ID, severity, guideline or submission rule, evidence confidence, evidence location, why it matters, concrete fix, and verification step.
 
 When JSON is requested, follow `references/report-contract.md`. Preserve scanner IDs when promoting a scanner finding into the final report.
+
+### Phase 5. Produce the visual report
+
+Treat the reviewed JSON report as the canonical source. Do not render a finding, grade, count, or reviewer-path status that is absent from that JSON.
+
+Read `references/visual-report-design.md`. If the host exposes `apple-design` from `emilkowalski/skills`, load it before the visual pass. If `emil-design-eng` is also available, use it for the final polish review. Apply their Apple design, typography, restraint, and accessibility principles, but do not add motion to this static report without a functional reason. If the external skills are unavailable, the bundled reference is the required fallback.
+
+Build in three passes: structure, type and color, then polish. Use the report's fixed editorial direction instead of inventing a new dashboard theme for each app. The report must remain clearly independent and must not copy App Store Connect, use Apple logos, or imply Apple endorsement.
+
+Generate a self-contained artifact with no remote assets:
+
+```bash
+python3 scripts/render_app_store_report.py <final-report.json> --output <report.html>
+```
+
+Inspect the result at a desktop width near 1440 px and a mobile width near 390 px. Check light and dark appearance when possible, keyboard reading order, text contrast, wrapping, and print output. Return the Markdown, JSON, and HTML paths together. Call the HTML preliminary when it was generated directly from unreviewed scanner output.
 
 ## Mode B: Rejection recovery
 

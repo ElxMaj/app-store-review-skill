@@ -2,9 +2,13 @@
 
 # App Store Review Skill
 
-**Find App Store review problems before submission. If Apple rejects the app, build a clear response.**
+**Catch review problems before submission. When Apple rejects a build, know what to fix and what to say.**
 
 <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-blue.svg"></a> <a href="https://developer.apple.com/app-store/review/guidelines/"><img alt="Guidelines verified July 17, 2026" src="https://img.shields.io/badge/guidelines-verified%202026--07--17-0A7E07.svg"></a> <a href="#quick-start"><img alt="Claude Code and Codex" src="https://img.shields.io/badge/works%20with-Claude%20Code%20%7C%20Codex-6B4FBB.svg"></a>
+
+<a href="examples/parceltrack-report.html"><img src="assets/visual-report-example.png" alt="Sample ParcelTrack App Store review report showing the release verdict, evidence counts, review scope, and first confirmed blocker" width="100%"></a>
+
+[Open the complete sample report](examples/parceltrack-report.html) · [Inspect its source JSON](examples/parceltrack-report.json)
 
 [Quick start](#quick-start) · [Review modes](#three-review-modes) · [Report preview](#report-preview) · [Coverage](#coverage)
 
@@ -43,6 +47,8 @@ Run the human-craft audit. Show me what feels generic or unfinished.
 
 ## Three review modes
 
+![One read-only front door leading to pre-submission, rejection recovery, and human-craft review modes](assets/review-modes.svg)
+
 ### 1. Pre-submission audit
 
 The scanner finds the project type and native targets, then collects file-level evidence. It checks permission strings, privacy manifests, Required Reason APIs, dynamic code, account deletion, Sign in with Apple, IAP restore paths, ATT, third-party AI consent, placeholders, shipped internal files, and optional exact asset reuse. Manual checks cover the areas source code cannot prove, including App Store metadata, privacy answers, purchases, reviewer access, iPad behavior, and error states.
@@ -57,26 +63,9 @@ The app is graded across product distinction, provenance, visual identity, micro
 
 ## Report preview
 
-Every finding shows what was found, where it was found, why it matters, and how to verify the fix.
+The reviewed JSON becomes a self-contained editorial report, not a dashboard. It uses the system font, one verdict accent, precise rules, light and dark appearances, phone-width reflow, and clean print output. The visual pass applies the same Apple design rules even when the optional design skill is not installed.
 
-```text
-# App Store review: ParcelTrack
-Verdict: NOT READY
-Policy verified: 2026-07-17
-Scope: Expo, one app target, archive not supplied
-
-## [ASR-PRIVACY-001] Camera use has no purpose string
-Severity: BLOCKER
-Guideline: 5.1.1(ii)
-Evidence confidence: OFFICIAL
-Evidence: Sources/Camera.swift:42; NSCameraUsageDescription not found
-Fix: Add a specific camera purpose at the authored configuration source.
-Verify: Rebuild, inspect the merged Info.plist, then open the camera flow.
-
-No files changed. Approve fix group A to apply the confirmed blockers.
-```
-
-Reports can be returned as readable Markdown and stable JSON. Scanner findings keep stable IDs so they can be used in CI, issue reports, and later audits.
+Every finding shows what was found, where it was found, why it matters, what to change, and how to verify it. Reports also come as readable Markdown and stable JSON. Scanner findings keep stable IDs for CI, issue reports, and later audits.
 
 ## How it works
 
@@ -108,8 +97,11 @@ The scanner gathers evidence. It does not make the final judgment by itself. Mis
 SKILL.md                         Main workflow and review rules
 references/                      Policy, recovery, craft, framework, and report guidance
 scripts/app_store_review_scan.py Read-only deterministic scanner
+scripts/render_app_store_report.py Self-contained visual HTML renderer
 scripts/tests/                   Scanner regression tests
 evals/                           Behavior and trigger cases
+assets/                          README visuals
+examples/                        Sample JSON and rendered visual report
 skills/app-store-review/         Cross-agent compatibility entry point
 .claude-plugin/                  Claude Code marketplace files
 .codex-plugin/                   Codex plugin manifest

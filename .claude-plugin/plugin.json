@@ -1,7 +1,7 @@
 {
   "name": "app-store-review",
-  "version": "1.0.0",
-  "description": "Audit iOS and iPadOS apps before review, recover from rejections, and diagnose 4.3 similarity and craft risks.",
+  "version": "1.1.0",
+  "description": "Audit iOS and iPadOS apps before review, recover from rejections, diagnose 4.3 similarity risks, and produce visual review reports.",
   "author": {
     "name": "Elie Majorel",
     "url": "https://github.com/ElxMaj"

@@ -71,6 +71,21 @@
         "Avoids invented credentials or features",
         "Makes one clear request for the next review action"
       ]
+    },
+    {
+      "id": "visual-report-artifact",
+      "prompt": "Audit this Expo app, then give me a polished visual report I can share with my team.",
+      "assertions": [
+        "Runs the read-only scanner and reviews its evidence before finalizing the artifact",
+        "Keeps the reviewed JSON as the canonical report source",
+        "Produces Markdown, JSON, and self-contained HTML paths",
+        "Loads apple-design from emilkowalski/skills when it is available",
+        "Uses an editorial document structure with one verdict accent and no floating metric cards, metadata pills, gradients, or decorative motion",
+        "Uses written status labels rather than color alone",
+        "Does not add approval odds, numeric risk scores, Apple branding, or invented results",
+        "Checks the HTML near 1440 px and 390 px and reports any remaining visual limitation",
+        "Does not edit the audited app before the user approves grouped fixes"
+      ]
     }
   ]
 }

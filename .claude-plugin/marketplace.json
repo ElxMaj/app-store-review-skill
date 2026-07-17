@@ -5,13 +5,13 @@
     "url": "https://github.com/ElxMaj"
   },
   "metadata": {
-    "description": "Evidence-based App Store review skills"
+    "description": "Evidence-based App Store review with self-contained visual reports"
   },
   "plugins": [
     {
       "name": "app-store-review",
       "source": "./",
-      "description": "Audit submissions, recover from rejections, and evaluate Guideline 4.3 craft risks.",
+      "description": "Audit submissions, recover from rejections, evaluate Guideline 4.3 craft risks, and generate visual reports.",
       "category": "development",
       "tags": [
         "ios",

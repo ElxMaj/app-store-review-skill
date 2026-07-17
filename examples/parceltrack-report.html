@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ParcelTrack · App Store review</title>
+<style>
+:root {
+  color-scheme: light dark;
+  --canvas: #e9e8e3;
+  --paper: #f8f7f3;
+  --ink: #181817;
+  --muted: #666662;
+  --quiet: #8b8b84;
+  --rule: rgba(24, 24, 23, 0.18);
+  --rule-strong: rgba(24, 24, 23, 0.5);
+  --wash: rgba(24, 24, 23, 0.045);
+  --danger: #b52a22;
+  --warning: #95620a;
+  --success: #26734d;
+  --link: #1256a0;
+  --accent: var(--danger);
+}
+
+* { box-sizing: border-box; }
+
+html { max-width: 100%; overflow-x: hidden; background: var(--canvas); }
+
+body {
+  margin: 0;
+  padding: 28px 0 64px;
+  max-width: 100%;
+  overflow-x: hidden;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a { color: var(--link); text-underline-offset: 0.16em; }
+code, pre, .mono {
+  font-family: ui-monospace, "SFMono-Regular", SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.report {
+  width: min(1080px, calc(100% - 32px));
+  margin: 0 auto;
+  overflow: clip;
+  border: 1px solid var(--rule);
+  border-top: 4px solid var(--accent);
+  background: var(--paper);
+}
+
+.shell { padding-inline: clamp(22px, 5vw, 56px); }
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.identity { display: flex; align-items: baseline; gap: 11px; min-width: 0; }
+.identity-title {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.identity-subtitle { margin: 0; color: var(--muted); font-size: 12px; }
+.policy { color: var(--muted); font-size: 12px; white-space: nowrap; }
+
+.hero { padding-top: clamp(54px, 8vw, 92px); padding-bottom: 50px; }
+.sample-flag {
+  margin: 0 0 18px;
+  color: var(--accent);
+  font-family: ui-monospace, "SFMono-Regular", SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.hero-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(210px, 0.36fr);
+  gap: clamp(34px, 7vw, 86px);
+  align-items: end;
+}
+.hero h1 {
+  margin: 0;
+  max-width: 720px;
+  font-size: clamp(40px, 6vw, 62px);
+  font-weight: 600;
+  letter-spacing: -0.045em;
+  line-height: 1;
+  overflow-wrap: anywhere;
+}
+.verdict-block { padding: 4px 0 4px 22px; border-left: 1px solid var(--rule-strong); }
+.verdict-caption {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.verdict { display: block; color: var(--accent); font-size: 22px; font-weight: 600; letter-spacing: -0.02em; }
+.hero-summary {
+  max-width: 780px;
+  margin: 34px 0 0;
+  color: var(--ink);
+  font-size: clamp(19px, 2.5vw, 25px);
+  line-height: 1.42;
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+}
+.mode-row { display: flex; flex-wrap: wrap; gap: 0; margin-top: 27px; color: var(--muted); font-size: 12px; }
+.mode-item + .mode-item::before { content: "/"; margin-inline: 10px; color: var(--quiet); }
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-top: 1px solid var(--rule-strong);
+  border-bottom: 1px solid var(--rule);
+}
+.metric { display: flex; align-items: baseline; gap: 8px; min-width: 0; padding: 15px 0; }
+.metric + .metric { padding-left: 24px; border-left: 1px solid var(--rule); }
+.metric-value { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; }
+.metric-label { color: var(--muted); font-size: 12px; }
+
+.document-grid {
+  display: grid;
+  grid-template-columns: 148px minmax(0, 1fr);
+  gap: clamp(38px, 6vw, 76px);
+  align-items: start;
+}
+
+.report-index { position: sticky; top: 24px; margin-top: 76px; }
+.index-label {
+  margin: 0 0 14px;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.report-index ol { margin: 0; padding: 0; list-style: none; counter-reset: report-index; }
+.report-index li { counter-increment: report-index; border-top: 1px solid var(--rule); }
+.report-index a { display: grid; grid-template-columns: 22px 1fr; gap: 5px; padding: 8px 0; color: var(--muted); font-size: 11px; text-decoration: none; }
+.report-index a::before { content: counter(report-index, decimal-leading-zero); color: var(--quiet); font-family: ui-monospace, "SFMono-Regular", SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+
+main { min-width: 0; padding-bottom: 100px; counter-reset: report-section; }
+.section { margin-top: 76px; counter-increment: report-section; }
+.section-heading { padding-top: 18px; border-top: 1px solid var(--rule-strong); margin-bottom: 28px; }
+.section-kicker { margin: 0 0 7px; color: var(--accent); font-size: 11px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; }
+.section-kicker::before { content: counter(report-section, decimal-leading-zero) " / "; }
+.section h2 { margin: 0; font-size: clamp(27px, 3.5vw, 36px); font-weight: 600; letter-spacing: -0.035em; line-height: 1.08; }
+.section-intro { max-width: 660px; margin: 13px 0 0; color: var(--muted); font-size: 15px; overflow-wrap: anywhere; }
+
+.scope-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+.scope-item { min-width: 0; padding: 19px 0; }
+.scope-item + .scope-item { padding-left: 22px; border-left: 1px solid var(--rule); }
+.scope-label { display: block; color: var(--muted); font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
+.scope-value { display: block; margin-top: 7px; font-size: 15px; font-weight: 600; overflow-wrap: anywhere; }
+.limitations { margin: 20px 0 0; padding: 0; list-style: none; }
+.limitations li { position: relative; padding: 8px 0 8px 19px; color: var(--muted); font-size: 13px; }
+.limitations li::before { content: ""; position: absolute; top: 1.05em; left: 0; width: 6px; border-top: 1px solid var(--quiet); }
+
+.finding-list { border-top: 1px solid var(--rule); }
+.finding {
+  padding: 30px 0 44px;
+  border-bottom: 1px solid var(--rule);
+}
+.finding-header { display: grid; grid-template-columns: minmax(0, 1fr) minmax(190px, 0.42fr); gap: 28px; align-items: start; }
+.finding-id { margin: 0 0 7px; color: var(--tone); font-size: 10px; font-weight: 600; letter-spacing: 0.07em; }
+.finding h3 { margin: 0; font-size: 24px; font-weight: 600; letter-spacing: -0.025em; line-height: 1.18; }
+.finding-badges { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0; color: var(--muted); font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+.badge + .badge::before { content: "/"; margin-inline: 7px; color: var(--quiet); }
+.badge-severity { color: var(--tone); }
+.finding-body { display: grid; grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr); gap: 34px; margin-top: 25px; }
+.evidence { padding: 18px 19px; border-left: 2px solid var(--tone); background: var(--wash); }
+.evidence-title, .detail-label { margin: 0 0 9px; color: var(--muted); font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+.evidence-list { margin: 0; padding: 0; list-style: none; }
+.evidence-list li + li { margin-top: 12px; }
+.evidence-path { display: block; font-size: 11px; font-weight: 600; overflow-wrap: anywhere; }
+.evidence-excerpt { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; overflow-wrap: anywhere; }
+.details { display: grid; gap: 19px; }
+.detail p { margin: 0; color: var(--ink); font-size: 14px; }
+.detail-fix { padding: 15px 0 15px 16px; border-left: 2px solid var(--tone); }
+
+.tone-blocker { --tone: var(--accent); }
+.tone-warning { --tone: var(--warning); }
+.tone-manual_check { --tone: var(--muted); }
+.tone-info { --tone: var(--link); }
+
+.manual-grid, .craft-grid { border-top: 1px solid var(--rule); }
+.manual-card, .craft-card { display: grid; grid-template-columns: 155px minmax(0, 1fr); gap: 25px; padding: 21px 0 23px; border-bottom: 1px solid var(--rule); }
+.row-copy { min-width: 0; }
+.manual-card h3, .craft-card h3 { margin: 0 0 7px; font-size: 17px; font-weight: 600; letter-spacing: -0.012em; }
+.manual-card p, .craft-card p { margin: 0; color: var(--muted); font-size: 14px; }
+.manual-verify { margin-top: 11px !important; color: var(--ink) !important; }
+.grade { color: var(--grade-color, var(--ink)); font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; }
+
+.transcript-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 34px; border-top: 1px solid var(--rule); }
+.panel { min-width: 0; padding: 21px 0; border-bottom: 1px solid var(--rule); }
+.panel pre { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; color: var(--ink); font-size: 12px; line-height: 1.65; }
+.note-panel pre { padding: 20px 21px; border-left: 2px solid var(--accent); background: var(--wash); }
+.checklist { margin: 0; padding: 0; list-style: none; }
+.checklist li { display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 9px; padding: 10px 0; border-top: 1px solid var(--rule); font-size: 14px; }
+.checklist li:first-child { border-top: 0; }
+.check-symbol { color: var(--accent); font-weight: 600; }
+.text-muted { color: var(--muted); }
+.fix-group { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 30px; padding: 22px 0; border-top: 1px solid var(--rule); }
+.fix-group:last-child { border-bottom: 1px solid var(--rule); }
+.fix-group h3 { margin: 0; font-size: 15px; font-weight: 600; }
+.fix-group ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 14px; }
+.approval { display: block; grid-column: 2; margin-top: -15px; color: var(--accent); font-size: 11px; font-weight: 600; }
+
+.empty-state { padding: 22px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); color: var(--muted); }
+
+.footer { padding-top: 25px; padding-bottom: 32px; border-top: 1px solid var(--rule-strong); color: var(--muted); font-size: 11px; }
+.footer-row { display: flex; justify-content: space-between; gap: 24px; }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --canvas: #11110f;
+    --paper: #1b1b18;
+    --ink: #f1f0ea;
+    --muted: #aaa9a2;
+    --quiet: #7f7e78;
+    --rule: rgba(241, 240, 234, 0.16);
+    --rule-strong: rgba(241, 240, 234, 0.45);
+    --wash: rgba(241, 240, 234, 0.055);
+    --danger: #ff6b62;
+    --warning: #e4ad51;
+    --success: #69c794;
+    --link: #74aef0;
+  }
+}
+
+@media (max-width: 820px) {
+  body { padding-top: 0; padding-bottom: 0; }
+  .report { width: 100%; border-right: 0; border-left: 0; border-bottom: 0; }
+  .document-grid { grid-template-columns: 1fr; gap: 0; }
+  .report-index { position: static; margin-top: 48px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); }
+  .report-index ol { display: flex; flex-wrap: wrap; gap: 0 18px; }
+  .report-index li { border-top: 0; }
+  .report-index a { grid-template-columns: 19px auto; padding: 4px 0; }
+  .section { margin-top: 64px; }
+}
+
+@media (max-width: 620px) {
+  .topbar { display: grid; gap: 5px; }
+  .identity { display: grid; gap: 2px; }
+  .policy { white-space: normal; }
+  .hero { padding-top: 50px; padding-bottom: 38px; }
+  .hero-heading { grid-template-columns: 1fr; gap: 26px; }
+  .verdict-block { padding: 15px 0 0; border-top: 1px solid var(--rule-strong); border-left: 0; }
+  .hero-summary { margin-top: 28px; }
+  .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .metric { padding: 12px 0; }
+  .metric + .metric { padding-left: 18px; }
+  .metric:nth-child(3) { padding-left: 0; border-top: 1px solid var(--rule); border-left: 0; }
+  .metric:nth-child(4) { border-top: 1px solid var(--rule); }
+  .scope-grid { grid-template-columns: 1fr; }
+  .scope-item + .scope-item { padding-left: 0; border-top: 1px solid var(--rule); border-left: 0; }
+  .finding-header { grid-template-columns: 1fr; gap: 13px; }
+  .finding-badges { justify-content: flex-start; }
+  .finding-body { grid-template-columns: 1fr; }
+  .manual-card, .craft-card, .fix-group { grid-template-columns: 1fr; gap: 8px; }
+  .approval { grid-column: 1; margin-top: 1px; }
+  .transcript-grid { grid-template-columns: 1fr; gap: 0; }
+  .footer-row { display: grid; }
+}
+
+@media (prefers-contrast: more) {
+  :root { --rule: currentColor; --rule-strong: currentColor; }
+}
+
+@media print {
+  :root {
+    color-scheme: light;
+    --canvas: #ffffff;
+    --paper: #ffffff;
+    --ink: #000000;
+    --muted: #4e4e4a;
+    --quiet: #777772;
+    --rule: #d1d1cc;
+    --rule-strong: #777772;
+    --wash: #f5f5f2;
+  }
+  @page { margin: 15mm; }
+  body { padding: 0; background: #ffffff; }
+  .report { width: 100%; border-right: 0; border-bottom: 0; border-left: 0; }
+  .shell { padding-inline: 0; }
+  .hero { padding-top: 35px; }
+  .document-grid { display: block; }
+  .report-index { display: none; }
+  #findings, #fix-plan { break-before: page; page-break-before: always; }
+  .section-heading { break-after: avoid-page; page-break-after: avoid; }
+  .finding, .manual-card, .craft-card, .panel, .fix-group { break-inside: avoid; }
+  .section { margin-top: 48px; }
+}
+</style>
+</head>
+<body>
+
+    <div class="report" style="--accent:var(--danger)">
+    <header class="shell topbar">
+      <div class="identity">
+        <p class="identity-title">App Store review</p>
+        <p class="identity-subtitle">Independent release assessment</p>
+      </div>
+      <div class="policy">Policy / 2026-07-17</div>
+    </header>
+    <section class="shell hero">
+        <p class="sample-flag">Sample report</p>
+        <div class="hero-heading">
+          <h1>ParcelTrack</h1>
+          <div class="verdict-block"><span class="verdict-caption">Release verdict</span><span class="verdict">Not ready</span></div>
+        </div>
+        <p class="hero-summary">One confirmed privacy blocker remains. Two warnings need product and target-level review before this build is ready for App Store Connect.</p>
+        <div class="mode-row"><span class="mode-item">Pre-submission</span><span class="mode-item">Human-craft audit</span></div>
+    </section>
+    <div class="shell"><div class="metrics" aria-label="Finding counts"><div class="metric"><span class="metric-value">1</span><span class="metric-label">Blocker</span></div><div class="metric"><span class="metric-value">2</span><span class="metric-label">Warning</span></div><div class="metric"><span class="metric-value">3</span><span class="metric-label">Manual check</span></div><div class="metric"><span class="metric-value">1</span><span class="metric-label">Info</span></div></div></div>
+    <div class="shell document-grid">
+      <nav class="report-index" aria-label="Report contents"><p class="index-label">Contents</p><ol><li><a href="#scope">Scope</a></li><li><a href="#findings">Findings</a></li><li><a href="#manual-checks">Manual checks</a></li><li><a href="#craft">Product craft</a></li><li><a href="#reviewer-path">Reviewer path</a></li><li><a href="#review-notes">Review notes</a></li><li><a href="#fix-plan">Proposed fixes</a></li></ol></nav>
+      <main>
+
+    <section class="section" id="scope">
+      <div class="section-heading">
+        <p class="section-kicker">Scope</p>
+        <h2>Review scope</h2>
+        <p class="section-intro">Frameworks, native targets, and evidence limits included in this review.</p>
+      </div>
+      <div class="scope-grid">
+        <div class="scope-item"><span class="scope-label">Frameworks</span><span class="scope-value">expo, react-native</span></div>
+        <div class="scope-item"><span class="scope-label">Native iOS root</span><span class="scope-value mono">ios</span></div>
+        <div class="scope-item"><span class="scope-label">Targets</span><span class="scope-value">ParcelTrack, ParcelTrackWidget</span></div>
+      </div>
+      <ul class="limitations"><li>No App Store Connect metadata export was supplied.</li><li>Subscription and notification paths were not executed on a release build.</li><li>The sample contains fictional project evidence for demonstration only.</li></ul>
+    </section>
+
+
+    <section class="section" id="findings">
+      <div class="section-heading">
+        <p class="section-kicker">Findings</p>
+        <h2>Submission findings</h2>
+        <p class="section-intro">Sorted by severity. Each item keeps the file evidence, policy basis, correction, and verification step together.</p>
+      </div>
+      <div class="finding-list">
+    <article class="finding tone-blocker">
+      <header class="finding-header">
+        <div>
+          <p class="finding-id mono">ASR-PERM-CAMERA</p>
+          <h3>Camera flow has no purpose string</h3>
+        </div>
+        <div class="finding-badges">
+          <span class="badge badge-severity">Blocker</span>
+          <span class="badge">5.1.1(ii)</span>
+          <span class="badge">OFFICIAL</span>
+        </div>
+      </header>
+      <div class="finding-body">
+        <div class="evidence">
+          <p class="evidence-title">Evidence</p>
+          <ul class="evidence-list"><li><span class="evidence-path mono">src/features/scan/LabelScanner.tsx:42</span><span class="evidence-excerpt">const permission = await Camera.requestCameraPermissionsAsync()</span></li><li><span class="evidence-path mono">app.json:18</span><span class="evidence-excerpt">ios.infoPlist does not include NSCameraUsageDescription</span></li></ul>
+        </div>
+        <div class="details">
+          <div class="detail"><p class="detail-label">Why it matters</p><p>The release flow requests access to a protected resource without a specific explanation of why the app needs it.</p></div>
+          <div class="detail detail-fix"><p class="detail-label">Fix</p><p>Add NSCameraUsageDescription in the Expo iOS configuration and explain that the camera scans parcel labels to add tracking numbers.</p></div>
+          <div class="detail"><p class="detail-label">Verify</p><p>Build the release archive, inspect the merged Info.plist, then trigger the label scanner on a clean device.</p></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="finding tone-warning">
+      <header class="finding-header">
+        <div>
+          <p class="finding-id mono">ASR-PRIVACY-WIDGET</p>
+          <h3>Widget privacy declaration needs target-level verification</h3>
+        </div>
+        <div class="finding-badges">
+          <span class="badge badge-severity">Warning</span>
+          <span class="badge">5.1.1(i)</span>
+          <span class="badge">OFFICIAL</span>
+        </div>
+      </header>
+      <div class="finding-body">
+        <div class="evidence">
+          <p class="evidence-title">Evidence</p>
+          <ul class="evidence-list"><li><span class="evidence-path mono">ios/ParcelTrackWidget/TimelineProvider.swift:31</span><span class="evidence-excerpt">UserDefaults(suiteName: appGroupIdentifier)</span></li><li><span class="evidence-path mono">ios/ParcelTrackWidget</span><span class="evidence-excerpt">No PrivacyInfo.xcprivacy was found in the extension source folder.</span></li></ul>
+        </div>
+        <div class="details">
+          <div class="detail"><p class="detail-label">Why it matters</p><p>Privacy manifests are target-sensitive. The app target manifest does not prove that the extension ships the required declaration.</p></div>
+          <div class="detail detail-fix"><p class="detail-label">Fix</p><p>Verify the extension target resources, then add the Required Reason API declaration at the widget source of truth if the archive does not contain it.</p></div>
+          <div class="detail"><p class="detail-label">Verify</p><p>Export the archive and inspect the widget bundle for PrivacyInfo.xcprivacy and the declared UserDefaults reason.</p></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="finding tone-warning">
+      <header class="finding-header">
+        <div>
+          <p class="finding-id mono">ASR-43-EMPTY-STATES</p>
+          <h3>Primary empty states look unfinished</h3>
+        </div>
+        <div class="finding-badges">
+          <span class="badge badge-severity">Warning</span>
+          <span class="badge">4.2 / 4.3(b)</span>
+          <span class="badge">INFERENCE</span>
+        </div>
+      </header>
+      <div class="finding-body">
+        <div class="evidence">
+          <p class="evidence-title">Evidence</p>
+          <ul class="evidence-list"><li><span class="evidence-path mono">src/screens/HomeScreen.tsx:88</span><span class="evidence-excerpt">&lt;Text&gt;No items yet&lt;/Text&gt;</span></li><li><span class="evidence-path mono">src/screens/WatchlistScreen.tsx:64</span><span class="evidence-excerpt">&lt;Text&gt;No items yet&lt;/Text&gt;</span></li></ul>
+        </div>
+        <div class="details">
+          <div class="detail"><p class="detail-label">Why it matters</p><p>Two high-traffic screens use the same placeholder copy and provide no next action, which makes the product feel generic during first review.</p></div>
+          <div class="detail detail-fix"><p class="detail-label">Fix</p><p>Give each state a specific explanation and action, such as scanning the first parcel or adding a tracking number manually.</p></div>
+          <div class="detail"><p class="detail-label">Verify</p><p>Launch with a new account and confirm each empty state explains the screen and leads to a working next step.</p></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="finding tone-info">
+      <header class="finding-header">
+        <div>
+          <p class="finding-id mono">ASR-NOTES-WIDGET</p>
+          <h3>Review notes can make the widget easier to find</h3>
+        </div>
+        <div class="finding-badges">
+          <span class="badge badge-severity">Info</span>
+          <span class="badge">2.1</span>
+          <span class="badge">OBSERVED PATTERN</span>
+        </div>
+      </header>
+      <div class="finding-body">
+        <div class="evidence">
+          <p class="evidence-title">Evidence</p>
+          <ul class="evidence-list"><li><span class="evidence-path mono">docs/app-review-notes.md:12</span><span class="evidence-excerpt">The app includes a home screen widget.</span></li></ul>
+        </div>
+        <div class="details">
+          <div class="detail"><p class="detail-label">Why it matters</p><p>The note names the feature but does not tell a reviewer how to add it or what successful data looks like.</p></div>
+          <div class="detail detail-fix"><p class="detail-label">Fix</p><p>Add exact widget installation steps and the demo parcel that should appear.</p></div>
+          <div class="detail"><p class="detail-label">Verify</p><p>Follow the notes from a clean simulator without using repository knowledge.</p></div>
+        </div>
+      </div>
+    </article>
+    </div>
+    </section>
+
+
+    <section class="section" id="manual-checks">
+      <div class="section-heading">
+        <p class="section-kicker">Manual checks</p>
+        <h2>Checks still open</h2>
+        <p class="section-intro">These require a release build, device, reviewer account, or App Store Connect evidence.</p>
+      </div>
+      <div class="manual-grid"><article class="manual-card"><span class="grade">ASR-MANUAL-PURCHASE</span><div class="row-copy"><h3>Subscription terms and restore path</h3><p>Static source cannot prove the storefront terms, localized price, and restored entitlement state shown by the release build.</p><p class="manual-verify"><strong>Verify:</strong> Use a sandbox account to purchase, cancel, reinstall, and restore on iPhone and iPad.</p></div></article><article class="manual-card"><span class="grade">ASR-MANUAL-PRIVACY</span><div class="row-copy"><h3>App Privacy answers match production data flows</h3><p>Repository signals do not establish every analytics payload, retention period, or linked-data choice in App Store Connect.</p><p class="manual-verify"><strong>Verify:</strong> Trace production analytics and crash payloads, then compare them with the submitted privacy answers.</p></div></article><article class="manual-card"><span class="grade">ASR-MANUAL-IPAD</span><div class="row-copy"><h3>Core tracking path works on iPad</h3><p>The repository does not prove layout, rotation, keyboard, or split-view behavior in the submitted build.</p><p class="manual-verify"><strong>Verify:</strong> Complete add, edit, notification, and delete flows on a supported iPad in portrait, landscape, and split view.</p></div></article></div>
+    </section>
+
+
+    <section class="section" id="craft">
+      <div class="section-heading">
+        <p class="section-kicker">Human craft</p>
+        <h2>Product craft review</h2>
+        <p class="section-intro">Grades summarize visible evidence. They are not approval probabilities and do not claim to detect AI authorship.</p>
+      </div>
+      <div class="craft-grid"><article class="craft-card"><span class="grade" style="--grade-color:var(--ink)">CREDIBLE</span><div class="row-copy"><h3>Product distinction</h3><p>The carrier exception timeline and shared parcel workflow are product-specific, but the first-run state hides them.</p></div></article><article class="craft-card"><span class="grade" style="--grade-color:var(--muted)">UNVERIFIED</span><div class="row-copy"><h3>Binary and asset provenance</h3><p>No sibling or prior rejected project was supplied for exact asset comparison.</p></div></article><article class="craft-card"><span class="grade" style="--grade-color:var(--ink)">CREDIBLE</span><div class="row-copy"><h3>Visual identity and accessibility</h3><p>A consistent tracking-status system is present. Dynamic Type and VoiceOver still need device verification.</p></div></article><article class="craft-card"><span class="grade" style="--grade-color:var(--warning)">GENERIC</span><div class="row-copy"><h3>Microcopy and interaction states</h3><p>Two primary empty states repeat placeholder copy and offer no route into the core workflow.</p></div></article><article class="craft-card"><span class="grade" style="--grade-color:var(--muted)">UNVERIFIED</span><div class="row-copy"><h3>Product-page specificity</h3><p>No screenshots, subtitle, promotional text, or description were included in the review scope.</p></div></article></div>
+    </section>
+
+
+
+    <section class="section" id="reviewer-path">
+      <div class="section-heading">
+        <p class="section-kicker">Reviewer path</p>
+        <h2>Reviewer path</h2>
+        <p class="section-intro">A checkmark means the path was executed or supported by supplied evidence. An open circle remains manual.</p>
+      </div>
+      <div class="panel"><ul class="checklist"><li><span class="check-symbol">✓</span><span>First launch reaches the tracking list <span class="text-muted">Supported by the supplied screen recording.</span></span></li><li><span class="check-symbol">○</span><span>Camera permission appears after an explanation <span class="text-muted">Retest after adding the purpose string.</span></span></li><li><span class="check-symbol">○</span><span>Demo parcel shows a carrier exception <span class="text-muted">A stable demo tracking number is still needed.</span></span></li><li><span class="check-symbol">○</span><span>Account deletion completes server-side <span class="text-muted">Execute against the production-like backend.</span></span></li></ul></div>
+    </section>
+
+
+    <section class="section" id="review-notes">
+      <div class="section-heading">
+        <p class="section-kicker">App Review Notes</p>
+        <h2>App Review Notes</h2>
+        <p class="section-intro">Exact screen names, controls, setup, credential placeholders, and expected results for the reviewer.</p>
+      </div>
+      <div class="panel note-panel"><pre>Demo account: &lt;REVIEW_EMAIL&gt; / &lt;REVIEW_PASSWORD&gt;
+
+To test label scanning, open Track, tap Add Parcel, then choose Scan Label. The camera is requested only after the explanation screen.
+
+To test the widget, add ParcelTrack from the Home Screen widget gallery. The demo account contains one parcel in an exception state.</pre></div>
+    </section>
+
+
+    <section class="section" id="fix-plan">
+      <div class="section-heading">
+        <p class="section-kicker">Fix plan</p>
+        <h2>Proposed fixes</h2>
+        <p class="section-intro">Confirmed submission work stays separate from optional product and craft changes. Repository edits still require approval.</p>
+      </div>
+      <div class="fix-list"><div class="fix-group"><h3>A · Submission blockers</h3><ul><li>Add and verify the camera purpose string in the merged release Info.plist.</li></ul><span class="approval">Approval required before editing</span></div><div class="fix-group"><h3>B · Target and reviewer-path checks</h3><ul><li>Verify the widget privacy manifest in the archive.</li><li>Run subscription, privacy-answer, and iPad checks.</li><li>Complete the widget navigation in App Review Notes.</li></ul><span class="approval">Approval required before editing</span></div><div class="fix-group"><h3>C · Product craft</h3><ul><li>Replace generic empty states with screen-specific explanations and actions.</li></ul><span class="approval">Approval required before editing</span></div></div>
+    </section>
+
+      </main>
+    </div>
+    <footer class="shell footer"><div class="footer-row"><span>Fictional sample based on public guidance. Approval is not guaranteed. Not affiliated with Apple.</span><span class="mono">Generated 2026-07-17T12:00:00Z</span></div></footer>
+    </div>
+
+</body>
+</html>

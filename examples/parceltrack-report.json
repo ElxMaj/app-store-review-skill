@@ -1,0 +1,232 @@
+{
+  "schema_version": "1.0",
+  "sample": true,
+  "app_name": "ParcelTrack",
+  "modes": [
+    "pre_submission",
+    "human_craft"
+  ],
+  "generated_at": "2026-07-17T12:00:00Z",
+  "root": "/example/ParcelTrack",
+  "verdict": "NOT_READY",
+  "policy_verified_at": "2026-07-17",
+  "summary": "One confirmed privacy blocker remains. Two warnings need product and target-level review before this build is ready for App Store Connect.",
+  "project": {
+    "frameworks": [
+      "expo",
+      "react-native"
+    ],
+    "native_ios_root": "ios",
+    "targets": [
+      {
+        "name": "ParcelTrack",
+        "type": "application"
+      },
+      {
+        "name": "ParcelTrackWidget",
+        "type": "app-extension"
+      }
+    ]
+  },
+  "counts": {
+    "blocker": 1,
+    "warning": 2,
+    "manual_check": 3,
+    "info": 1
+  },
+  "findings": [
+    {
+      "id": "ASR-PERM-CAMERA",
+      "severity": "blocker",
+      "title": "Camera flow has no purpose string",
+      "guideline": "5.1.1(ii)",
+      "evidence_confidence": "official",
+      "evidence": [
+        {
+          "path": "src/features/scan/LabelScanner.tsx",
+          "line": 42,
+          "excerpt": "const permission = await Camera.requestCameraPermissionsAsync()"
+        },
+        {
+          "path": "app.json",
+          "line": 18,
+          "excerpt": "ios.infoPlist does not include NSCameraUsageDescription"
+        }
+      ],
+      "reason": "The release flow requests access to a protected resource without a specific explanation of why the app needs it.",
+      "fix": "Add NSCameraUsageDescription in the Expo iOS configuration and explain that the camera scans parcel labels to add tracking numbers.",
+      "verification": "Build the release archive, inspect the merged Info.plist, then trigger the label scanner on a clean device."
+    },
+    {
+      "id": "ASR-PRIVACY-WIDGET",
+      "severity": "warning",
+      "title": "Widget privacy declaration needs target-level verification",
+      "guideline": "5.1.1(i)",
+      "evidence_confidence": "official",
+      "evidence": [
+        {
+          "path": "ios/ParcelTrackWidget/TimelineProvider.swift",
+          "line": 31,
+          "excerpt": "UserDefaults(suiteName: appGroupIdentifier)"
+        },
+        {
+          "path": "ios/ParcelTrackWidget",
+          "line": null,
+          "excerpt": "No PrivacyInfo.xcprivacy was found in the extension source folder."
+        }
+      ],
+      "reason": "Privacy manifests are target-sensitive. The app target manifest does not prove that the extension ships the required declaration.",
+      "fix": "Verify the extension target resources, then add the Required Reason API declaration at the widget source of truth if the archive does not contain it.",
+      "verification": "Export the archive and inspect the widget bundle for PrivacyInfo.xcprivacy and the declared UserDefaults reason."
+    },
+    {
+      "id": "ASR-43-EMPTY-STATES",
+      "severity": "warning",
+      "title": "Primary empty states look unfinished",
+      "guideline": "4.2 / 4.3(b)",
+      "evidence_confidence": "inference",
+      "evidence": [
+        {
+          "path": "src/screens/HomeScreen.tsx",
+          "line": 88,
+          "excerpt": "<Text>No items yet</Text>"
+        },
+        {
+          "path": "src/screens/WatchlistScreen.tsx",
+          "line": 64,
+          "excerpt": "<Text>No items yet</Text>"
+        }
+      ],
+      "reason": "Two high-traffic screens use the same placeholder copy and provide no next action, which makes the product feel generic during first review.",
+      "fix": "Give each state a specific explanation and action, such as scanning the first parcel or adding a tracking number manually.",
+      "verification": "Launch with a new account and confirm each empty state explains the screen and leads to a working next step."
+    },
+    {
+      "id": "ASR-NOTES-WIDGET",
+      "severity": "info",
+      "title": "Review notes can make the widget easier to find",
+      "guideline": "2.1",
+      "evidence_confidence": "observed pattern",
+      "evidence": [
+        {
+          "path": "docs/app-review-notes.md",
+          "line": 12,
+          "excerpt": "The app includes a home screen widget."
+        }
+      ],
+      "reason": "The note names the feature but does not tell a reviewer how to add it or what successful data looks like.",
+      "fix": "Add exact widget installation steps and the demo parcel that should appear.",
+      "verification": "Follow the notes from a clean simulator without using repository knowledge."
+    }
+  ],
+  "manual_checks": [
+    {
+      "id": "ASR-MANUAL-PURCHASE",
+      "title": "Subscription terms and restore path",
+      "reason": "Static source cannot prove the storefront terms, localized price, and restored entitlement state shown by the release build.",
+      "verification": "Use a sandbox account to purchase, cancel, reinstall, and restore on iPhone and iPad."
+    },
+    {
+      "id": "ASR-MANUAL-PRIVACY",
+      "title": "App Privacy answers match production data flows",
+      "reason": "Repository signals do not establish every analytics payload, retention period, or linked-data choice in App Store Connect.",
+      "verification": "Trace production analytics and crash payloads, then compare them with the submitted privacy answers."
+    },
+    {
+      "id": "ASR-MANUAL-IPAD",
+      "title": "Core tracking path works on iPad",
+      "reason": "The repository does not prove layout, rotation, keyboard, or split-view behavior in the submitted build.",
+      "verification": "Complete add, edit, notification, and delete flows on a supported iPad in portrait, landscape, and split view."
+    }
+  ],
+  "limitations": [
+    "No App Store Connect metadata export was supplied.",
+    "Subscription and notification paths were not executed on a release build.",
+    "The sample contains fictional project evidence for demonstration only."
+  ],
+  "craft": {
+    "dimensions": [
+      {
+        "name": "Product distinction",
+        "grade": "CREDIBLE",
+        "evidence": "The carrier exception timeline and shared parcel workflow are product-specific, but the first-run state hides them."
+      },
+      {
+        "name": "Binary and asset provenance",
+        "grade": "UNVERIFIED",
+        "evidence": "No sibling or prior rejected project was supplied for exact asset comparison."
+      },
+      {
+        "name": "Visual identity and accessibility",
+        "grade": "CREDIBLE",
+        "evidence": "A consistent tracking-status system is present. Dynamic Type and VoiceOver still need device verification."
+      },
+      {
+        "name": "Microcopy and interaction states",
+        "grade": "GENERIC",
+        "evidence": "Two primary empty states repeat placeholder copy and offer no route into the core workflow."
+      },
+      {
+        "name": "Product-page specificity",
+        "grade": "UNVERIFIED",
+        "evidence": "No screenshots, subtitle, promotional text, or description were included in the review scope."
+      }
+    ]
+  },
+  "reviewer_experience": [
+    {
+      "label": "First launch reaches the tracking list",
+      "status": "verified",
+      "detail": "Supported by the supplied screen recording."
+    },
+    {
+      "label": "Camera permission appears after an explanation",
+      "status": "manual",
+      "detail": "Retest after adding the purpose string."
+    },
+    {
+      "label": "Demo parcel shows a carrier exception",
+      "status": "manual",
+      "detail": "A stable demo tracking number is still needed."
+    },
+    {
+      "label": "Account deletion completes server-side",
+      "status": "manual",
+      "detail": "Execute against the production-like backend."
+    }
+  ],
+  "app_review_notes": "Demo account: <REVIEW_EMAIL> / <REVIEW_PASSWORD>\n\nTo test label scanning, open Track, tap Add Parcel, then choose Scan Label. The camera is requested only after the explanation screen.\n\nTo test the widget, add ParcelTrack from the Home Screen widget gallery. The demo account contains one parcel in an exception state.",
+  "fix_groups": [
+    {
+      "id": "A",
+      "title": "Submission blockers",
+      "items": [
+        "Add and verify the camera purpose string in the merged release Info.plist."
+      ],
+      "approval_required": true
+    },
+    {
+      "id": "B",
+      "title": "Target and reviewer-path checks",
+      "items": [
+        "Verify the widget privacy manifest in the archive.",
+        "Run subscription, privacy-answer, and iPad checks.",
+        "Complete the widget navigation in App Review Notes."
+      ],
+      "approval_required": true
+    },
+    {
+      "id": "C",
+      "title": "Product craft",
+      "items": [
+        "Replace generic empty states with screen-specific explanations and actions."
+      ],
+      "approval_required": true
+    }
+  ],
+  "scanner": {
+    "name": "app_store_review_scan",
+    "version": "1.1.0"
+  },
+  "disclaimer": "Fictional sample based on public guidance. Approval is not guaranteed. Not affiliated with Apple."
+}
