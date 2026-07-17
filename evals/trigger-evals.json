@@ -8,7 +8,8 @@
     "Write a factual Resolution Center reply",
     "Does this Flutter app look too template-built for 4.3(b)?",
     "Will Apple approve my React Native subscription app?",
-    "Audit third-party AI consent before App Review"
+    "Audit third-party AI consent before App Review",
+    "Create a visual App Store review report for this Expo project"
   ],
   "should_not_trigger": [
     "Summarize the latest customer reviews of my app",

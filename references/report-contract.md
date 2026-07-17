@@ -64,7 +64,7 @@ Emit UTF-8 JSON with this top-level shape:
   "limitations": [],
   "scanner": {
     "name": "app_store_review_scan",
-    "version": "1.0.0"
+    "version": "1.1.0"
   }
 }
 ```
@@ -99,3 +99,52 @@ Rules:
 - Do not omit manual checks merely to improve the verdict.
 - Preserve machine-readable findings without Markdown embedded in string values.
 - A later human review may remove a scanner finding, change its severity, or add context, but should preserve the original ID when it is the same issue.
+
+## Visual HTML artifact
+
+The reviewed JSON is the source of truth for `scripts/render_app_store_report.py`. The renderer must not calculate approval scores, upgrade a manual check to a pass, or add claims that are absent from the JSON.
+
+The standard scanner shape renders without extra fields. A final human-reviewed report may also include:
+
+```json
+{
+  "app_name": "ParcelTrack",
+  "summary": "One privacy blocker remains before submission.",
+  "modes": ["pre_submission", "human_craft"],
+  "craft": {
+    "dimensions": [
+      {
+        "name": "Product distinction",
+        "grade": "CREDIBLE",
+        "evidence": "The tracking timeline and exception workflow were inspected."
+      }
+    ]
+  },
+  "recovery": {
+    "classification": "CLARIFY",
+    "apple_message": "Exact supplied rejection text",
+    "reply_draft": "Draft Resolution Center response",
+    "attachments": ["Annotated reviewer path"]
+  },
+  "reviewer_experience": [
+    {
+      "label": "Core value is reachable without hidden setup",
+      "status": "manual",
+      "detail": "Verify on the release build."
+    }
+  ],
+  "app_review_notes": "Exact navigation and demo account placeholders",
+  "fix_groups": [
+    {
+      "id": "A",
+      "title": "Confirmed blockers",
+      "items": ["Add the missing purpose string at the authored config source."],
+      "approval_required": true
+    }
+  ]
+}
+```
+
+Allowed reviewer-path statuses are `passed`, `verified`, `complete`, or `manual`. Use a checked state only when the path was executed or supported by reliable supplied evidence. Craft grades remain `DISTINCT`, `CREDIBLE`, `GENERIC`, `HIGH RISK`, or `UNVERIFIED`.
+
+The HTML file must be self-contained, print-friendly, responsive, and clearly labeled as an independent report. Follow `references/visual-report-design.md`.

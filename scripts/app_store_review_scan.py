@@ -21,8 +21,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Sequence, Set, Tuple
 
+from render_app_store_report import render_report_html
 
-VERSION = "1.0.0"
+
+VERSION = "1.1.0"
 POLICY_VERIFIED_AT = "2026-07-17"
 
 DEFAULT_IGNORED_DIRS = {
@@ -1179,27 +1181,40 @@ def render_markdown_finding(item: Dict[str, Any]) -> List[str]:
 def write_outputs(report: Dict[str, Any], args: argparse.Namespace) -> None:
     markdown = render_markdown(report)
     json_text = json.dumps(report, indent=2, ensure_ascii=False) + "\n"
+    html_text = render_report_html(report)
     if args.output_dir:
         output_dir = Path(args.output_dir).expanduser().resolve()
         output_dir.mkdir(parents=True, exist_ok=True)
-        if args.format in {"markdown", "both"}:
+        if args.format in {"markdown", "both", "all"}:
             (output_dir / "app-store-review-report.md").write_text(markdown, encoding="utf-8")
-        if args.format in {"json", "both"}:
+        if args.format in {"json", "both", "all"}:
             (output_dir / "app-store-review-report.json").write_text(json_text, encoding="utf-8")
+        if args.format in {"html", "all"}:
+            (output_dir / "app-store-review-report.html").write_text(html_text, encoding="utf-8")
         return
     if args.format == "markdown":
         sys.stdout.write(markdown)
     elif args.format == "json":
         sys.stdout.write(json_text)
+    elif args.format == "html":
+        sys.stdout.write(html_text)
     else:
-        raise ValueError("--format both requires --output-dir")
+        raise ValueError(f"--format {args.format} requires --output-dir")
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("project", help="Project root to scan")
-    parser.add_argument("--format", choices=("markdown", "json", "both"), default="markdown")
-    parser.add_argument("--output-dir", help="Directory for app-store-review-report.md and .json")
+    parser.add_argument(
+        "--format",
+        choices=("markdown", "json", "html", "both", "all"),
+        default="markdown",
+        help="Output type. 'both' writes Markdown and JSON; 'all' also writes visual HTML.",
+    )
+    parser.add_argument(
+        "--output-dir",
+        help="Directory for app-store-review-report.md, .json, and optional .html",
+    )
     parser.add_argument("--archive", help="Optional IPA or ZIP release archive to inspect")
     parser.add_argument(
         "--compare-root",
@@ -1228,8 +1243,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     root = Path(args.project).expanduser()
     if not root.is_dir():
         parser.error(f"project root is not a directory: {root}")
-    if args.format == "both" and not args.output_dir:
-        parser.error("--format both requires --output-dir")
+    if args.format in {"both", "all"} and not args.output_dir:
+        parser.error(f"--format {args.format} requires --output-dir")
     archive = Path(args.archive).expanduser() if args.archive else None
     compare_roots = [Path(item).expanduser() for item in args.compare_root]
     ctx = ScanContext(root, args.include_dependencies, compare_roots, archive)

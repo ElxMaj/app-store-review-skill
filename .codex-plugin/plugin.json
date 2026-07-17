@@ -1,7 +1,7 @@
 {
   "name": "app-store-review-skill",
-  "version": "1.0.0",
-  "description": "Audit iOS and iPadOS apps before review, recover from rejections, and diagnose 4.3 similarity and craft risks.",
+  "version": "1.1.0",
+  "description": "Audit iOS and iPadOS apps before review, recover from rejections, diagnose 4.3 similarity risks, and produce visual review reports.",
   "author": {
     "name": "Elie Majorel",
     "url": "https://github.com/ElxMaj"
@@ -23,8 +23,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "App Store Review",
-    "shortDescription": "Catch rejection risks and recover with evidence.",
-    "longDescription": "Run evidence-tagged iOS and iPadOS pre-submission audits, diagnose App Review rejections, draft factual Resolution Center replies, and audit Guideline 4.3 product similarity and craft risks.",
+    "shortDescription": "Catch rejection risks with evidence and a visual report.",
+    "longDescription": "Run evidence-tagged iOS and iPadOS pre-submission audits, diagnose App Review rejections, draft factual Resolution Center replies, audit Guideline 4.3 product similarity and craft risks, and render a self-contained visual report.",
     "developerName": "Elie Majorel",
     "category": "Developer Tools",
     "capabilities": [
@@ -35,7 +35,8 @@
     "defaultPrompt": [
       "Audit this iOS app before App Store submission.",
       "Diagnose this App Review rejection and draft a reply.",
-      "Run a Guideline 4.3 human-craft audit."
+      "Run a Guideline 4.3 human-craft audit.",
+      "Create a visual App Store review report for this project."
     ]
   }
 }
