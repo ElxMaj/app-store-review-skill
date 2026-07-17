@@ -10,6 +10,8 @@ Use this audit for Guideline 4.3(b), low-effort concerns, template similarity, o
 
 Audit the symptoms. Do not label an app AI-generated from visual style, code style, or copy.
 
+When only a product description is supplied, complete the audit instead of stopping for files. Grade claims supported by that description conservatively, grade every screen, provenance, accessibility, and product-page dimension without evidence as `UNVERIFIED`, and make each intervention conditional on the missing evidence it addresses.
+
 ## Evidence grades
 
 Grade every dimension:

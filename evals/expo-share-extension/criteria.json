@@ -1,0 +1,71 @@
+{
+  "context": "Tests a full pre-launch review of an Expo iOS app with a Share extension. The agent must run Mode A then Mode C, correctly audit Expo config sources rather than generated plists, treat the Share extension as a separate target, label unverifiable checks as MANUAL CHECK, verify Apple policy online and record the date, produce five Mode C interventions graded with the allowed labels, and avoid reporting ITMS-91053 or editing any files.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Mode A declared first",
+      "description": "The report explicitly states it is running or has run Mode A (pre-submission audit) before beginning the configuration review section.",
+      "max_score": 7
+    },
+    {
+      "name": "Mode C declared",
+      "description": "The report explicitly states it is running or has run Mode C (human-craft audit) for the product page / differentiation section.",
+      "max_score": 7
+    },
+    {
+      "name": "Expo config cited as evidence",
+      "description": "Findings reference `app.json` (e.g., `expo.ios.infoPlist`, `expo.ios.entitlements`, or `expo.ios.privacyManifests`) as the evidence location — not `ios/Runner/Info.plist` or another generated plist path.",
+      "max_score": 8
+    },
+    {
+      "name": "Fix targets app.json or plugin",
+      "description": "At least one recommended fix instructs the developer to edit `app.json` or the config plugin (`plugins/withShareExtension.js`), not the generated iOS plist directly.",
+      "max_score": 8
+    },
+    {
+      "name": "Share extension reviewed separately",
+      "description": "The Share extension (bundle identifier `com.acme.shareflow.share`) is reviewed as a distinct target with its own bundle ID, entitlements, or privacy manifest assessment — not folded into the main app review.",
+      "max_score": 8
+    },
+    {
+      "name": "MANUAL CHECK for absent ios/ directory",
+      "description": "At least one check is explicitly labeled MANUAL CHECK with a reason that the native ios/ directory has not been generated (e.g., native target membership, archive validation, or merged plist cannot be confirmed).",
+      "max_score": 8
+    },
+    {
+      "name": "Missing camera purpose string identified",
+      "description": "The report identifies that `NSCameraUsageDescription` is absent from `expo.ios.infoPlist` in `app.json`, given that `expo-camera` is listed as a dependency.",
+      "max_score": 8
+    },
+    {
+      "name": "Policy verification date recorded",
+      "description": "The report includes a date on which Apple's official pages (App Store guidelines or upcoming requirements) were verified — or states that the agent was offline and gives the bundled reference date.",
+      "max_score": 7
+    },
+    {
+      "name": "ITMS-91053 absent",
+      "description": "The string 'ITMS-91053' does NOT appear anywhere in the report.",
+      "max_score": 7
+    },
+    {
+      "name": "Five Mode C interventions",
+      "description": "The Mode C section returns exactly five numbered or bulleted highest-impact interventions.",
+      "max_score": 8
+    },
+    {
+      "name": "All five Mode C dimensions graded",
+      "description": "All five Mode C dimensions (product distinction, binary and asset provenance, visual identity and accessibility, microcopy and interaction states, App Store product-page specificity) are each assigned a grade from: DISTINCT, CREDIBLE, GENERIC, HIGH RISK, or UNVERIFIED.",
+      "max_score": 8
+    },
+    {
+      "name": "No files modified",
+      "description": "The agent produces only `shareflow-review.md` and does not modify any file in the `inputs/` directory.",
+      "max_score": 7
+    },
+    {
+      "name": "Fix plan section present",
+      "description": "The report contains a section titled (or equivalent to) 'Fix Plan' that groups recommended changes and notes approval requirements.",
+      "max_score": 9
+    }
+  ]
+}

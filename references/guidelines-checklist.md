@@ -61,6 +61,8 @@ Do not report `ITMS-91053` unless the user supplied that upload error or the arc
 
 - [ ] `BLOCKER`, `OFFICIAL`: The privacy policy and App Store privacy answers accurately describe collection, use, retention, deletion, and sharing.
 - [ ] `BLOCKER`, `OFFICIAL`: Personal data is not sent to a third party, including third-party AI, before clear disclosure and explicit permission where required by Guideline 5.1.2(i).
+- [ ] `BLOCKER`, `OFFICIAL`: The pre-transfer disclosure identifies the personal data, the receiving third party, and the purpose before asking for permission.
+- [ ] `MANUAL CHECK`, `OFFICIAL`: From a clean state, declining third-party AI permission sends no personal data or identifiers to that provider. If the AI feature cannot work without sharing, the UI explains that consequence without treating refusal as consent.
 - [ ] `BLOCKER`, `OFFICIAL`: Tracking uses AppTrackingTransparency when the app's behavior meets Apple's tracking definition.
 - [ ] `WARNING`, `OFFICIAL`: SDK initialization does not send tracking data before the ATT decision.
 - [ ] `WARNING`, `OFFICIAL`: The app offers a usable way to withdraw consent where the guideline requires it.
