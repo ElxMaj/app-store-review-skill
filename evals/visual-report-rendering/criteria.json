@@ -1,26 +1,26 @@
 {
-  "context": "The agent is given a pre-reviewed JSON audit report and must generate a visual HTML report using the bundled render script, verify the output, and return all three output paths. This scenario tests HTML report generation, self-containment, design compliance, font usage, accent color selection, path reporting, and output verification.",
+  "context": "The agent is given a pre-reviewed JSON audit report and must generate a visual HTML report using the bundled renderer, preserve the finding contract, verify responsive and print behavior, and return a concise handoff. This scenario tests the renderer workflow and report qualities that the skill adds beyond generic HTML generation.",
   "type": "weighted_checklist",
   "checklist": [
     {
       "name": "Script invocation",
       "description": "Invokes `scripts/render_app_store_report.py` with the JSON file as the first positional argument and `--output` to name the output HTML file",
-      "max_score": 12
+      "max_score": 25
     },
     {
       "name": "No remote assets",
       "description": "The generated HTML file contains no external URLs in `<link href>`, `<script src>`, `<img src>`, or `@import` — all assets are inline",
-      "max_score": 12
+      "max_score": 5
     },
     {
       "name": "System typography",
       "description": "The HTML uses `-apple-system` or `BlinkMacSystemFont` in its font-family declaration and does not contain any `@font-face` or remote font URL",
-      "max_score": 8
+      "max_score": 3
     },
     {
       "name": "Amber accent only",
       "description": "The HTML uses amber/orange as the single verdict accent color (matching NEEDS_REVIEW), and does not apply red or green as competing accent colors",
-      "max_score": 10
+      "max_score": 8
     },
     {
       "name": "No forbidden design patterns",
@@ -30,27 +30,37 @@
     {
       "name": "JSON-only findings",
       "description": "The HTML renders only the findings present in `inputs/audit-report.json` (ASR-PRIVACY-001, ASR-AUDIO-002, ASR-PRIV-MC-001); no invented findings, counts, or grades appear",
-      "max_score": 12
+      "max_score": 5
+    },
+    {
+      "name": "Complete finding anatomy",
+      "description": "Each confirmed finding keeps its evidence or source location, policy basis, reason, fix, verification step, severity, and evidence-confidence label together in the HTML report",
+      "max_score": 15
+    },
+    {
+      "name": "Responsive and print-ready report",
+      "description": "The HTML includes deliberate phone-width reflow, dark-appearance support, and print rules; the handoff note records verification at desktop and phone widths or clearly states any remaining limitation",
+      "max_score": 15
     },
     {
       "name": "All three paths reported",
       "description": "The Markdown handoff note lists the paths to all three output formats: the handoff note itself, the supplied JSON (`inputs/audit-report.json`), and the generated HTML report",
-      "max_score": 10
+      "max_score": 4
     },
     {
       "name": "Verification documented",
       "description": "The Markdown handoff note includes at least one observation about the HTML output (file size, rendering, width behavior, or similar) showing the agent inspected the result",
-      "max_score": 10
+      "max_score": 5
     },
     {
       "name": "Verdict in summary",
       "description": "The Markdown handoff note states the verdict (NEEDS REVIEW or equivalent) and includes a finding count broken down by severity",
-      "max_score": 9
+      "max_score": 4
     },
     {
       "name": "No Markdown in JSON",
       "description": "The fixture `inputs/audit-report.json` is not modified by the agent; if the agent produces any additional JSON, it does not contain Markdown formatting (bold, backtick code, headers) inside string values",
-      "max_score": 9
+      "max_score": 3
     }
   ]
 }
