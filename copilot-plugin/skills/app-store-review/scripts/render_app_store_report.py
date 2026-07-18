@@ -465,7 +465,7 @@ def render_finding(item: Mapping[str, Any]) -> str:
         evidence_items.append(
             "<li>"
             f'<span class="evidence-path mono">{escape(evidence_location(evidence))}</span>'
-            f'<span class="evidence-excerpt">{escape(evidence.get("excerpt"), "No excerpt supplied")}</span>'
+            f'<span class="evidence-excerpt">{escape(evidence.get("signal") or evidence.get("excerpt"), "No evidence signal supplied")}</span>'
             "</li>"
         )
     if not evidence_items:

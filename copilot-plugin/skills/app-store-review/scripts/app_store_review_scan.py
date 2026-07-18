@@ -115,7 +115,7 @@ ASSISTANT_ARTIFACT_PATTERNS = (
 class Evidence:
     path: str
     line: Optional[int]
-    excerpt: str
+    signal: str
 
 
 @dataclass
@@ -171,9 +171,9 @@ class ScanContext:
     def add_finding(self, finding: Finding) -> None:
         existing = next((item for item in self.findings if item.id == finding.id), None)
         if existing:
-            seen = {(e.path, e.line, e.excerpt) for e in existing.evidence}
+            seen = {(e.path, e.line, e.signal) for e in existing.evidence}
             for evidence in finding.evidence:
-                key = (evidence.path, evidence.line, evidence.excerpt)
+                key = (evidence.path, evidence.line, evidence.signal)
                 if key not in seen and len(existing.evidence) < 20:
                     existing.evidence.append(evidence)
                     seen.add(key)
@@ -217,8 +217,7 @@ def walk_files(root: Path, include_dependencies: bool = False) -> Iterable[Path]
 
 def evidence_for_match(text_file: TextFile, match: re.Match[str]) -> Evidence:
     line_number = text_file.text.count("\n", 0, match.start()) + 1
-    line = text_file.lines[line_number - 1].strip() if text_file.lines else ""
-    return Evidence(text_file.relative, line_number, line[:240])
+    return Evidence(text_file.relative, line_number, "Static scanner rule matched")
 
 
 def first_matches(
@@ -369,8 +368,7 @@ def collect_configuration(ctx: ScanContext) -> None:
 
 def record_config_dict(ctx: ScanContext, value: Dict[str, Any], path: Path) -> None:
     for key, item in value.items():
-        excerpt = f"{key} = {render_value(item)}"
-        ctx.config_values[key].append((item, Evidence(ctx.rel(path), None, excerpt[:240])))
+        ctx.config_values[key].append((item, Evidence(ctx.rel(path), None, f"Configuration key present: {key}")))
 
 
 def record_privacy_manifest(ctx: ScanContext, value: Dict[str, Any], path: Path) -> None:
@@ -384,7 +382,7 @@ def record_privacy_manifest(ctx: ScanContext, value: Dict[str, Any], path: Path)
         if isinstance(category, str):
             reasons = entry.get("NSPrivacyAccessedAPITypeReasons", [])
             ctx.privacy_categories[category].append(
-                Evidence(ctx.rel(path), None, f"{category}: {render_value(reasons)}")
+                Evidence(ctx.rel(path), None, f"Privacy manifest category present: {category}")
             )
 
 
@@ -406,7 +404,7 @@ def collect_expo_config(ctx: ScanContext) -> None:
             if isinstance(values, dict):
                 for key, value in values.items():
                     ctx.config_values[key].append(
-                        (value, Evidence(ctx.rel(path), None, f"expo.ios.{group}.{key} = {render_value(value)}"))
+                        (value, Evidence(ctx.rel(path), None, f"Expo configuration key present: expo.ios.{group}.{key}"))
                     )
         privacy = ios.get("privacyManifests", {})
         if isinstance(privacy, dict):
@@ -420,12 +418,6 @@ def collect_expo_config(ctx: ScanContext) -> None:
                         ctx.privacy_categories[category].append(
                             Evidence(ctx.rel(path), None, f"expo.ios.privacyManifests: {category}")
                         )
-
-
-def render_value(value: Any) -> str:
-    if isinstance(value, (dict, list)):
-        return json.dumps(value, ensure_ascii=False, sort_keys=True)
-    return str(value)
 
 
 PROTECTED_APIS: Dict[str, Tuple[Sequence[str], str, str]] = {
@@ -937,7 +929,7 @@ def scan_archive(ctx: ScanContext) -> None:
                         manifests.add(parent_match.group(1))
                 lowered = normalized.lower()
                 if any(pattern.lower() in lowered for pattern in ASSISTANT_ARTIFACT_PATTERNS):
-                    artifacts.append(Evidence(f"archive:{ctx.archive.name}", None, normalized[:240]))
+                    artifacts.append(Evidence(f"archive:{ctx.archive.name}", None, "Assistant artifact path matched"))
     except (OSError, zipfile.BadZipFile) as exc:
         ctx.limitations.append(f"Archive inspection failed: {exc}")
         return
@@ -979,7 +971,7 @@ def scan_asset_reuse(ctx: ScanContext) -> None:
         for digest in sorted(set(own).intersection(other)):
             for own_path in own[digest][:3]:
                 for other_path in other[digest][:3]:
-                    matches.append(Evidence(own_path, None, f"Exact asset match: {compare_root.name}/{other_path}"))
+                    matches.append(Evidence(own_path, None, "Exact content hash matched in a comparison root"))
                     if len(matches) >= 20:
                         break
                 if len(matches) >= 20:
@@ -1163,7 +1155,7 @@ def render_markdown_finding(item: Dict[str, Any]) -> List[str]:
         location = evidence["path"]
         if evidence["line"] is not None:
             location += f":{evidence['line']}"
-        lines.append(f"- `{location}`: {evidence['excerpt']}")
+        lines.append(f"- `{location}`: {evidence['signal']}")
     lines.extend(
         [
             "",

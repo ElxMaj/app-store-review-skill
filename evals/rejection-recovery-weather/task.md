@@ -8,6 +8,8 @@ The rejection notice and full app details are in `inputs/rejection-details.md`. 
 
 Petra needs your help to understand what type of rejection she received, what her options are, and what to actually say to Apple. She does not want to make things worse by saying the wrong thing.
 
+Use the installed App Store review skill for this recovery.
+
 ## Output Specification
 
 Produce two files in the working directory:

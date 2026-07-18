@@ -2,6 +2,20 @@
 
 Use this only after preserving Apple's exact message and the submitted build or metadata context. Apply `references/evidence-policy.md` to every claim.
 
+## Required analysis opening
+
+Begin the recovery analysis with:
+
+```text
+Mode B: Rejection recovery
+Apple's message (verbatim):
+> <copy every supplied line exactly>
+
+Response classification: <exactly one of FIX, CLARIFY, APPEAL, REQUEST INTERPRETATION>
+```
+
+Do not rename the classification, add adjectives to it, or replace evidence-confidence labels with strength ratings.
+
 ## Contents
 
 1. Build the case record
@@ -108,6 +122,8 @@ Use a Resolution Center call request or Meet with Apple to understand the rule's
 
 - 4.3(a): portfolio duplication, repeated Bundle IDs, white-label variants, shared template or lineage concerns.
 - 4.3(b): an app or category entry is not meaningfully different or improved, or reads as mediocre, low-quality, or low-effort under the current text.
+
+Every 4.3 analysis must name both subsections, identify the cited subsection, and explain that 4.3(a) usually calls for consolidation or provenance evidence while 4.3(b) usually calls for stronger product distinction. Prefix this policy explanation with `OFFICIAL`.
 
 The remedy differs. 4.3(a) often requires consolidation or provenance evidence. 4.3(b) often requires stronger product distinction, not a longer appeal.
 
