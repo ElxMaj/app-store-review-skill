@@ -34,5 +34,17 @@ jobs:
           token: ${{ secrets.TESSL_TOKEN }}
       - name: Validate Tessl plugin
         run: tessl plugin lint .
+      - name: Check whether this version is already published
+        id: published
+        shell: bash
+        run: |
+          plugin_name="$(jq -r '.name' .tessl-plugin/plugin.json)"
+          plugin_version="$(jq -r '.version' .tessl-plugin/plugin.json)"
+          if tessl plugin info "${plugin_name}@${plugin_version}" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
       - name: Publish plugin and run evaluations
+        if: steps.published.outputs.exists != 'true'
         run: tessl plugin publish . --with-scenario-quality-check
