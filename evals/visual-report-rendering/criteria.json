@@ -34,17 +34,17 @@
     },
     {
       "name": "All three paths reported",
-      "description": "The `report-summary.md` file lists the paths to all three output formats: Markdown (report-summary.md), JSON (inputs/audit-report.json), and HTML (audit-report.html)",
+      "description": "The Markdown handoff note lists the paths to all three output formats: the handoff note itself, the supplied JSON (`inputs/audit-report.json`), and the generated HTML report",
       "max_score": 10
     },
     {
       "name": "Verification documented",
-      "description": "The `report-summary.md` includes at least one observation about the HTML output (file size, rendering, width behavior, or similar) showing the agent inspected the result",
+      "description": "The Markdown handoff note includes at least one observation about the HTML output (file size, rendering, width behavior, or similar) showing the agent inspected the result",
       "max_score": 10
     },
     {
       "name": "Verdict in summary",
-      "description": "The `report-summary.md` states the verdict (NEEDS REVIEW or equivalent) and includes a finding count broken down by severity",
+      "description": "The Markdown handoff note states the verdict (NEEDS REVIEW or equivalent) and includes a finding count broken down by severity",
       "max_score": 9
     },
     {
