@@ -1,5 +1,5 @@
 {
-  "name": "elxmaj/app-store-review",
+  "name": "maj-labs/app-store-review",
   "description": "Full-lifecycle Apple App Store review for iOS and iPadOS apps. Use for pre-submission audits, rejection diagnosis and Resolution Center replies, Guideline 4.3 spam or similarity recovery, human-craft and low-effort audits, App Review Notes, privacy manifests, Info.plist permission strings, subscriptions, Sign in with Apple, account deletion, UGC, third-party AI consent, TestFlight or App Store readiness, and vague requests such as \"review my app\" or \"will Apple approve this\" when an Xcode, Expo, React Native, or Flutter project is present. Produces evidence-tagged Markdown, JSON, and a self-contained visual HTML report, runs a read-only deterministic scan first, and only offers grouped fixes after the report.",
   "skills": [
     "copilot-plugin/skills/app-store-review"
