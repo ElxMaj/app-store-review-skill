@@ -1,0 +1,66 @@
+{
+  "context": "Tests a dedicated Mode C human-craft audit under the June 8, 2026 Guideline 4.3(b) wording. The supplied evidence describes a thin focus timer with confirmed commercial-template reuse, generic product-page copy, weak states, accessibility gaps, and several unverified binary surfaces. The skill should grade observable symptoms rather than claim AI detection, lead with substantive product distinction, and return five evidence-backed interventions without modifying files.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Exact Mode C contract",
+      "description": "The audit begins with `Mode C: Human-craft audit` followed by the five required grade lines for Product distinction, Provenance, Visual identity and accessibility, Microcopy and states, and Product page",
+      "max_score": 20
+    },
+    {
+      "name": "All dimensions use allowed grades",
+      "description": "Each of the five dimensions receives exactly one grade from DISTINCT, CREDIBLE, GENERIC, HIGH RISK, or UNVERIFIED, with no numeric score substituted",
+      "max_score": 15
+    },
+    {
+      "name": "Grades match supplied evidence",
+      "description": "Product distinction and provenance are graded GENERIC or HIGH RISK; generic screen copy and product-page claims are not graded DISTINCT; unsupported binary or accessibility conclusions are not presented as verified facts",
+      "max_score": 10
+    },
+    {
+      "name": "Current 4.3(b) position",
+      "description": "The audit explains that the June 8, 2026 4.3(b) concern is whether a mature-category submission provides a meaningfully different or improved experience, and does not claim Apple detected AI-written code",
+      "max_score": 8
+    },
+    {
+      "name": "4.3(a) kept distinct",
+      "description": "The audit does not conflate 4.3(b) product similarity with 4.3(a) portfolio duplication or white-label variants",
+      "max_score": 4
+    },
+    {
+      "name": "Template provenance handled accurately",
+      "description": "The reused UI kit, navigation, timer component, icons, and recolored template icon are treated as concrete provenance risk; the audit does not recommend hiding lineage, obfuscating code, or blaming SwiftUI",
+      "max_score": 7
+    },
+    {
+      "name": "Product change leads",
+      "description": "The first and highest-priority intervention addresses substantive product distinction or depth for a specific freelancer workflow, not colors, icon polish, animation, metadata, or another cosmetic disguise",
+      "max_score": 10
+    },
+    {
+      "name": "Exactly five interventions",
+      "description": "The audit contains exactly five clearly numbered or bulleted highest-impact interventions",
+      "max_score": 8
+    },
+    {
+      "name": "Interventions are verifiable",
+      "description": "Each intervention includes supplied evidence or its location, why it matters, an S/M/L effort, and an observable verification step",
+      "max_score": 7
+    },
+    {
+      "name": "Unverified surfaces preserved",
+      "description": "The missing archive, binary asset comparison, real-device accessibility pass, and competitor comparison remain explicitly UNVERIFIED or listed as unverified surfaces",
+      "max_score": 4
+    },
+    {
+      "name": "No evasion or fake probability",
+      "description": "The audit recommends genuine product improvement, does not offer AI camouflage or review evasion, and does not provide approval odds or a numeric risk probability",
+      "max_score": 5
+    },
+    {
+      "name": "No supplied files modified",
+      "description": "The agent creates only `craft-review.md` and does not modify anything in `inputs/`",
+      "max_score": 2
+    }
+  ]
+}

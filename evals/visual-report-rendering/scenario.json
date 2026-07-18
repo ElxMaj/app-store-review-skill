@@ -1,1 +1,0 @@
-{ "description": "HTML report generation from reviewed audit JSON", "include": ["./inputs"] }
