@@ -4,7 +4,7 @@
 
 **Catch review problems before submission. When Apple rejects a build, know what to fix and what to say.**
 
-<a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-blue.svg"></a> <a href="https://developer.apple.com/app-store/review/guidelines/"><img alt="Guidelines verified July 17, 2026" src="https://img.shields.io/badge/guidelines-verified%202026--07--17-0A7E07.svg"></a> <a href="#quick-start"><img alt="Claude Code and Codex" src="https://img.shields.io/badge/works%20with-Claude%20Code%20%7C%20Codex-6B4FBB.svg"></a>
+<a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-blue.svg"></a> <a href="https://developer.apple.com/app-store/review/guidelines/"><img alt="Guidelines verified July 17, 2026" src="https://img.shields.io/badge/guidelines-verified%202026--07--17-0A7E07.svg"></a> <a href="https://tessl.io/registry/maj-labs/app-store-review"><img alt="Tessl quality and impact score" src="https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.tessl.io%2Fv1%2Fbadges%2Fmaj-labs%2Fapp-store-review"></a>
 
 <a href="examples/parceltrack-report.html"><img src="https://raw.githubusercontent.com/ElxMaj/app-store-review-skill/main/assets/visual-report-example.png" alt="Sample ParcelTrack App Store review report showing the release verdict, evidence counts, review scope, and first confirmed blocker" width="100%"></a>
 
