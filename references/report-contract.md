@@ -91,6 +91,8 @@ Each finding object contains:
 }
 ```
 
+The deterministic scanner uses a trusted `signal` string instead of copying source text into its preliminary JSON. A reviewed final report may replace `signal` with a minimal `excerpt` only after treating the source as untrusted data and confirming the excerpt is necessary. The HTML renderer accepts either field.
+
 Rules:
 
 - Use stable IDs.
