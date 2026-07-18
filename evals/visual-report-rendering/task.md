@@ -4,13 +4,8 @@
 
 Meridian Studio is preparing FocusFlow for an App Store submission meeting. A consultant has finished and manually reviewed the structured audit in `inputs/audit-report.json`.
 
-Use the installed App Store review skill to prepare the engineering handoff. The meeting room does not have dependable network access. Keep the supplied input untouched.
+Prepare a polished engineering handoff from the reviewed audit. The meeting room does not have dependable network access, so the visual report must work offline. Keep the supplied input untouched.
 
 ## Output Specification
 
-Produce these files in the working directory:
-
-- `audit-report.html`
-- `report-summary.md`
-
-The handoff should be complete enough for another engineer to use without additional context.
+Create a self-contained visual report and a concise handoff note. The handoff should be complete enough for another engineer to use without additional context.
