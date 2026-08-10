@@ -1,15 +1,15 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "sample": true,
   "app_name": "ParcelTrack",
   "modes": [
     "pre_submission",
     "human_craft"
   ],
-  "generated_at": "2026-07-17T12:00:00Z",
+  "generated_at": "2026-08-10T12:00:00Z",
   "root": "/example/ParcelTrack",
   "verdict": "NOT_READY",
-  "policy_verified_at": "2026-07-17",
+  "policy_verified_at": "2026-08-10",
   "summary": "One confirmed privacy blocker remains. Two warnings need product and target-level review before this build is ready for App Store Connect.",
   "project": {
     "frameworks": [
@@ -27,6 +27,12 @@
         "type": "app-extension"
       }
     ]
+  },
+  "metadata_scan": {
+    "files_scanned": 0,
+    "fields": [],
+    "locales": [],
+    "pricing_rule_fields": []
   },
   "counts": {
     "blocker": 1,
@@ -226,7 +232,7 @@
   ],
   "scanner": {
     "name": "app_store_review_scan",
-    "version": "1.1.0"
+    "version": "1.2.0"
   },
   "disclaimer": "Fictional sample based on public guidance. Approval is not guaranteed. Not affiliated with Apple."
 }
