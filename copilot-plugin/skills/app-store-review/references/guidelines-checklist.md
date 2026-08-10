@@ -1,6 +1,6 @@
 # Pre-submission checklist
 
-Last verified against Apple's official pages: 2026-07-17.
+Last verified against Apple's official pages: 2026-08-10.
 
 This checklist supports iOS and iPadOS. Apply only the sections relevant to the app. Use `references/evidence-policy.md` for claim wording and `references/frameworks.md` for generated configuration.
 
@@ -47,6 +47,21 @@ Do not report `ITMS-91053` unless the user supplied that upload error or the arc
 - [ ] `WARNING`, `OFFICIAL`: The age rating answers reflect UGC, messaging, web access, simulated gambling, medical content, and other relevant capabilities.
 - [ ] `WARNING`, `OFFICIAL`: Subscription and purchase claims match the products, prices, and trial terms configured in App Store Connect.
 - [ ] `MANUAL CHECK`, `OFFICIAL`: Accessibility Nutrition Labels, privacy answers, categories, and regional fields match the build.
+
+### Guideline 2.3.7 price-reference field and context matrix
+
+| Field or surface | Treatment | Required review |
+|---|---|---|
+| App name, subtitle, keywords, and promotional text | `BLOCKER`, `OFFICIAL` when supplied live metadata proves direct price advertising such as free, discount, sale, savings, or currency-amount claims | Remove the claim only from each affected field and localization. The scanner reports high-precision English matches as `ASR-METADATA-PRICE-237`; an ambiguous standalone `free` remains contextual review. |
+| Screenshot and app-preview UI | `MANUAL CHECK`, `OFFICIAL`; genuine in-app commerce UI differs from a marketing overlay, so text presence alone is not decisive | Inspect the visible context, accuracy, relevance, and whether the asset advertises price outside an expected commerce flow. |
+| Description | `MANUAL CHECK`, `OFFICIAL`; accurate, relevant pricing or price-change copy can be appropriate, but the field is not categorically safe | Verify the statement against current products and storefront availability, and retain it only when it belongs in the description context. |
+| Release notes | `MANUAL CHECK`, `OFFICIAL`; a truthful change note differs from generic price advertising | Confirm that the claim describes the submitted update and remains accurate and relevant. |
+| App Store Connect price, subscription, introductory-offer, promotional-offer, and in-app purchase fields | Excluded from the presence-only 2.3.7 metadata rule because price information is expected | Validate configured price, duration, eligibility, renewal, localization, and disclosure requirements through the applicable commerce review. |
+
+The deterministic detector has English lexical coverage only. Before declaring
+the issue resolved, inspect every live App Store Connect localization, including
+each subtitle, and check default-locale or other fallback metadata plus localized
+screenshot and preview assets. Local Fastlane files do not prove storefront state.
 
 ## 4. Guideline 5.1, privacy and data
 

@@ -44,7 +44,7 @@ Write: "A possible explanation is..." Include what evidence would confirm or fal
 
 ## Official sources
 
-Last verified: 2026-07-17.
+Last verified: 2026-08-10.
 
 | Subject | Source |
 |---|---|
