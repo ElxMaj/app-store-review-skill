@@ -206,6 +206,42 @@ class ScannerTests(unittest.TestCase):
             for expected in ("descriptions", "release notes", "screenshots", "previews"):
                 self.assertIn(expected, manual_blob)
 
+    def test_report_emits_current_policy_and_scanner_versions(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            report = scan(Path(temporary))
+
+            self.assertEqual("2026-08-10", report["policy_verified_at"])
+            self.assertEqual("1.2.0", report["scanner"]["version"])
+
+    def test_metadata_report_discloses_language_live_state_and_visual_limits(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            write_fastlane_metadata(root, "en-US", "subtitle.txt", "always free")
+
+            report = scan(root)
+
+            self.assertIn(
+                "Metadata pricing-language detection uses English lexical rules and is "
+                "incomplete for other languages.",
+                report["limitations"],
+            )
+            metadata_manual = next(
+                item for item in report["manual_checks"] if item["id"] == "ASR-MANUAL-METADATA"
+            )
+            self.assertEqual(
+                "Descriptions and release notes require contextual accuracy and relevance review. "
+                "Screenshots and previews containing price text require contextual visual review "
+                "and are not scanned as caption fields. Local metadata files cannot prove live "
+                "App Store Connect state. Other metadata, age rating, privacy answers, "
+                "Accessibility Nutrition Labels, and review notes may live outside the repository.",
+                metadata_manual["reason"],
+            )
+            self.assertEqual(
+                "Export or open the live App Store Connect metadata and compare every claim, "
+                "screenshot, and preview with the exact build.",
+                metadata_manual["verification"],
+            )
+
     def test_explicit_metadata_uses_typed_field_and_stable_external_alias(self):
         with tempfile.TemporaryDirectory() as temporary:
             base = Path(temporary)

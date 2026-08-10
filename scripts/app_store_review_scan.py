@@ -26,7 +26,7 @@ from render_app_store_report import render_report_html
 
 
 VERSION = "1.2.0"
-POLICY_VERIFIED_AT = "2026-07-17"
+POLICY_VERIFIED_AT = "2026-08-10"
 
 DEFAULT_IGNORED_DIRS = {
     ".git",
@@ -351,6 +351,13 @@ def normalize_metadata_text(value: str) -> str:
 
 
 def scan_metadata_pricing(ctx: ScanContext) -> None:
+    if any(item.field in PRICING_RULE_FIELDS for item in ctx.metadata_inputs):
+        language_limitation = (
+            "Metadata pricing-language detection uses English lexical rules and is incomplete "
+            "for other languages."
+        )
+        if language_limitation not in ctx.limitations:
+            ctx.limitations.append(language_limitation)
     blocker_evidence: List[Evidence] = []
     warning_evidence: List[Evidence] = []
     for metadata_input in ctx.metadata_inputs:
@@ -1252,8 +1259,8 @@ def add_baseline_manual_checks(ctx: ScanContext) -> None:
     ctx.add_manual(
         "ASR-MANUAL-METADATA",
         "Compare App Store metadata with the candidate build",
-        "Descriptions, release notes, screenshots, and previews still need contextual accuracy and relevance review. Other metadata, age rating, privacy answers, Accessibility Nutrition Labels, and review notes may live outside the repository.",
-        "Export or open the App Store Connect metadata and compare every claim, screenshot, and preview with the exact build.",
+        "Descriptions and release notes require contextual accuracy and relevance review. Screenshots and previews containing price text require contextual visual review and are not scanned as caption fields. Local metadata files cannot prove live App Store Connect state. Other metadata, age rating, privacy answers, Accessibility Nutrition Labels, and review notes may live outside the repository.",
+        "Export or open the live App Store Connect metadata and compare every claim, screenshot, and preview with the exact build.",
     )
     ctx.add_manual(
         "ASR-MANUAL-REVIEWER-PATH",
