@@ -22,5 +22,13 @@ jobs:
         run: python3 -m unittest discover -s scripts/tests -v
       - name: Check JSON output
         run: python3 scripts/app_store_review_scan.py . --format json | python3 -m json.tool >/dev/null
+      - name: Validate package and evaluation JSON
+        run: |
+          python3 -m json.tool tessl.json >/dev/null
+          python3 -m json.tool .tessl-plugin/plugin.json >/dev/null
+          python3 -m json.tool .claude-plugin/plugin.json >/dev/null
+          python3 -m json.tool .codex-plugin/plugin.json >/dev/null
+          python3 -m json.tool copilot-plugin/.github/plugin/plugin.json >/dev/null
+          find evals -name '*.json' -print0 | xargs -0 -n1 python3 -m json.tool >/dev/null
       - name: Check portable archive
         run: unzip -t app-store-review-skill.skill

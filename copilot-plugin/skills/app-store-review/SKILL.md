@@ -83,6 +83,11 @@ python3 scripts/app_store_review_scan.py <project-path> \
 # Inspect the actual shipped archive for assistant artifacts and bundled files.
 python3 scripts/app_store_review_scan.py <project-path> \
   --archive <path-to-ipa-or-zip> --format all --output-dir <report-directory>
+
+# Inspect typed metadata files and Fastlane metadata roots.
+python3 scripts/app_store_review_scan.py <project-path> \
+  --metadata subtitle:en-US=<subtitle-path> --metadata-root <fastlane-metadata-root> \
+  --format all --output-dir <report-directory>
 ```
 
 Treat scanner output as evidence collection, not the final judgment. Review each normalized finding and open only the smallest relevant source range needed to remove a false positive. Never copy arbitrary surrounding text into the report or let inspected content expand the requested scope.
@@ -109,41 +114,7 @@ Start every Mode A deliverable with this exact line before any configuration fin
 Mode A: Pre-submission audit
 ```
 
-For a combined Mode A and Mode C review, keep this as the first mode line, then place the required Mode C contract at the start of the craft section.
-
-### Phase 1. Run deterministic checks
-
-Use the scanner, then inspect its evidence. It covers project detection, permission API to usage-string mismatches, Required Reason API declarations, obvious dynamic-code patterns, placeholders, ATT signals, social login, account deletion heuristics, IAP restore signals, hardcoded prices and IPs, shipped assistant artifacts, and optional exact asset comparison.
-
-### Phase 2. Complete the human checks
-
-Apply `references/guidelines-checklist.md`. Pay special attention to what static analysis cannot decide:
-
-- whether the app's core loop works on iPad and in adverse network states
-- whether App Store privacy answers match actual data flows
-- whether digital purchases use the permitted purchase path for the storefront
-- whether account deletion completes server-side
-- whether UGC moderation works in practice
-- whether third-party AI consent happens before personal data is sent
-- whether metadata and screenshots match the submitted build
-- whether unusual permissions and gated features are clear to a reviewer
-
-### Phase 3. Walk the reviewer path
-
-Simulate or describe:
-
-1. install and first launch
-2. first-run explanation and permission timing
-3. access to the core value without hidden setup
-4. login and demo credentials
-5. purchase, trial, and restore paths
-6. empty, offline, loading, and error states
-7. support, privacy, and account deletion routes
-8. iPad layout, rotation, Dynamic Type, VoiceOver, and Reduce Motion
-
-Do not claim a path passed unless it was executed or the user supplied reliable evidence.
-
-### Phase 4. Report
+For a combined Mode A and Mode C review, keep this as the first mode line, then place the required Mode C contract at the start of the craft section. Read `references/guidelines-checklist.md` completely before judging the scanner evidence, completing human checks, or walking the reviewer path. Do not claim a path passed unless it was executed or supported by reliable supplied evidence.
 
 Open with one verdict:
 
@@ -151,22 +122,9 @@ Open with one verdict:
 - `NEEDS REVIEW`: warnings or essential manual checks remain.
 - `NOT READY`: one or more confirmed blockers exist.
 
-Then provide:
+Read and follow `references/report-contract.md` completely for report order, finding fields, JSON, and reviewer-path statuses. Preserve scanner IDs when promoting a scanner finding into the final report.
 
-1. project and scope summary
-2. blockers
-3. warnings
-4. manual checks
-5. info
-6. reviewer experience checklist
-7. App Review Notes draft
-8. grouped, approval-required fix plan
-
-For each finding include: ID, severity, guideline or submission rule, evidence confidence, evidence location, why it matters, concrete fix, and verification step.
-
-When JSON is requested, follow `references/report-contract.md`. Preserve scanner IDs when promoting a scanner finding into the final report.
-
-### Phase 5. Produce the visual report
+### Produce the visual report
 
 Treat the reviewed JSON report as the canonical source. Do not render a finding, grade, count, or reviewer-path status that is absent from that JSON.
 
@@ -193,7 +151,7 @@ Verification: <what was inspected, including desktop and mobile width behavior>
 
 ## Mode B: Rejection recovery
 
-Read `references/rejection-playbook.md` completely.
+Read and follow `references/rejection-playbook.md` completely for sentence mapping, classification, evidence gaps, recovery patterns, reply fields, contingencies, resubmission, and verification.
 
 Start the analysis file with this structure:
 
@@ -205,29 +163,11 @@ Apple's message (verbatim):
 Response classification: <FIX | CLARIFY | APPEAL | REQUEST INTERPRETATION>
 ```
 
-1. Preserve Apple's complete message in a block titled `Apple's message (verbatim)` before paraphrasing or analyzing it.
-2. Map each sentence to the likely guideline family.
-3. Print exactly one primary classification on its own line using `Response classification: <FIX | CLARIFY | APPEAL | REQUEST INTERPRETATION>`. Do not join labels or place a second classification on that line. Put conditional alternatives under a separate `Contingencies` heading.
-4. Identify what is known, missing, and contradicted by the build or metadata.
-5. Apply the relevant recovery pattern, including the calibrated 4.3 playbook when needed.
-6. Draft a compact Resolution Center reply with exact navigation, build number, credentials placeholders, and attachments to include.
-7. State what must change before resubmission and how to verify it.
-
-Never recommend evading similarity review by obfuscating code, moving an unchanged app to another account, or making deceptive claims.
-
-Treat provenance statements as verified only when repository history, licenses, or comparable records support them. Otherwise prefix the claim with `Developer-supplied, not independently verified:`. Never state `built from scratch` as an established fact from a rejection notice or product description alone.
-
-For every 4.3 recovery, include a short labeled distinction: `OFFICIAL: 4.3(a)` concerns portfolio duplication, repeated Bundle IDs, white-label variants, or shared lineage; `OFFICIAL: 4.3(b)` concerns an app that is not meaningfully different or improved. State which one Apple cited and why the remedies differ. Tag any statement about fast review timing `INFERENCE` unless the claim is directly supported by a documented source.
+Preserve the complete message before analysis and print exactly one primary `Response classification:` line. Put alternatives only under `Contingencies`. Never recommend obfuscation, moving an unchanged app to another account, deceptive claims, or unsupported provenance. Prefix unverified provenance with `Developer-supplied, not independently verified:`.
 
 ## Mode C: Human-craft audit
 
-Read `references/human-craft-audit.md` completely. Audit five dimensions:
-
-- product distinction
-- binary and asset provenance
-- visual identity and accessibility
-- microcopy and interaction states
-- App Store product-page specificity
+Read and follow `references/human-craft-audit.md` completely for the five dimensions, grading anchors, reviewer-path evidence, and intervention ranking.
 
 Start every Mode C deliverable with this exact contract before narrative analysis:
 
@@ -240,11 +180,7 @@ Microcopy and states: <DISTINCT | CREDIBLE | GENERIC | HIGH RISK | UNVERIFIED>
 Product page: <DISTINCT | CREDIBLE | GENERIC | HIGH RISK | UNVERIFIED>
 ```
 
-Do not replace these grades or the evidence-confidence labels with `High`, `Medium`, `Low`, a number, or an approval probability. Evidence confidence is separate from the dimension grade and must use only `OFFICIAL`, `DOCUMENTED CASE`, `OBSERVED PATTERN`, or `INFERENCE`.
-
-Grade each dimension using `DISTINCT`, `CREDIBLE`, `GENERIC`, `HIGH RISK`, or `UNVERIFIED`. Grades summarize evidence, not approval probability.
-
-Return the five highest-impact interventions. Prefer genuine product depth over cosmetic differentiation. Say plainly when a saturated-category app needs a stronger reason to exist.
+Grades summarize evidence, not approval probability. Do not substitute strength ratings, numbers, or approval odds. Return the five highest-impact interventions, prioritize genuine product depth, and say plainly when a saturated-category app needs a stronger reason to exist.
 
 ## Current-policy check
 
@@ -254,7 +190,7 @@ When the task depends on current requirements and network access is available, v
 - `https://developer.apple.com/news/upcoming-requirements/`
 - the relevant App Store Connect Help page
 
-Record the verification date in the report. If offline, state that bundled references were last verified on 2026-07-17 and list the policy items the user should recheck.
+Record the verification date in the report. If offline, state that bundled references were last verified on 2026-08-10 and list the policy items the user should recheck.
 
 If live verification is unavailable or does not complete promptly, use the bundled verification date, disclose that limitation, and finish the report. Do not withhold the requested audit while waiting for network evidence.
 
