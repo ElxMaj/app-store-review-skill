@@ -4,7 +4,7 @@
 
 **Catch review problems before submission. When Apple rejects a build, know what to fix and what to say.**
 
-<a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-blue.svg"></a> <a href="https://developer.apple.com/app-store/review/guidelines/"><img alt="Guidelines verified July 17, 2026" src="https://img.shields.io/badge/guidelines-verified%202026--07--17-0A7E07.svg"></a> <a href="https://tessl.io/registry/maj-labs/app-store-review"><img alt="Tessl quality and impact score" src="https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.tessl.io%2Fv1%2Fbadges%2Fmaj-labs%2Fapp-store-review"></a>
+<a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-blue.svg"></a> <a href="https://developer.apple.com/app-store/review/guidelines/"><img alt="Guidelines verified August 10, 2026" src="https://img.shields.io/badge/guidelines-verified%202026--08--10-0A7E07.svg"></a> <a href="https://tessl.io/registry/maj-labs/app-store-review"><img alt="Tessl quality and impact score" src="https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.tessl.io%2Fv1%2Fbadges%2Fmaj-labs%2Fapp-store-review"></a> [![Listed on ClaudePluginHub](https://www.claudepluginhub.com/badge/elxmaj-app-store-review)](https://www.claudepluginhub.com/plugins/elxmaj-app-store-review?ref=badge)
 
 <a href="examples/parceltrack-report.html"><img src="https://raw.githubusercontent.com/ElxMaj/app-store-review-skill/main/assets/visual-report-example.png" alt="Sample ParcelTrack App Store review report showing the release verdict, evidence counts, review scope, and first confirmed blocker" width="100%"></a>
 
@@ -14,7 +14,7 @@
 
 </div>
 
-`app-store-review` reads an iOS or iPadOS project and looks for evidence that can cause trouble during App Review. Use it before submission, after a rejection, or when an app feels too close to a template. It detects Xcode, Expo, React Native, and Flutter projects. The first pass is read-only. You get the report first, then a grouped fix plan if you want one. The policy references were verified on July 17, 2026 and include Apple's June 8, 2026 change to Guideline 4.3(b). Recovery advice keeps Apple's published rules separate from documented developer cases, observed patterns, and inference.
+`app-store-review` reads an iOS or iPadOS project and looks for evidence that can cause trouble during App Review. Use it before submission, after a rejection, or when an app feels too close to a template. It detects Xcode, Expo, React Native, and Flutter projects. The first pass is read-only. You get the report first, then a grouped fix plan if you want one. The policy references were verified on August 10, 2026 and include Apple's current Guideline 2.3.7 metadata rules and June 8, 2026 change to Guideline 4.3(b). Recovery advice keeps Apple's published rules separate from documented developer cases, observed patterns, and inference.
 
 ## Why this is useful
 
@@ -57,7 +57,7 @@ Run the human-craft audit. Show me what feels generic or unfinished.
 
 ### 1. Pre-submission audit
 
-The scanner finds the project type and native targets, then collects file-level evidence. It checks permission strings, privacy manifests, Required Reason APIs, dynamic code, account deletion, Sign in with Apple, IAP restore paths, ATT, third-party AI consent, placeholders, shipped internal files, and optional exact asset reuse. Manual checks cover the areas source code cannot prove, including App Store metadata, privacy answers, purchases, reviewer access, iPad behavior, and error states.
+The scanner finds the project type and native targets, then collects file-level evidence. It checks permission strings, privacy manifests, Required Reason APIs, dynamic code, account deletion, Sign in with Apple, IAP restore paths, ATT, third-party AI consent, typed App Store metadata, placeholders, shipped internal files, and optional exact asset reuse. Manual checks cover context, storefront localizations and fallback assets, privacy answers, purchases, reviewer access, iPad behavior, and error states.
 
 ### 2. Rejection recovery
 
@@ -75,19 +75,20 @@ Every finding shows what was found, where it was found, why it matters, what to 
 
 ## How it works
 
-1. **Discover:** find the framework, native iOS project, app targets, extensions, configuration sources, and available archive.
-2. **Scan:** run deterministic checks and collect paths, lines, plist keys, package signals, and exact file matches.
-3. **Review:** inspect each result, remove false positives, and walk the parts that need a person or a real build.
-4. **Report:** give a verdict, evidence confidence, reviewer checklist, App Review Notes draft, and approval-required fix groups.
+The skill discovers the framework and targets, scans deterministic evidence, reviews contextual results and real-build paths, then reports a verdict, evidence confidence, reviewer checklist, App Review Notes draft, and approval-required fix groups. The scanner gathers evidence; it does not make the final judgment, and missing context stays a `MANUAL CHECK`.
 
-The scanner gathers evidence. It does not make the final judgment by itself. Missing context stays a `MANUAL CHECK` instead of becoming a fake defect.
+Add repeatable typed metadata files with `--metadata FIELD[:LOCALE]=PATH`, and include Fastlane trees with `--metadata-root PATH`:
+
+```bash
+python3 scripts/app_store_review_scan.py <project-path> --metadata subtitle:en-US=<path> --metadata-root <fastlane-metadata-root> --format all --output-dir <report-directory>
+```
 
 ## Coverage
 
 | Guideline family | What is reviewed |
 |---|---|
 | 2.1 | Crashes, placeholders, demo access, broken paths, network behavior, and iPad reviewability |
-| 2.3 | Build-to-metadata accuracy, screenshots, keywords, age rating, and purchase claims |
+| 2.3 | Build-to-metadata accuracy, field-aware price references, localizations, fallback assets, screenshots, keywords, age rating, and purchase claims |
 | 3.1 | Digital purchases, paywall terms, StoreKit pricing, trials, and restoration |
 | 4.2 / 4.3 | Minimum functionality, templates, portfolio duplication, provenance, and distinct value |
 | 5.1 | Purpose strings, privacy manifests, deletion, ATT, labels, and third-party AI consent |
@@ -106,7 +107,6 @@ scripts/app_store_review_scan.py Read-only deterministic scanner
 scripts/render_app_store_report.py Self-contained visual HTML renderer
 scripts/tests/                   Scanner regression tests
 evals/                           Behavior and trigger cases
-assets/                          README visuals
 examples/                        Sample JSON and rendered visual report
 skills/app-store-review/         Cross-agent compatibility entry point
 .claude-plugin/                  Claude Code marketplace files

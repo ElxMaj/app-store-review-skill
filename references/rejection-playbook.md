@@ -50,6 +50,7 @@ Do not infer the rejected build from the current branch when they differ.
 | Screenshot, description, keyword, or platform mismatch | 2.3 metadata | Compare every claim and image with the rejected build |
 | External payment or purchase method | 3.1 | Classify the good, storefront, entitlement, and exact purchase path |
 | Subscription terms or restore issue | 3.1.2 | Inspect billed price, period, trial conversion, links, and restore behavior |
+| Subtitle, free, discount, sale, savings, or other price-reference wording | 2.3.7 metadata | Compare the cited field with every live localization and its fallback metadata or product-page assets |
 | Minimum functionality or web-wrapper concern | 4.2 | Identify native value, core depth, and whether product work is required |
 | Similar binary, metadata, concept, or spam | 4.3 | Preserve the phrase and use the 4.3 playbook below |
 | Commercialized template or generation service | 4.2.6 | Establish content-provider eligibility and code or template provenance |
@@ -59,6 +60,24 @@ Do not infer the rejected build from the current branch when they differ.
 | UGC, chat, reporting, or abuse | 1.2 | Exercise filtering, report, block, contact, and moderation operations |
 
 If the wording is ambiguous, ask one precise interpretation question. Do not make several unrelated changes in the hope that one satisfies Apple.
+
+### Guideline 2.3.7 price-reference recovery
+
+Choose `FIX` when Apple's cited field and the submitted metadata prove a direct
+price claim. For a cited subtitle, inspect every live subtitle localization and
+remove equivalent pricing claims only in the locales where they occur. Check
+default-locale and other fallback metadata plus localized screenshot and preview
+assets; repository or Fastlane files alone do not establish the live storefront.
+
+Do not turn the rejection into a blanket ban on description pricing. Accurate,
+relevant price or price-change copy may remain in the description when it fits
+that context and matches current products and storefront availability. Treat
+release notes and genuine commerce UI contextually, and validate expected pricing,
+subscription, offer, and in-app purchase fields under their applicable rules.
+
+Keep `CLARIFY`, `REQUEST INTERPRETATION`, and `APPEAL` available when the cited
+field is wrong, unavailable in the supplied evidence, or contextually legitimate.
+Do not appeal a proven direct price claim or invent binary work to resolve it.
 
 ## 3. Choose the response path
 
@@ -199,10 +218,30 @@ Quality checks:
 - attachments named in the message
 - one requested next action
 
+For a 2.3.7 metadata fix, use this narrower shape after verifying the facts:
+
+```text
+Thank you for the review under Guideline 2.3.7.
+
+We removed the price reference from the <VERIFIED FIELD> in <VERIFIED LOCALES>.
+<If verified: No binary or bundled configuration changed, and we retained version
+<VERSION>, build <BUILD>.>
+
+Please re-review the corrected metadata. <Name only verified attachments, if any.>
+```
+
+Name only verified fields, locales, version, build, changes, and attachments.
+Omit an unverified placeholder instead of guessing its value.
+
 ## 6. Escalation and resubmission
 
 - Use a new build when the binary or bundled configuration changed.
-- A metadata-only issue may permit resubmitting the same build after correcting the metadata, as Apple's current help explains.
+
+If only editable App Store metadata or product-page assets changed, and no binary
+or bundled configuration changed, a new build is normally unnecessary. Confirm
+that the current App Store Connect status permits the edit, retain the selected
+build, and resubmit the rejected item or app version.
+
 - Use App Review Board appeal for a supported disagreement, not for a defect.
 - Use expedited review only for a qualifying urgent circumstance. It changes queue priority, not the guideline result.
 - Use Meet with Apple or a requested call to clarify interpretation or evidence expectations.
