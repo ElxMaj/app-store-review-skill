@@ -14,6 +14,7 @@ import os
 import plistlib
 import re
 import sys
+import unicodedata
 import zipfile
 from collections import defaultdict
 from dataclasses import asdict, dataclass
@@ -24,7 +25,7 @@ from typing import Any, Dict, Iterable, List, Optional, Sequence, Set, Tuple
 from render_app_store_report import render_report_html
 
 
-VERSION = "1.1.0"
+VERSION = "1.2.0"
 POLICY_VERIFIED_AT = "2026-07-17"
 
 DEFAULT_IGNORED_DIRS = {
@@ -110,12 +111,64 @@ ASSISTANT_ARTIFACT_PATTERNS = (
     ".aider",
 )
 
+METADATA_FILENAMES = {
+    "description.txt": "description",
+    "keywords.txt": "keywords",
+    "name.txt": "name",
+    "promotional_text.txt": "promotional_text",
+    "release_notes.txt": "release_notes",
+    "subtitle.txt": "subtitle",
+}
+METADATA_FIELDS = frozenset(METADATA_FILENAMES.values())
+PRICING_RULE_FIELDS = frozenset({"keywords", "name", "promotional_text", "subtitle"})
+PRICE_CATEGORIES = (
+    "free-claim",
+    "no-cost-claim",
+    "discount-claim",
+    "percent-off",
+    "save-amount",
+    "currency-amount",
+)
+PRICE_PATTERNS = {
+    "free-claim": re.compile(
+        r"\b(?:\d{1,3}\s*%\s*free|always\s+free|completely\s+free|"
+        r"free\s+trial|free\s*-\s*to\s*-\s*play|free\s+to\s+use)\b"
+    ),
+    "no-cost-claim": re.compile(r"\b(?:(?:at\s+)?no|zero)\s+cost\b"),
+    "discount-claim": re.compile(
+        r"\b(?:on\s+sale|sale\s+price|discounted\s+(?:price|plan|service))\b"
+    ),
+    "percent-off": re.compile(r"\b\d{1,3}(?:[.,]\d+)?\s*%\s*off\b"),
+    "save-amount": re.compile(
+        r"\bsave\s+(?:[$€£]\s*\d+(?:[.,]\d{1,2})?|"
+        r"\d+(?:[.,]\d{1,2})?\s*[$€£]|"
+        r"(?:usd|eur|gbp|cad|aud)\s+\d+(?:[.,]\d{1,2})?|"
+        r"\d+(?:[.,]\d{1,2})?\s+(?:usd|eur|gbp|cad|aud))\b"
+    ),
+    "currency-amount": re.compile(
+        r"(?:[$€£]\s*\d+(?:[.,]\d{1,2})?|"
+        r"\b\d+(?:[.,]\d{1,2})?\s*[$€£]|"
+        r"\b(?:usd|eur|gbp|cad|aud)\s+\d+(?:[.,]\d{1,2})?\b|"
+        r"\b\d+(?:[.,]\d{1,2})?\s+(?:usd|eur|gbp|cad|aud)\b)"
+    ),
+}
+AMBIGUOUS_FREE_PATTERN = re.compile(r"(?<![a-z-])free(?![a-z])")
+SAFE_LOCALE_PATTERN = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]*$")
+
 
 @dataclass(frozen=True)
 class Evidence:
     path: str
     line: Optional[int]
     signal: str
+
+
+@dataclass(frozen=True)
+class MetadataInput:
+    path: Path
+    field: str
+    locale: str
+    display_path: str
 
 
 @dataclass
@@ -146,11 +199,16 @@ class ScanContext:
         include_dependencies: bool,
         compare_roots: Sequence[Path],
         archive: Optional[Path],
+        metadata_specs: Sequence[str] = (),
+        metadata_roots: Sequence[Path] = (),
     ) -> None:
         self.root = root.resolve()
         self.include_dependencies = include_dependencies
         self.compare_roots = [path.resolve() for path in compare_roots]
         self.archive = archive.resolve() if archive else None
+        self.metadata_specs = tuple(metadata_specs)
+        self.metadata_roots = tuple(metadata_roots)
+        self.metadata_inputs: List[MetadataInput] = []
         self.files: List[Path] = []
         self.text_files: List[TextFile] = []
         self.findings: List[Finding] = []
@@ -174,7 +232,7 @@ class ScanContext:
             seen = {(e.path, e.line, e.signal) for e in existing.evidence}
             for evidence in finding.evidence:
                 key = (evidence.path, evidence.line, evidence.signal)
-                if key not in seen and len(existing.evidence) < 20:
+                if key not in seen:
                     existing.evidence.append(evidence)
                     seen.add(key)
             return
@@ -198,6 +256,181 @@ def safe_read_text(path: Path, max_bytes: int = 2_000_000) -> Optional[str]:
     if b"\x00" in data[:4096]:
         return None
     return data.decode("utf-8", errors="replace")
+
+
+def metadata_display_path(path: Path, root: Path, field: str, locale: str) -> str:
+    try:
+        return path.relative_to(root.resolve()).as_posix()
+    except ValueError:
+        return f"external-metadata/{locale}/{field}/{path.name}"
+
+
+def parse_metadata_spec(value: str, root: Path) -> MetadataInput:
+    if "=" not in value:
+        raise ValueError("metadata spec must use FIELD[:LOCALE]=PATH")
+    field_locale, raw_path = value.split("=", 1)
+    field_locale = field_locale.strip()
+    raw_path = raw_path.strip()
+    if not field_locale or not raw_path:
+        raise ValueError("metadata spec must use FIELD[:LOCALE]=PATH")
+    if ":" in field_locale:
+        field, locale = field_locale.split(":", 1)
+        if not locale or not SAFE_LOCALE_PATTERN.fullmatch(locale):
+            raise ValueError(f"invalid metadata locale: {locale or '(empty)'}")
+    else:
+        field, locale = field_locale, "unspecified"
+    if field not in METADATA_FIELDS:
+        supported = ", ".join(sorted(METADATA_FIELDS))
+        raise ValueError(f"unsupported metadata field: {field}; expected one of: {supported}")
+
+    path = Path(raw_path).expanduser()
+    if not path.is_absolute():
+        path = root / path
+    path = path.resolve()
+    if not path.exists():
+        raise ValueError(f"metadata file does not exist: {path}")
+    if not path.is_file():
+        raise ValueError(f"metadata path is not a file: {path}")
+    return MetadataInput(path, field, locale, metadata_display_path(path, root, field, locale))
+
+
+def collect_metadata_inputs(ctx: ScanContext) -> None:
+    conventional_root = ctx.root / "fastlane" / "metadata"
+    roots = list(ctx.metadata_roots)
+    if conventional_root.is_dir():
+        roots.append(conventional_root)
+
+    discovered: List[MetadataInput] = []
+    resolved_roots = sorted({path.expanduser().resolve() for path in roots}, key=lambda path: path.as_posix())
+    for metadata_root in resolved_roots:
+        if not metadata_root.exists():
+            raise ValueError(f"metadata root does not exist: {metadata_root}")
+        if not metadata_root.is_dir():
+            raise ValueError(f"metadata root is not a directory: {metadata_root}")
+        locale_directories = sorted(
+            (
+                path
+                for path in metadata_root.iterdir()
+                if path.is_dir()
+                and path.name != "review_information"
+                and SAFE_LOCALE_PATTERN.fullmatch(path.name)
+            ),
+            key=lambda path: path.name,
+        )
+        for locale_directory in locale_directories:
+            locale = locale_directory.name
+            for filename, field in sorted(METADATA_FILENAMES.items()):
+                candidate = locale_directory / filename
+                if not candidate.is_file():
+                    continue
+                path = candidate.resolve()
+                discovered.append(
+                    MetadataInput(
+                        path,
+                        field,
+                        locale,
+                        metadata_display_path(path, ctx.root, field, locale),
+                    )
+                )
+
+    explicit = [parse_metadata_spec(value, ctx.root) for value in sorted(ctx.metadata_specs)]
+    unique: Dict[Tuple[Path, str, str], MetadataInput] = {}
+    for metadata_input in discovered + explicit:
+        key = (metadata_input.path, metadata_input.field, metadata_input.locale)
+        unique.setdefault(key, metadata_input)
+    ctx.metadata_inputs = sorted(
+        unique.values(),
+        key=lambda item: (item.display_path, item.field, item.locale, item.path.as_posix()),
+    )
+
+
+def normalize_metadata_text(value: str) -> str:
+    normalized = unicodedata.normalize("NFKC", value).casefold()
+    normalized = re.sub(r"[\u2010-\u2015\u2212\ufe58\ufe63\uff0d]", "-", normalized)
+    return re.sub(r"[\s\u2007\u200b\u202f\u2060]+", " ", normalized).strip()
+
+
+def scan_metadata_pricing(ctx: ScanContext) -> None:
+    blocker_evidence: List[Evidence] = []
+    warning_evidence: List[Evidence] = []
+    for metadata_input in ctx.metadata_inputs:
+        if metadata_input.field not in PRICING_RULE_FIELDS:
+            continue
+        text = safe_read_text(metadata_input.path)
+        if text is None:
+            continue
+        for line_number, line in enumerate(text.splitlines() or [""], start=1):
+            normalized = normalize_metadata_text(line)
+            matched_category = next(
+                (
+                    category
+                    for category in PRICE_CATEGORIES
+                    if PRICE_PATTERNS[category].search(normalized)
+                ),
+                None,
+            )
+            if matched_category:
+                blocker_evidence.append(
+                    Evidence(
+                        metadata_input.display_path,
+                        line_number,
+                        "Pricing-language rule matched; "
+                        f"field={metadata_input.field}; locale={metadata_input.locale}; "
+                        f"category={matched_category}",
+                    )
+                )
+            elif AMBIGUOUS_FREE_PATTERN.search(normalized):
+                warning_evidence.append(
+                    Evidence(
+                        metadata_input.display_path,
+                        line_number,
+                        "Pricing-language rule matched; "
+                        f"field={metadata_input.field}; locale={metadata_input.locale}; "
+                        "category=ambiguous-free",
+                    )
+                )
+
+    evidence_key = lambda item: (item.path, -1 if item.line is None else item.line, item.signal)
+    blocker_evidence.sort(key=evidence_key)
+    warning_evidence.sort(key=evidence_key)
+    if blocker_evidence:
+        ctx.add_finding(
+            Finding(
+                "ASR-METADATA-PRICE-237",
+                "blocker",
+                "Pricing language found in restricted App Store metadata",
+                "2.3.7",
+                "official",
+                blocker_evidence,
+                "Names, subtitles, keywords, and promotional text must not advertise app or service pricing.",
+                "Remove the pricing claim from every affected field and localization. Keep any accurate price-change context in an appropriate description when relevant.",
+                "Re-export the live metadata and confirm each affected localization no longer contains the claim.",
+            )
+        )
+    if warning_evidence:
+        ctx.add_finding(
+            Finding(
+                "ASR-METADATA-PRICE-237-REVIEW",
+                "warning",
+                "Ambiguous free wording needs contextual review",
+                "2.3.7",
+                "official",
+                warning_evidence,
+                "A standalone term can describe pricing or a non-price product property, so static context is insufficient.",
+                "Review each use and remove it when it advertises app or service pricing.",
+                "Compare the wording with the live product and the metadata field's permitted purpose.",
+            )
+        )
+
+
+def metadata_scan_summary(ctx: ScanContext) -> Dict[str, Any]:
+    fields = sorted({item.field for item in ctx.metadata_inputs})
+    return {
+        "files_scanned": len(ctx.metadata_inputs),
+        "fields": fields,
+        "locales": sorted({item.locale for item in ctx.metadata_inputs}),
+        "pricing_rule_fields": sorted(set(fields) & PRICING_RULE_FIELDS),
+    }
 
 
 def walk_files(root: Path, include_dependencies: bool = False) -> Iterable[Path]:
@@ -1019,8 +1252,8 @@ def add_baseline_manual_checks(ctx: ScanContext) -> None:
     ctx.add_manual(
         "ASR-MANUAL-METADATA",
         "Compare App Store metadata with the candidate build",
-        "Descriptions, screenshots, keywords, age rating, privacy answers, Accessibility Nutrition Labels, and review notes may live outside the repository.",
-        "Export or open the App Store Connect metadata and compare every claim and image with the exact build.",
+        "Descriptions, release notes, screenshots, and previews still need contextual accuracy and relevance review. Other metadata, age rating, privacy answers, Accessibility Nutrition Labels, and review notes may live outside the repository.",
+        "Export or open the App Store Connect metadata and compare every claim, screenshot, and preview with the exact build.",
     )
     ctx.add_manual(
         "ASR-MANUAL-REVIEWER-PATH",
@@ -1037,6 +1270,7 @@ def add_baseline_manual_checks(ctx: ScanContext) -> None:
 
 
 def run_scan(ctx: ScanContext) -> Dict[str, Any]:
+    collect_metadata_inputs(ctx)
     load_files(ctx)
     discover_project(ctx)
     collect_configuration(ctx)
@@ -1046,6 +1280,7 @@ def run_scan(ctx: ScanContext) -> Dict[str, Any]:
     scan_completeness(ctx)
     scan_technical_patterns(ctx)
     scan_feature_heuristics(ctx)
+    scan_metadata_pricing(ctx)
     scan_archive(ctx)
     scan_asset_reuse(ctx)
     add_baseline_manual_checks(ctx)
@@ -1067,7 +1302,7 @@ def run_scan(ctx: ScanContext) -> Dict[str, Any]:
         verdict = "NO STATIC BLOCKERS FOUND"
 
     return {
-        "schema_version": "1.0",
+        "schema_version": "1.1",
         "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
         "root": str(ctx.root),
         "verdict": verdict,
@@ -1077,6 +1312,7 @@ def run_scan(ctx: ScanContext) -> Dict[str, Any]:
             "native_ios_root": ctx.native_ios_root,
             "targets": ctx.targets,
         },
+        "metadata_scan": metadata_scan_summary(ctx),
         "counts": counts,
         "findings": [finding_to_dict(item) for item in ctx.findings],
         "manual_checks": ctx.manual_checks,
@@ -1087,7 +1323,14 @@ def run_scan(ctx: ScanContext) -> Dict[str, Any]:
 
 def finding_to_dict(finding: Finding) -> Dict[str, Any]:
     value = asdict(finding)
-    value["evidence"] = [asdict(item) for item in finding.evidence]
+    evidence = sorted(
+        finding.evidence,
+        key=lambda item: (item.path, -1 if item.line is None else item.line, item.signal),
+    )
+    rendered_evidence = evidence[:20]
+    value["evidence"] = [asdict(item) for item in rendered_evidence]
+    value["evidence_total"] = len(evidence)
+    value["evidence_omitted"] = len(evidence) - len(rendered_evidence)
     return value
 
 
@@ -1215,6 +1458,20 @@ def build_parser() -> argparse.ArgumentParser:
         help="Sibling, template, or prior project root for exact asset comparison; repeatable",
     )
     parser.add_argument(
+        "--metadata",
+        action="append",
+        default=[],
+        metavar="FIELD[:LOCALE]=PATH",
+        help="App Store metadata text file with an explicit field and optional locale; repeatable",
+    )
+    parser.add_argument(
+        "--metadata-root",
+        action="append",
+        default=[],
+        metavar="PATH",
+        help="Fastlane metadata root containing locale directories; repeatable",
+    )
+    parser.add_argument(
         "--include-dependencies",
         action="store_true",
         help="Include dependency directories such as Pods and node_modules in text scanning",
@@ -1239,8 +1496,19 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         parser.error(f"--format {args.format} requires --output-dir")
     archive = Path(args.archive).expanduser() if args.archive else None
     compare_roots = [Path(item).expanduser() for item in args.compare_root]
-    ctx = ScanContext(root, args.include_dependencies, compare_roots, archive)
-    report = run_scan(ctx)
+    metadata_roots = [Path(item).expanduser() for item in args.metadata_root]
+    ctx = ScanContext(
+        root,
+        args.include_dependencies,
+        compare_roots,
+        archive,
+        metadata_specs=args.metadata,
+        metadata_roots=metadata_roots,
+    )
+    try:
+        report = run_scan(ctx)
+    except ValueError as error:
+        parser.error(str(error))
     write_outputs(report, args)
     counts = report["counts"]
     if args.fail_on == "blocker" and counts["blocker"]:
