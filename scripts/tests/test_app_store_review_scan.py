@@ -68,11 +68,14 @@ class ScannerTests(unittest.TestCase):
             ("completely free", "free-claim"),
             ("free trial", "free-claim"),
             ("free-to-play", "free-claim"),
+            ("always-free", "free-claim"),
+            ("free-trial", "free-claim"),
             ("free to use", "free-claim"),
             ("at no cost", "no-cost-claim"),
             ("on sale", "discount-claim"),
             ("20% off", "percent-off"),
             ("20％ off", "percent-off"),
+            ("20%-off", "percent-off"),
             ("save $5", "save-amount"),
             ("$9.99", "currency-amount"),
             ("9,99 €", "currency-amount"),
@@ -109,6 +112,9 @@ class ScannerTests(unittest.TestCase):
             "point of sale",
             "sales tax",
             "discount calculator",
+            "100% free-range recipes",
+            "always free from ads",
+            "completely free of tracking",
         )
         for raw_text in harmless_cases:
             with self.subTest(raw_text=raw_text), tempfile.TemporaryDirectory() as temporary:
@@ -184,7 +190,9 @@ class ScannerTests(unittest.TestCase):
             self.assertEqual("1.1", report["schema_version"])
             self.assertEqual(
                 {
+                    "files_discovered": 3,
                     "files_scanned": 3,
+                    "files_skipped": 0,
                     "fields": ["description", "release_notes", "subtitle"],
                     "locales": ["default", "en-US"],
                     "pricing_rule_fields": ["subtitle"],
@@ -263,7 +271,9 @@ class ScannerTests(unittest.TestCase):
 
             self.assertEqual(
                 {
+                    "files_discovered": 1,
                     "files_scanned": 1,
+                    "files_skipped": 0,
                     "fields": ["description"],
                     "locales": ["en-US"],
                     "pricing_rule_fields": [],
@@ -281,7 +291,10 @@ class ScannerTests(unittest.TestCase):
                 for item in subtitle_report["findings"]
                 if item["id"] == "ASR-METADATA-PRICE-237"
             )
-            self.assertEqual("external-metadata/unspecified/subtitle/offer-copy.txt", finding["evidence"][0]["path"])
+            self.assertRegex(
+                finding["evidence"][0]["path"],
+                r"^external-metadata/unspecified/subtitle/[0-9a-f]{12}/offer-copy\.txt$",
+            )
             self.assertEqual(["unspecified"], subtitle_report["metadata_scan"]["locales"])
 
     def test_extra_metadata_roots_are_discovered(self):
@@ -300,7 +313,87 @@ class ScannerTests(unittest.TestCase):
             finding = next(
                 item for item in report["findings"] if item["id"] == "ASR-METADATA-PRICE-237"
             )
-            self.assertEqual("external-metadata/fr-FR/keywords/keywords.txt", finding["evidence"][0]["path"])
+            self.assertRegex(
+                finding["evidence"][0]["path"],
+                r"^external-metadata/fr-FR/keywords/[0-9a-f]{12}/keywords\.txt$",
+            )
+
+    def test_auto_discovered_unreadable_metadata_is_skipped_with_coverage(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            write_fastlane_metadata(root, "en-US", "description.txt", "Accurate release context")
+            binary = root / "fastlane" / "metadata" / "en-US" / "subtitle.txt"
+            binary.write_bytes(b"SECRET-BINARY\x00always free")
+            oversized = root / "fastlane" / "metadata" / "en-US" / "keywords.txt"
+            oversized.write_bytes(b"x" * 2_000_001)
+
+            report = scan(root)
+
+            self.assertEqual(
+                {
+                    "files_discovered": 3,
+                    "files_scanned": 1,
+                    "files_skipped": 2,
+                    "fields": ["description"],
+                    "locales": ["en-US"],
+                    "pricing_rule_fields": [],
+                },
+                report["metadata_scan"],
+            )
+            self.assertIn(
+                "2 auto-discovered metadata files were skipped because they were unreadable, "
+                "binary, or larger than 2000000 bytes.",
+                report["limitations"],
+            )
+            self.assertNotIn("SECRET-BINARY", json.dumps(report))
+
+    def test_explicit_unreadable_metadata_fails_without_copying_content(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            binary = root / "explicit-subtitle.txt"
+            binary.write_bytes(b"SECRET-EXPLICIT\x00always free")
+
+            with self.assertRaises(ValueError) as raised:
+                scan(
+                    root,
+                    metadata_specs=[f"subtitle:en-US={binary}"],
+                    metadata_roots=[],
+                )
+
+            self.assertIn("explicit metadata file could not be scanned", str(raised.exception))
+            self.assertNotIn("SECRET-EXPLICIT", str(raised.exception))
+
+    def test_external_metadata_aliases_disambiguate_identical_filenames(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            base = Path(temporary)
+            root = base / "project"
+            root.mkdir()
+            first = base / "PRIVATE-FIRST" / "offer.txt"
+            second = base / "PRIVATE-SECOND" / "offer.txt"
+            first.parent.mkdir()
+            second.parent.mkdir()
+            first.write_text("always free", encoding="utf-8")
+            second.write_text("always free", encoding="utf-8")
+
+            report = scan(
+                root,
+                metadata_specs=[f"subtitle:en-US={second}", f"subtitle:en-US={first}"],
+                metadata_roots=[],
+            )
+
+            finding = next(
+                item for item in report["findings"] if item["id"] == "ASR-METADATA-PRICE-237"
+            )
+            paths = [item["path"] for item in finding["evidence"]]
+            self.assertEqual(2, len(set(paths)))
+            for display_path in paths:
+                self.assertRegex(
+                    display_path,
+                    r"^external-metadata/en-US/subtitle/[0-9a-f]{12}/offer\.txt$",
+                )
+            serialized = json.dumps(report)
+            self.assertNotIn("PRIVATE-FIRST", serialized)
+            self.assertNotIn("PRIVATE-SECOND", serialized)
 
     def test_duplicate_auto_discovered_and_explicit_metadata_is_scanned_once(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -413,7 +506,14 @@ class ScannerTests(unittest.TestCase):
             report = scan(Path(temporary))
 
             self.assertEqual(
-                {"files_scanned": 0, "fields": [], "locales": [], "pricing_rule_fields": []},
+                {
+                    "files_discovered": 0,
+                    "files_scanned": 0,
+                    "files_skipped": 0,
+                    "fields": [],
+                    "locales": [],
+                    "pricing_rule_fields": [],
+                },
                 report["metadata_scan"],
             )
 
