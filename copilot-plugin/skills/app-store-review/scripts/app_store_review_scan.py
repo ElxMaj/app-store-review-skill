@@ -132,16 +132,17 @@ PRICE_CATEGORIES = (
 )
 PRICE_PATTERNS = {
     "free-claim": re.compile(
-        r"\b(?:\d{1,3}\s*%\s*free(?![-\s]+(?:range|from|of)\b)|"
-        r"always[-\s]+free(?![-\s]+(?:range|from|of)\b)|"
-        r"completely[-\s]+free(?![-\s]+(?:range|from|of)\b)|"
+        r"\b(?:\d{1,3}\s*%\s*free(?![-\s]+(?:range\b|(?:from|of)[-\s]+(?:ads?|advertising|tracking|trackers?)\b))|"
+        r"always[-\s]+free(?![-\s]+(?:range\b|(?:from|of)[-\s]+(?:ads?|advertising|tracking|trackers?)\b))|"
+        r"completely[-\s]+free(?![-\s]+(?:range\b|(?:from|of)[-\s]+(?:ads?|advertising|tracking|trackers?)\b))|"
+        r"free[-\s]+of[-\s]+charge|free[-\s]+from[-\s]+fees?|"
         r"free[-\s]+trial|free[-\s]+to[-\s]+play|free[-\s]+to[-\s]+use)\b"
     ),
     "no-cost-claim": re.compile(r"\b(?:(?:at\s+)?no|zero)\s+cost\b"),
     "discount-claim": re.compile(
         r"\b(?:on\s+sale|sale\s+price|discounted\s+(?:price|plan|service))\b"
     ),
-    "percent-off": re.compile(r"\b\d{1,3}(?:[.,]\d+)?\s*%(?:\s+|\s*-\s*)off\b"),
+    "percent-off": re.compile(r"\b\d{1,3}(?:[.,]\d+)?\s*%\s*(?:-\s*)?off\b"),
     "save-amount": re.compile(
         r"\bsave\s+(?:[$€£]\s*\d+(?:[.,]\d{1,2})?|"
         r"\d+(?:[.,]\d{1,2})?\s*[$€£]|"
