@@ -1,37 +1,46 @@
 {
-  "scenario_id": "rejection-recovery-metadata-price-237",
-  "criteria": [
+  "context": "Tests a proven Guideline 2.3.7 subtitle price-reference rejection. The agent must preserve Apple's supplied message, classify the case as FIX, inspect every live localization and fallback asset, keep description guidance contextual, give conditional same-build advice, draft a factual reply, and avoid appeal or invented work.",
+  "type": "weighted_checklist",
+  "checklist": [
     {
-      "id": "verbatim-opening",
-      "description": "Preserves Apple's complete supplied message under Apple's message (verbatim) and prints exactly one Response classification line."
+      "name": "Verbatim opening and one classification",
+      "description": "Preserves Apple's complete supplied message under Apple's message (verbatim) and prints exactly one Response classification line.",
+      "max_score": 15
     },
     {
-      "id": "proven-fix",
-      "description": "Classifies the proven case as FIX and maps the subtitle price claim to Guideline 2.3.7."
+      "name": "Proven FIX under 2.3.7",
+      "description": "Classifies the proven case as FIX and maps the subtitle price claim to Guideline 2.3.7.",
+      "max_score": 15
     },
     {
-      "id": "localized-subtitles",
-      "description": "Requires inspection of every live subtitle localization and removal of equivalent price claims only in locales where they occur."
+      "name": "Every live subtitle localization",
+      "description": "Requires inspection of every live subtitle localization and removal of equivalent price claims only in locales where they occur.",
+      "max_score": 14
     },
     {
-      "id": "fallback-assets",
-      "description": "Requires inspection of localization fallback metadata and product-page assets."
+      "name": "Fallback metadata and assets",
+      "description": "Requires inspection of localization fallback metadata and product-page assets.",
+      "max_score": 10
     },
     {
-      "id": "description-context",
-      "description": "Allows accurate, relevant price-change copy in an appropriate description context without declaring all description pricing safe."
+      "name": "Description remains contextual",
+      "description": "Allows accurate, relevant price-change copy in an appropriate description context without declaring all description pricing safe or imposing a blanket ban.",
+      "max_score": 12
     },
     {
-      "id": "conditional-same-build",
-      "description": "Says a new build is normally unnecessary only when no binary or bundled configuration changed and the current App Store Connect status permits the edit."
+      "name": "Conditional same-build guidance",
+      "description": "Says a new build is normally unnecessary only when no binary or bundled configuration changed and the current App Store Connect status permits the edit.",
+      "max_score": 12
     },
     {
-      "id": "factual-reply",
-      "description": "Drafts a factual reply that names only verified fields, locales, version, build, changes, and attachments."
+      "name": "Factual verified reply",
+      "description": "Drafts a factual reply that names only verified fields, locales, version, build, changes, and attachments.",
+      "max_score": 12
     },
     {
-      "id": "no-overreach",
-      "description": "Does not recommend an appeal, invent binary work, or impose a blanket ban on pricing information in descriptions."
+      "name": "No appeal or invented work",
+      "description": "Does not recommend an appeal, invent binary work, or impose a blanket ban on pricing information in descriptions.",
+      "max_score": 10
     }
   ]
 }

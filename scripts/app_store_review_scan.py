@@ -121,6 +121,7 @@ METADATA_FILENAMES = {
 }
 METADATA_FIELDS = frozenset(METADATA_FILENAMES.values())
 PRICING_RULE_FIELDS = frozenset({"keywords", "name", "promotional_text", "subtitle"})
+MAX_METADATA_BYTES = 2_000_000
 PRICE_CATEGORIES = (
     "free-claim",
     "no-cost-claim",
@@ -131,14 +132,16 @@ PRICE_CATEGORIES = (
 )
 PRICE_PATTERNS = {
     "free-claim": re.compile(
-        r"\b(?:\d{1,3}\s*%\s*free|always\s+free|completely\s+free|"
-        r"free\s+trial|free\s*-\s*to\s*-\s*play|free\s+to\s+use)\b"
+        r"\b(?:\d{1,3}\s*%\s*free(?![-\s]+(?:range|from|of)\b)|"
+        r"always[-\s]+free(?![-\s]+(?:range|from|of)\b)|"
+        r"completely[-\s]+free(?![-\s]+(?:range|from|of)\b)|"
+        r"free[-\s]+trial|free[-\s]+to[-\s]+play|free[-\s]+to[-\s]+use)\b"
     ),
     "no-cost-claim": re.compile(r"\b(?:(?:at\s+)?no|zero)\s+cost\b"),
     "discount-claim": re.compile(
         r"\b(?:on\s+sale|sale\s+price|discounted\s+(?:price|plan|service))\b"
     ),
-    "percent-off": re.compile(r"\b\d{1,3}(?:[.,]\d+)?\s*%\s*off\b"),
+    "percent-off": re.compile(r"\b\d{1,3}(?:[.,]\d+)?\s*%(?:\s+|\s*-\s*)off\b"),
     "save-amount": re.compile(
         r"\bsave\s+(?:[$€£]\s*\d+(?:[.,]\d{1,2})?|"
         r"\d+(?:[.,]\d{1,2})?\s*[$€£]|"
@@ -152,7 +155,9 @@ PRICE_PATTERNS = {
         r"\b\d+(?:[.,]\d{1,2})?\s+(?:usd|eur|gbp|cad|aud)\b)"
     ),
 }
-AMBIGUOUS_FREE_PATTERN = re.compile(r"(?<![a-z-])free(?![a-z])")
+AMBIGUOUS_FREE_PATTERN = re.compile(
+    r"(?<![a-z-])free(?![a-z]|[-\s]+(?:range|from|of)\b)"
+)
 SAFE_LOCALE_PATTERN = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]*$")
 
 
@@ -209,6 +214,9 @@ class ScanContext:
         self.metadata_specs = tuple(metadata_specs)
         self.metadata_roots = tuple(metadata_roots)
         self.metadata_inputs: List[MetadataInput] = []
+        self.metadata_contents: Dict[MetadataInput, str] = {}
+        self.metadata_files_discovered = 0
+        self.metadata_files_skipped = 0
         self.files: List[Path] = []
         self.text_files: List[TextFile] = []
         self.findings: List[Finding] = []
@@ -262,7 +270,8 @@ def metadata_display_path(path: Path, root: Path, field: str, locale: str) -> st
     try:
         return path.relative_to(root.resolve()).as_posix()
     except ValueError:
-        return f"external-metadata/{locale}/{field}/{path.name}"
+        disambiguator = hashlib.sha256(path.as_posix().encode("utf-8")).hexdigest()[:12]
+        return f"external-metadata/{locale}/{field}/{disambiguator}/{path.name}"
 
 
 def parse_metadata_spec(value: str, root: Path) -> MetadataInput:
@@ -334,14 +343,40 @@ def collect_metadata_inputs(ctx: ScanContext) -> None:
                 )
 
     explicit = [parse_metadata_spec(value, ctx.root) for value in sorted(ctx.metadata_specs)]
+    explicit_keys = {(item.path, item.field, item.locale) for item in explicit}
     unique: Dict[Tuple[Path, str, str], MetadataInput] = {}
     for metadata_input in discovered + explicit:
         key = (metadata_input.path, metadata_input.field, metadata_input.locale)
         unique.setdefault(key, metadata_input)
-    ctx.metadata_inputs = sorted(
+    inputs = sorted(
         unique.values(),
         key=lambda item: (item.display_path, item.field, item.locale, item.path.as_posix()),
     )
+    ctx.metadata_files_discovered = len(inputs)
+    ctx.metadata_inputs = []
+    ctx.metadata_contents = {}
+    ctx.metadata_files_skipped = 0
+    for metadata_input in inputs:
+        text = safe_read_text(metadata_input.path, max_bytes=MAX_METADATA_BYTES)
+        if text is None:
+            key = (metadata_input.path, metadata_input.field, metadata_input.locale)
+            if key in explicit_keys:
+                raise ValueError(
+                    "explicit metadata file could not be scanned because it is unreadable, "
+                    f"binary, or larger than {MAX_METADATA_BYTES} bytes: "
+                    f"{metadata_input.display_path}"
+                )
+            ctx.metadata_files_skipped += 1
+            continue
+        ctx.metadata_inputs.append(metadata_input)
+        ctx.metadata_contents[metadata_input] = text
+    if ctx.metadata_files_skipped:
+        count = ctx.metadata_files_skipped
+        subject = "file was" if count == 1 else "files were"
+        ctx.limitations.append(
+            f"{count} auto-discovered metadata {subject} skipped because they were unreadable, "
+            f"binary, or larger than {MAX_METADATA_BYTES} bytes."
+        )
 
 
 def normalize_metadata_text(value: str) -> str:
@@ -363,9 +398,7 @@ def scan_metadata_pricing(ctx: ScanContext) -> None:
     for metadata_input in ctx.metadata_inputs:
         if metadata_input.field not in PRICING_RULE_FIELDS:
             continue
-        text = safe_read_text(metadata_input.path)
-        if text is None:
-            continue
+        text = ctx.metadata_contents[metadata_input]
         for line_number, line in enumerate(text.splitlines() or [""], start=1):
             normalized = normalize_metadata_text(line)
             matched_category = next(
@@ -433,7 +466,9 @@ def scan_metadata_pricing(ctx: ScanContext) -> None:
 def metadata_scan_summary(ctx: ScanContext) -> Dict[str, Any]:
     fields = sorted({item.field for item in ctx.metadata_inputs})
     return {
+        "files_discovered": ctx.metadata_files_discovered,
         "files_scanned": len(ctx.metadata_inputs),
+        "files_skipped": ctx.metadata_files_skipped,
         "fields": fields,
         "locales": sorted({item.locale for item in ctx.metadata_inputs}),
         "pricing_rule_fields": sorted(set(fields) & PRICING_RULE_FIELDS),

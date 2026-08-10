@@ -18,9 +18,9 @@ SEVERITY_LABEL = {
     "info": "Info",
 }
 VERDICT_LABEL = {
-    "NO_STATIC_BLOCKERS_FOUND": "No static blockers found",
-    "NEEDS_REVIEW": "Needs review",
-    "NOT_READY": "Not ready",
+    "NO_STATIC_BLOCKERS_FOUND": "NO STATIC BLOCKERS FOUND",
+    "NEEDS_REVIEW": "NEEDS REVIEW",
+    "NOT_READY": "NOT READY",
 }
 MODE_LABEL = {
     "pre_submission": "Pre-submission",
@@ -381,7 +381,7 @@ def project_name(report: Mapping[str, Any]) -> str:
 
 
 def verdict_key(report: Mapping[str, Any]) -> str:
-    return str(report.get("verdict", "NEEDS_REVIEW")).strip().upper().replace(" ", "_")
+    return str(report.get("verdict", "NEEDS REVIEW")).strip().upper().replace(" ", "_")
 
 
 def join_names(values: Iterable[Any], fallback: str = "Not resolved") -> str:

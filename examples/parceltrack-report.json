@@ -8,7 +8,7 @@
   ],
   "generated_at": "2026-08-10T12:00:00Z",
   "root": "/example/ParcelTrack",
-  "verdict": "NOT_READY",
+  "verdict": "NOT READY",
   "policy_verified_at": "2026-08-10",
   "summary": "One confirmed privacy blocker remains. Two warnings need product and target-level review before this build is ready for App Store Connect.",
   "project": {
@@ -29,7 +29,9 @@
     ]
   },
   "metadata_scan": {
+    "files_discovered": 0,
     "files_scanned": 0,
+    "files_skipped": 0,
     "fields": [],
     "locales": [],
     "pricing_rule_fields": []

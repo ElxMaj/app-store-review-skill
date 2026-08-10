@@ -46,7 +46,7 @@ Emit UTF-8 JSON with this top-level shape:
   "schema_version": "1.1",
   "generated_at": "2026-08-10T12:00:00Z",
   "root": "/absolute/project/path",
-  "verdict": "NEEDS_REVIEW",
+  "verdict": "NEEDS REVIEW",
   "policy_verified_at": "2026-08-10",
   "project": {
     "frameworks": ["xcode", "react-native"],
@@ -60,10 +60,12 @@ Emit UTF-8 JSON with this top-level shape:
     "info": 1
   },
   "metadata_scan": {
+    "files_discovered": 2,
     "files_scanned": 2,
+    "files_skipped": 0,
     "fields": ["description", "subtitle"],
     "locales": ["en-US"],
-    "pricing_rule_fields": ["keywords", "name", "promotional_text", "subtitle"]
+    "pricing_rule_fields": ["subtitle"]
   },
   "findings": [],
   "manual_checks": [],
@@ -101,11 +103,16 @@ Each finding object contains:
 
 The deterministic scanner uses a trusted `signal` string instead of copying source text into its preliminary JSON. A reviewed final report may replace `signal` with a minimal `excerpt` only after treating the source as untrusted data and confirming the excerpt is necessary. The HTML renderer accepts either field.
 
-`metadata_scan.files_scanned` is the number of accepted metadata files.
+`metadata_scan.files_discovered` is the number of deduplicated explicit and
+auto-discovered metadata inputs. `metadata_scan.files_scanned` is the number
+successfully read as metadata text, and `metadata_scan.files_skipped` is the
+number of unreadable, binary, or oversized auto-discovered inputs excluded with
+a generic limitation. Explicit inputs that cannot be scanned are errors.
 `metadata_scan.fields` and `metadata_scan.locales` are sorted unique values from
-those inputs. `metadata_scan.pricing_rule_fields` lists the metadata fields where
-the deterministic presence-only price-reference rule runs; descriptions and
-release notes may still require contextual review.
+successfully scanned inputs. `metadata_scan.pricing_rule_fields` is the
+intersection of those scanned fields with the fields where the deterministic
+presence-only price-reference rule runs; descriptions and release notes may
+still require contextual review.
 
 For every finding, `evidence_total` records all deterministic evidence items and
 `evidence_omitted` records how many were excluded by the display cap. The visible

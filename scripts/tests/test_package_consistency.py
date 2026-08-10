@@ -1,11 +1,17 @@
 import json
 import re
+import sys
 import unittest
 import zipfile
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "scripts"))
+
+from render_app_store_report import render_report_html  # noqa: E402
+
+
 ARCHIVE = ROOT / "app-store-review-skill.skill"
 PACKAGE_ROOT = "app-store-review"
 COPILOT_SKILL = ROOT / "copilot-plugin" / "skills" / "app-store-review"
@@ -46,9 +52,12 @@ class PackageConsistencyTests(unittest.TestCase):
 
         self.assertEqual("1.1", sample["schema_version"])
         self.assertEqual("2026-08-10", sample["policy_verified_at"])
+        self.assertEqual("NOT READY", sample["verdict"])
         self.assertEqual(
             {
+                "files_discovered": 0,
                 "files_scanned": 0,
+                "files_skipped": 0,
                 "fields": [],
                 "locales": [],
                 "pricing_rule_fields": [],
@@ -59,6 +68,52 @@ class PackageConsistencyTests(unittest.TestCase):
             {"name": "app_store_review_scan", "version": EXPECTED_VERSION},
             sample["scanner"],
         )
+        rendered = (ROOT / "examples" / "parceltrack-report.html").read_text(encoding="utf-8")
+        self.assertEqual(render_report_html(sample), rendered)
+        self.assertIn("Policy / 2026-08-10", rendered)
+        self.assertIn("Generated 2026-08-10T12:00:00Z", rendered)
+        self.assertIn('<span class="verdict">NOT READY</span>', rendered)
+
+    def test_report_contract_metadata_coverage_matches_the_example(self):
+        contract = (ROOT / "references" / "report-contract.md").read_text(encoding="utf-8")
+
+        for key in ("files_discovered", "files_scanned", "files_skipped"):
+            with self.subTest(key=key):
+                self.assertIn(f'"{key}"', contract)
+        self.assertIn('"fields": ["description", "subtitle"]', contract)
+        self.assertIn('"pricing_rule_fields": ["subtitle"]', contract)
+        self.assertNotIn('"verdict": "NEEDS_REVIEW"', contract)
+
+    def test_metadata_rejection_eval_uses_established_weighted_schema(self):
+        eval_root = ROOT / "evals" / "rejection-recovery-metadata"
+        criteria = json.loads((eval_root / "criteria.json").read_text(encoding="utf-8"))
+        scenario = json.loads((eval_root / "scenario.json").read_text(encoding="utf-8"))
+
+        self.assertEqual({"context", "type", "checklist"}, set(criteria))
+        self.assertEqual("weighted_checklist", criteria["type"])
+        self.assertEqual(100, sum(item["max_score"] for item in criteria["checklist"]))
+        self.assertTrue(
+            all(set(item) == {"name", "description", "max_score"} for item in criteria["checklist"])
+        )
+        self.assertEqual({"description", "include"}, set(scenario))
+        self.assertEqual(["./inputs"], scenario["include"])
+        semantics = " ".join(item["description"] for item in criteria["checklist"]).lower()
+        for required in (
+            "complete supplied message",
+            "exactly one response classification",
+            "fix",
+            "guideline 2.3.7",
+            "every live subtitle localization",
+            "fallback metadata",
+            "price-change copy",
+            "no binary or bundled configuration changed",
+            "app store connect status permits the edit",
+            "only verified fields, locales, version, build, changes, and attachments",
+            "does not recommend an appeal",
+            "blanket ban",
+        ):
+            with self.subTest(required=required):
+                self.assertIn(required, semantics)
 
     def test_copilot_and_archive_match_canonical_resources(self):
         with zipfile.ZipFile(ARCHIVE) as archive:

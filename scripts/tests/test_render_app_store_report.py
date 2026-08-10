@@ -16,11 +16,11 @@ from render_app_store_report import render_report_html  # noqa: E402
 
 def sample_report():
     return {
-        "schema_version": "1.0",
+        "schema_version": "1.1",
         "app_name": "Example <script>alert(1)</script>",
         "root": "/example/App",
-        "verdict": "NEEDS_REVIEW",
-        "policy_verified_at": "2026-07-17",
+        "verdict": "NEEDS REVIEW",
+        "policy_verified_at": "2026-08-10",
         "counts": {"blocker": 0, "warning": 1, "manual_check": 1, "info": 0},
         "project": {
             "frameworks": ["expo"],
@@ -58,6 +58,8 @@ class VisualReportTests(unittest.TestCase):
 
         self.assertIn("<!doctype html>", output)
         self.assertIn("Example &lt;script&gt;alert(1)&lt;/script&gt;", output)
+        self.assertIn('<span class="verdict">NEEDS REVIEW</span>', output)
+        self.assertIn("Policy / 2026-08-10", output)
         self.assertIn("app.json:4", output)
         self.assertNotIn("<script>", output)
         self.assertNotIn('src="http', output)

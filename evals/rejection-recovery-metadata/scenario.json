@@ -1,9 +1,4 @@
 {
-  "id": "rejection-recovery-metadata-price-237",
-  "title": "Recover from a proven subtitle price-reference rejection",
-  "description": "An anonymized App Review rejection cites Guideline 2.3.7 and identifies the subtitle copy Always free job alerts as an explicit price claim.",
-  "task": "task.md",
-  "inputs": [
-    "inputs/rejection-details.md"
-  ]
+  "description": "Anonymized Guideline 2.3.7 rejection recovery for a proven subtitle price claim requiring localized metadata correction and a factual Resolution Center reply",
+  "include": ["./inputs"]
 }
