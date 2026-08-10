@@ -39,6 +39,27 @@ class PackageConsistencyTests(unittest.TestCase):
                 )
         self.assertIn('"version": "1.2.0"', contract)
 
+    def test_public_sample_uses_current_report_contract(self):
+        sample = json.loads(
+            (ROOT / "examples" / "parceltrack-report.json").read_text(encoding="utf-8")
+        )
+
+        self.assertEqual("1.1", sample["schema_version"])
+        self.assertEqual("2026-08-10", sample["policy_verified_at"])
+        self.assertEqual(
+            {
+                "files_scanned": 0,
+                "fields": [],
+                "locales": [],
+                "pricing_rule_fields": [],
+            },
+            sample["metadata_scan"],
+        )
+        self.assertEqual(
+            {"name": "app_store_review_scan", "version": EXPECTED_VERSION},
+            sample["scanner"],
+        )
+
     def test_copilot_and_archive_match_canonical_resources(self):
         with zipfile.ZipFile(ARCHIVE) as archive:
             for source in [*ROOT_REFERENCES, *ROOT_SCRIPTS]:
