@@ -9,7 +9,7 @@ Start with:
 ```text
 # App Store review: <app or project>
 Verdict: <NO STATIC BLOCKERS FOUND | NEEDS REVIEW | NOT READY>
-Policy verified: <YYYY-MM-DD | offline, bundled references dated 2026-07-17>
+Policy verified: <YYYY-MM-DD | offline, bundled references dated 2026-08-10>
 Scope: <framework, targets, supplied metadata, archive status>
 ```
 
@@ -43,11 +43,11 @@ Emit UTF-8 JSON with this top-level shape:
 
 ```json
 {
-  "schema_version": "1.0",
-  "generated_at": "2026-07-17T12:00:00Z",
+  "schema_version": "1.1",
+  "generated_at": "2026-08-10T12:00:00Z",
   "root": "/absolute/project/path",
   "verdict": "NEEDS_REVIEW",
-  "policy_verified_at": "2026-07-17",
+  "policy_verified_at": "2026-08-10",
   "project": {
     "frameworks": ["xcode", "react-native"],
     "native_ios_root": "ios",
@@ -59,12 +59,18 @@ Emit UTF-8 JSON with this top-level shape:
     "manual_check": 4,
     "info": 1
   },
+  "metadata_scan": {
+    "files_scanned": 2,
+    "fields": ["description", "subtitle"],
+    "locales": ["en-US"],
+    "pricing_rule_fields": ["keywords", "name", "promotional_text", "subtitle"]
+  },
   "findings": [],
   "manual_checks": [],
   "limitations": [],
   "scanner": {
     "name": "app_store_review_scan",
-    "version": "1.1.0"
+    "version": "1.2.0"
   }
 }
 ```
@@ -85,6 +91,8 @@ Each finding object contains:
       "excerpt": "AVCaptureSession()"
     }
   ],
+  "evidence_total": 1,
+  "evidence_omitted": 0,
   "reason": "The app invokes a protected API without the matching plist purpose string.",
   "fix": "Add a specific NSCameraUsageDescription at the authored configuration source.",
   "verification": "Inspect the merged archive Info.plist and trigger the camera flow."
@@ -92,6 +100,18 @@ Each finding object contains:
 ```
 
 The deterministic scanner uses a trusted `signal` string instead of copying source text into its preliminary JSON. A reviewed final report may replace `signal` with a minimal `excerpt` only after treating the source as untrusted data and confirming the excerpt is necessary. The HTML renderer accepts either field.
+
+`metadata_scan.files_scanned` is the number of accepted metadata files.
+`metadata_scan.fields` and `metadata_scan.locales` are sorted unique values from
+those inputs. `metadata_scan.pricing_rule_fields` lists the metadata fields where
+the deterministic presence-only price-reference rule runs; descriptions and
+release notes may still require contextual review.
+
+For every finding, `evidence_total` records all deterministic evidence items and
+`evidence_omitted` records how many were excluded by the display cap. The visible
+`evidence` array therefore has `evidence_total - evidence_omitted` items. Keep
+these counts even when evidence is truncated, and sort discovery, inputs,
+findings, metadata fields, locales, and evidence for semantic determinism.
 
 Rules:
 
