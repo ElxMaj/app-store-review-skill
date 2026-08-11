@@ -19,6 +19,8 @@ It does not change `SKILL.md`, the scanner, references, eval content, the v1.2.0
 
 Add `.github/workflows/pages.yml`. The workflow runs on pushes to `main` that change the canonical report, its renderer, the Pages workflow, or the README. It also supports manual dispatch.
 
+Before the maintenance pull request is merged, enable GitHub Pages once through the authenticated repository API with `build_type: workflow`. The workflow does not attempt repository-level enablement because GitHub's default Actions token cannot perform that administrative operation.
+
 The build job creates a temporary `_site` directory and copies:
 
 - `examples/parceltrack-report.html` to `_site/index.html`
@@ -73,11 +75,12 @@ Future owner changes must then use a pull request and pass `validate`. Tessl pub
 
 Before opening the pull request:
 
-- run the 36 Python tests,
+- run all Python tests, including offline registry-check fixtures,
 - parse every repository JSON file used by packaging and evals,
 - run `unzip -t app-store-review-skill.skill`,
 - validate both workflow YAML files with Ruby's YAML parser,
-- execute the registry-check shell logic locally,
+- execute the registry-check shell logic against deterministic local fixtures,
+- run the live registry check and record any external crawler delay without treating it as a local code failure,
 - assemble the Pages artifact locally and confirm the HTML and JSON exist at their public paths,
 - run `git diff --check`.
 
