@@ -23,6 +23,10 @@ FULL_SHA_PATTERN = re.compile(r"^[0-9a-f]{40}$")
 MAJOR_TAG_PATTERN = re.compile(r"^v[0-9]+$")
 MAPPING_USES_KEY_PATTERN = re.compile(r"^(?:-\s*)?(?:uses|\"uses\"|'uses')\s*:")
 FLOW_USES_KEY_PATTERN = re.compile(r"(?:\{|,)\s*(?:uses|\"uses\"|'uses')\s*:")
+PREFIXED_USES_KEY_PATTERN = re.compile(
+    r"^(?:-\s*)?(?:&[A-Za-z0-9_-]+|![^\s]+)\s+"
+    r"(?:uses|\"uses\"|'uses')\s*:"
+)
 
 
 def fail(message: str) -> None:
@@ -90,6 +94,7 @@ def workflow_action_pins(workflow_dir: Path) -> list[tuple[str, str, str]]:
             has_uses_key = bool(
                 MAPPING_USES_KEY_PATTERN.search(stripped)
                 or FLOW_USES_KEY_PATTERN.search(stripped)
+                or PREFIXED_USES_KEY_PATTERN.search(stripped)
             )
             if not has_uses_key:
                 continue

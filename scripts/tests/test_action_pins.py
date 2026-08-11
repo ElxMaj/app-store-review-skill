@@ -106,6 +106,12 @@ class ActionPinTests(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("unsupported uses syntax", result.stderr)
 
+    def test_anchored_uses_key_is_rejected_instead_of_ignored(self):
+        result = self.run_checker(raw_extra_step="- &unsafe uses: acme/example@v1")
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("unsupported uses syntax", result.stderr)
+
 
 if __name__ == "__main__":
     unittest.main()
