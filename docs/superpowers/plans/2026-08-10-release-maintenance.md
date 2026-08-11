@@ -175,7 +175,7 @@ Support test-only environment overrides for both manifest paths and all three UR
 
 - [ ] **Step 3: Add the scheduled workflow**
 
-Create `.github/workflows/registry-health.yml` with daily `08:00 UTC`, manual dispatch, `contents: read`, a five-minute timeout, pinned `actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1`, and one step running `scripts/check_registry_health.sh`.
+Create `.github/workflows/registry-health.yml` with daily `08:17 UTC`, manual dispatch, `contents: read`, a five-minute timeout, pinned `actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1`, and one step running `scripts/check_registry_health.sh`.
 
 - [ ] **Step 4: Make the offline behavior tests pass**
 
@@ -303,6 +303,10 @@ Then delete only the two known remote branches after verifying their exact names
 - [ ] **Step 8: Disable automated security-update pull requests**
 
 Check the repository's automated security-fix state. If enabled, disable automated security fixes through the GitHub API. Keep vulnerability alerts enabled so security findings remain visible without Dependabot opening pull requests.
+
+### Reviewer follow-up: Preserve Action update visibility
+
+Before publication, add `.github/scripts/check_action_pins.py`, its offline tests, and `.github/workflows/action-pin-health.yml`. The monthly workflow verifies each full Action SHA against its moving major-version tag without opening pull requests. Update existing pins to the current major tags, document quarterly major-version and advisory review plus GitHub's 60-day scheduled-workflow limitation in `CONTRIBUTING.md`, and keep vulnerability alerts enabled.
 
 ### Task 4: Complete deployment and enforce administrator protection
 

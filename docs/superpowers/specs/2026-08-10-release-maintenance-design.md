@@ -10,7 +10,7 @@ This change covers four repository-maintenance surfaces:
 
 1. GitHub Pages for the existing sample report.
 2. Daily read-only checks for Tessl and ClaudePluginHub freshness.
-3. Dependabot removal and closure of its two open pull requests.
+3. Dependabot removal, closure of its two open pull requests, and a read-only replacement check for SHA-pinned GitHub Actions.
 4. Enforcement of the existing `main` branch rules for administrators.
 
 It does not change `SKILL.md`, the scanner, references, eval content, the v1.2.0 archive, or the published v1.2.0 tag and release.
@@ -32,7 +32,7 @@ The public URL is `https://elxmaj.github.io/app-store-review-skill/`. The README
 
 ## Registry freshness monitor
 
-Add `.github/workflows/registry-health.yml`. It runs daily at 08:00 UTC and on manual dispatch. It has only `contents: read` permission.
+Add `.github/workflows/registry-health.yml`. It runs daily at 08:17 UTC and on manual dispatch. It has only `contents: read` permission. The non-zero minute avoids GitHub's busiest scheduling boundary.
 
 The check derives expected versions from repository files rather than hard-coding a release:
 
@@ -57,6 +57,8 @@ Remove `.github/dependabot.yml`. Close pull requests #6 and #7 with a short expl
 
 Dependabot is already absent from the repository's contributor list. This cleanup removes the remaining open bot activity without rewriting history.
 
+Add a monthly `Action Pin Health` workflow and offline-tested checker under `.github/scripts/`. It verifies every full Action SHA against the action's moving major-version tag without adding repository-maintenance code to the distributed skill. Maintainers review new major versions, GitHub advisories, and Action release and security notes quarterly, keep GitHub vulnerability alerts enabled, and re-enable scheduled workflows if GitHub disables them after 60 days of repository inactivity.
+
 ## Branch protection
 
 The current `main` protection already requires:
@@ -80,6 +82,7 @@ Before opening the pull request:
 - run `unzip -t app-store-review-skill.skill`,
 - validate both workflow YAML files with Ruby's YAML parser,
 - execute the registry-check shell logic against deterministic local fixtures,
+- execute the Action pin checker against deterministic local API fixtures,
 - run the live registry check and record any external crawler delay without treating it as a local code failure,
 - assemble the Pages artifact locally and confirm the HTML and JSON exist at their public paths,
 - run `git diff --check`.
