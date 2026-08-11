@@ -2,7 +2,7 @@ name: Registry Health
 
 on:
   schedule:
-    - cron: "0 8 * * *"
+    - cron: "17 8 * * *"
   workflow_dispatch:
 
 permissions:

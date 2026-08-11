@@ -14,9 +14,71 @@ fetch() {
     --show-error \
     --location \
     --retry 3 \
+    --retry-all-errors \
     --connect-timeout 10 \
     --max-time 30 \
     "$1"
+}
+
+extract_json_ld_version() {
+  python3 -c '
+import json
+from html.parser import HTMLParser
+import sys
+
+
+class JsonLdParser(HTMLParser):
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.blocks = []
+        self.current = None
+
+    def handle_starttag(self, tag, attrs):
+        attributes = {name.lower(): value for name, value in attrs}
+        if tag.lower() == "script" and attributes.get("type", "").lower() == "application/ld+json":
+            self.current = []
+
+    def handle_data(self, data):
+        if self.current is not None:
+            self.current.append(data)
+
+    def handle_endtag(self, tag):
+        if tag.lower() == "script" and self.current is not None:
+            self.blocks.append("".join(self.current))
+            self.current = None
+
+
+def versions(value, expected_url):
+    if isinstance(value, dict):
+        version = value.get("softwareVersion")
+        url = value.get("url")
+        if (
+            isinstance(version, str)
+            and version
+            and isinstance(url, str)
+            and url.rstrip("/") == expected_url.rstrip("/")
+        ):
+            yield version
+        for child in value.values():
+            yield from versions(child, expected_url)
+    elif isinstance(value, list):
+        for child in value:
+            yield from versions(child, expected_url)
+
+
+parser = JsonLdParser()
+parser.feed(sys.stdin.read())
+expected_url = sys.argv[1]
+for block in parser.blocks:
+    try:
+        payload = json.loads(block)
+    except json.JSONDecodeError:
+        continue
+    for version in versions(payload, expected_url):
+        print(version)
+        raise SystemExit(0)
+raise SystemExit(1)
+' "$1"
 }
 
 claude_manifest=${ASR_CLAUDE_MANIFEST:-.claude-plugin/plugin.json}
@@ -31,12 +93,8 @@ expected_tessl_version=$(jq -er '.version | select(type == "string" and length >
 tessl_version_url=${ASR_TESSL_VERSION_URL:-https://api.tessl.io/v1/tiles/maj-labs/app-store-review/versions/$expected_tessl_version}
 
 claude_listing=$(fetch "$claude_url") || fail "ClaudePluginHub listing could not be downloaded"
-claude_version_pattern='"softwareVersion"[[:space:]]*:[[:space:]]*"([^"]+)"'
-if [[ $claude_listing =~ $claude_version_pattern ]]; then
-  observed_claude_version=${BASH_REMATCH[1]}
-else
-  fail "ClaudePluginHub softwareVersion is missing"
-fi
+observed_claude_version=$(extract_json_ld_version "$claude_url" <<<"$claude_listing") \
+  || fail "ClaudePluginHub softwareVersion is missing"
 
 if [[ $observed_claude_version != "$expected_claude_version" ]]; then
   fail "ClaudePluginHub version mismatch: expected $expected_claude_version, observed $observed_claude_version"

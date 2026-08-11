@@ -15,6 +15,7 @@ class RegistryHealthTests(unittest.TestCase):
         self,
         *,
         claude_version="1.2.0",
+        claude_document=None,
         security_level="NONE",
         multiplier=2.02,
     ):
@@ -34,12 +35,18 @@ class RegistryHealthTests(unittest.TestCase):
                 json.dumps({"name": "maj-labs/app-store-review", "version": "1.2.0"}),
                 encoding="utf-8",
             )
-            claude_listing.write_text(
-                '<script type="application/ld+json">'
-                + json.dumps({"softwareVersion": claude_version})
-                + "</script>",
-                encoding="utf-8",
-            )
+            if claude_document is None:
+                claude_document = (
+                    '<script type="application/ld+json">'
+                    + json.dumps(
+                        {
+                            "url": claude_listing.as_uri(),
+                            "softwareVersion": claude_version,
+                        }
+                    )
+                    + "</script>"
+                )
+            claude_listing.write_text(claude_document, encoding="utf-8")
             tessl_tile.write_text(
                 json.dumps(
                     {
@@ -128,6 +135,29 @@ class RegistryHealthTests(unittest.TestCase):
             "ClaudePluginHub version mismatch: expected 1.2.0, observed 1.1.4",
             result.stderr,
         )
+
+    def test_version_outside_json_ld_does_not_satisfy_listing_check(self):
+        result = self.run_checker(
+            claude_document=(
+                '<div data-cache=\'{"softwareVersion":"1.2.0"}\'></div>'
+                '<script type="application/ld+json">{"name":"App Store Review"}</script>'
+            )
+        )
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("ClaudePluginHub softwareVersion is missing", result.stderr)
+
+    def test_version_for_another_json_ld_identity_does_not_satisfy_check(self):
+        result = self.run_checker(
+            claude_document=(
+                '<script type="application/ld+json">'
+                '{"url":"https://example.com/another-plugin","softwareVersion":"1.2.0"}'
+                "</script>"
+            )
+        )
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("ClaudePluginHub softwareVersion is missing", result.stderr)
 
     def test_missing_tessl_security_level_fails(self):
         result = self.run_checker(security_level=None)
