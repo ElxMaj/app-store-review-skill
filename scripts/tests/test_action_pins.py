@@ -11,7 +11,14 @@ CHECKER = ROOT / ".github" / "scripts" / "check_action_pins.py"
 
 
 class ActionPinTests(unittest.TestCase):
-    def run_checker(self, *, pinned_sha="a" * 40, tag_sha="a" * 40, ref=None):
+    def run_checker(
+        self,
+        *,
+        pinned_sha="a" * 40,
+        tag_sha="a" * 40,
+        ref=None,
+        extra_uses=None,
+    ):
         with tempfile.TemporaryDirectory() as directory:
             fixture_dir = Path(directory)
             workflows = fixture_dir / "workflows"
@@ -21,14 +28,16 @@ class ActionPinTests(unittest.TestCase):
             tag_response.parent.mkdir(parents=True)
 
             action_ref = ref or pinned_sha
-            workflows.joinpath("check.yml").write_text(
+            workflow_text = (
                 "name: Check\n"
                 "jobs:\n"
                 "  check:\n"
                 "    steps:\n"
-                f"      - uses: acme/example@{action_ref} # v1\n",
-                encoding="utf-8",
+                f"      - uses: acme/example@{action_ref} # v1\n"
             )
+            if extra_uses is not None:
+                workflow_text += f"      - uses: {extra_uses}\n"
+            workflows.joinpath("check.yml").write_text(workflow_text, encoding="utf-8")
             tag_response.write_text(
                 json.dumps(
                     {
@@ -75,6 +84,12 @@ class ActionPinTests(unittest.TestCase):
 
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("acme/example is not pinned to a full commit SHA", result.stderr)
+
+    def test_unpinned_subpath_cannot_hide_beside_a_valid_pin(self):
+        result = self.run_checker(extra_uses="acme/example/subpath@v1")
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("acme/example/subpath is not pinned to a full commit SHA", result.stderr)
 
 
 if __name__ == "__main__":

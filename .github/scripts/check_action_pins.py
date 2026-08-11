@@ -14,12 +14,13 @@ from urllib.parse import quote
 from urllib.request import Request, urlopen
 
 
-ACTION_PATTERN = re.compile(
+USES_PATTERN = re.compile(
     r"^\s*-?\s*uses:\s*"
-    r"(?P<action>[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+)@(?P<ref>\S+)"
-    r"(?:\s+#\s*(?P<tag>v[0-9]+))?\s*$"
+    r"(?P<value>\"[^\"]+\"|'[^']+'|[^\s#]+)"
+    r"(?:\s+#\s*(?P<comment>.*))?\s*$"
 )
 FULL_SHA_PATTERN = re.compile(r"^[0-9a-f]{40}$")
+MAJOR_TAG_PATTERN = re.compile(r"^v[0-9]+$")
 
 
 def fail(message: str) -> None:
@@ -81,16 +82,33 @@ def workflow_action_pins(workflow_dir: Path) -> list[tuple[str, str, str]]:
     pins: set[tuple[str, str, str]] = set()
     for workflow in sorted((*workflow_dir.glob("*.yml"), *workflow_dir.glob("*.yaml"))):
         for line_number, line in enumerate(workflow.read_text(encoding="utf-8").splitlines(), 1):
-            match = ACTION_PATTERN.match(line)
-            if not match:
+            stripped = line.lstrip()
+            if stripped.startswith("#") or not re.match(r"^-?\s*uses\s*:", stripped):
                 continue
-            action = match.group("action")
-            action_ref = match.group("ref")
-            tag = match.group("tag")
+
+            match = USES_PATTERN.match(line)
+            if not match:
+                fail(f"unsupported uses syntax ({workflow}:{line_number})")
+
+            value = match.group("value")
+            if value[:1] in {"\"", "'"} and value[-1:] == value[:1]:
+                value = value[1:-1]
+            if value.startswith("./"):
+                continue
+            if "@" not in value:
+                fail(f"{value} has no immutable reference ({workflow}:{line_number})")
+
+            source, action_ref = value.rsplit("@", 1)
+            parts = source.split("/")
+            if len(parts) < 2 or not all(parts[:2]):
+                fail(f"unsupported external uses target {source!r} ({workflow}:{line_number})")
+            action = "/".join(parts[:2])
             if not FULL_SHA_PATTERN.fullmatch(action_ref):
-                fail(f"{action} is not pinned to a full commit SHA ({workflow}:{line_number})")
-            if tag is None:
-                fail(f"{action} pin has no moving major tag comment ({workflow}:{line_number})")
+                fail(f"{source} is not pinned to a full commit SHA ({workflow}:{line_number})")
+
+            tag = match.group("comment")
+            if tag is None or not MAJOR_TAG_PATTERN.fullmatch(tag):
+                fail(f"{source} pin has no moving major tag comment ({workflow}:{line_number})")
             pins.add((action, action_ref, tag))
     if not pins:
         fail(f"no pinned third-party Actions found in {workflow_dir}")
