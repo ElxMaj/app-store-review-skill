@@ -24,7 +24,7 @@ MAJOR_TAG_PATTERN = re.compile(r"^v[0-9]+$")
 MAPPING_USES_KEY_PATTERN = re.compile(r"^(?:-\s*)?(?:uses|\"uses\"|'uses')\s*:")
 FLOW_USES_KEY_PATTERN = re.compile(r"(?:\{|,)\s*(?:uses|\"uses\"|'uses')\s*:")
 PREFIXED_USES_KEY_PATTERN = re.compile(
-    r"^(?:-\s*)?(?:&[A-Za-z0-9_-]+|![^\s]+)\s+"
+    r"^(?:-\s*)?(?:(?:&[A-Za-z0-9_-]+|![^\s]+)\s+)+"
     r"(?:uses|\"uses\"|'uses')\s*:"
 )
 

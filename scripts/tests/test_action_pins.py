@@ -112,6 +112,12 @@ class ActionPinTests(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("unsupported uses syntax", result.stderr)
 
+    def test_combined_yaml_node_properties_are_rejected_instead_of_ignored(self):
+        result = self.run_checker(raw_extra_step="- &unsafe !!map uses: acme/example@v1")
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("unsupported uses syntax", result.stderr)
+
 
 if __name__ == "__main__":
     unittest.main()
