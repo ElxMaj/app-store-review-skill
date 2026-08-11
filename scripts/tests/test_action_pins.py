@@ -94,29 +94,37 @@ class ActionPinTests(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("acme/example/subpath is not pinned to a full commit SHA", result.stderr)
 
-    def test_quoted_uses_key_is_rejected_instead_of_ignored(self):
+    def test_quoted_uses_key_is_checked_instead_of_ignored(self):
         result = self.run_checker(raw_extra_step='- "uses": acme/example@v1')
 
         self.assertNotEqual(result.returncode, 0)
-        self.assertIn("unsupported uses syntax", result.stderr)
+        self.assertIn("acme/example is not pinned to a full commit SHA", result.stderr)
 
-    def test_flow_mapping_uses_key_is_rejected_instead_of_ignored(self):
+    def test_flow_mapping_uses_key_is_checked_instead_of_ignored(self):
         result = self.run_checker(raw_extra_step="- {uses: acme/example@v1}")
 
         self.assertNotEqual(result.returncode, 0)
-        self.assertIn("unsupported uses syntax", result.stderr)
+        self.assertIn("acme/example is not pinned to a full commit SHA", result.stderr)
 
-    def test_anchored_uses_key_is_rejected_instead_of_ignored(self):
+    def test_anchored_uses_key_is_checked_instead_of_ignored(self):
         result = self.run_checker(raw_extra_step="- &unsafe uses: acme/example@v1")
 
         self.assertNotEqual(result.returncode, 0)
-        self.assertIn("unsupported uses syntax", result.stderr)
+        self.assertIn("acme/example is not pinned to a full commit SHA", result.stderr)
 
-    def test_combined_yaml_node_properties_are_rejected_instead_of_ignored(self):
+    def test_combined_yaml_node_properties_are_checked_instead_of_ignored(self):
         result = self.run_checker(raw_extra_step="- &unsafe !!map uses: acme/example@v1")
 
         self.assertNotEqual(result.returncode, 0)
-        self.assertIn("unsupported uses syntax", result.stderr)
+        self.assertIn("acme/example is not pinned to a full commit SHA", result.stderr)
+
+    def test_explicit_yaml_mapping_key_cannot_bypass_discovery(self):
+        result = self.run_checker(
+            raw_extra_step="- ? uses\n        : acme/example@v1"
+        )
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("acme/example is not pinned to a full commit SHA", result.stderr)
 
 
 if __name__ == "__main__":

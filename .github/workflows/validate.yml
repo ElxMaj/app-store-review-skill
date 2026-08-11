@@ -34,6 +34,7 @@ jobs:
         run: |
           bash -n scripts/check_registry_health.sh
           python3 -m py_compile .github/scripts/check_action_pins.py
+          ruby -c .github/scripts/list_workflow_uses.rb
           ruby -e 'require "yaml"; Dir[".github/workflows/*.yml"].each { |path| YAML.parse_file(path) }'
       - name: Check portable archive
         run: unzip -t app-store-review-skill.skill

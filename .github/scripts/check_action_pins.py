@@ -8,25 +8,17 @@ import json
 import os
 from pathlib import Path
 import re
+import subprocess
 import sys
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote
 from urllib.request import Request, urlopen
 
 
-USES_PATTERN = re.compile(
-    r"^\s*-?\s*uses:\s*"
-    r"(?P<value>\"[^\"]+\"|'[^']+'|[^\s#]+)"
-    r"(?:\s+#\s*(?P<comment>.*))?\s*$"
-)
 FULL_SHA_PATTERN = re.compile(r"^[0-9a-f]{40}$")
 MAJOR_TAG_PATTERN = re.compile(r"^v[0-9]+$")
-MAPPING_USES_KEY_PATTERN = re.compile(r"^(?:-\s*)?(?:uses|\"uses\"|'uses')\s*:")
-FLOW_USES_KEY_PATTERN = re.compile(r"(?:\{|,)\s*(?:uses|\"uses\"|'uses')\s*:")
-PREFIXED_USES_KEY_PATTERN = re.compile(
-    r"^(?:-\s*)?(?:(?:&[A-Za-z0-9_-]+|![^\s]+)\s+)+"
-    r"(?:uses|\"uses\"|'uses')\s*:"
-)
+MAJOR_TAG_COMMENT_PATTERN = re.compile(r"#\s*(v[0-9]+)\s*$")
+USES_HELPER = Path(__file__).with_name("list_workflow_uses.rb")
 
 
 def fail(message: str) -> None:
@@ -86,43 +78,57 @@ def current_tag_sha(api_base: str, action: str, tag: str) -> str:
 
 def workflow_action_pins(workflow_dir: Path) -> list[tuple[str, str, str]]:
     pins: set[tuple[str, str, str]] = set()
-    for workflow in sorted((*workflow_dir.glob("*.yml"), *workflow_dir.glob("*.yaml"))):
-        for line_number, line in enumerate(workflow.read_text(encoding="utf-8").splitlines(), 1):
-            stripped = line.lstrip()
-            if stripped.startswith("#"):
-                continue
-            has_uses_key = bool(
-                MAPPING_USES_KEY_PATTERN.search(stripped)
-                or FLOW_USES_KEY_PATTERN.search(stripped)
-                or PREFIXED_USES_KEY_PATTERN.search(stripped)
-            )
-            if not has_uses_key:
-                continue
+    workflows = sorted((*workflow_dir.glob("*.yml"), *workflow_dir.glob("*.yaml")))
+    if not workflows:
+        fail(f"no workflow files found in {workflow_dir}")
 
-            match = USES_PATTERN.match(line)
-            if not match:
-                fail(f"unsupported uses syntax ({workflow}:{line_number})")
+    parsed = subprocess.run(
+        ["ruby", str(USES_HELPER), *(str(path) for path in workflows)],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if parsed.returncode != 0:
+        fail(f"workflow YAML could not be inspected: {parsed.stderr.strip()}")
+    try:
+        entries = json.loads(parsed.stdout)
+    except json.JSONDecodeError as error:
+        fail(f"workflow inspector returned invalid JSON: {error}")
 
-            value = match.group("value")
-            if value[:1] in {"\"", "'"} and value[-1:] == value[:1]:
-                value = value[1:-1]
-            if value.startswith("./"):
-                continue
-            if "@" not in value:
-                fail(f"{value} has no immutable reference ({workflow}:{line_number})")
+    workflow_lines = {
+        str(path): path.read_text(encoding="utf-8").splitlines() for path in workflows
+    }
+    for entry in entries:
+        workflow = entry.get("path")
+        line_number = entry.get("line")
+        value = entry.get("value")
+        if (
+            not isinstance(workflow, str)
+            or not isinstance(line_number, int)
+            or not isinstance(value, str)
+            or workflow not in workflow_lines
+            or not 1 <= line_number <= len(workflow_lines[workflow])
+        ):
+            fail("workflow inspector returned an invalid uses entry")
+        if value.startswith("./"):
+            continue
+        if "@" not in value:
+            fail(f"{value} has no immutable reference ({workflow}:{line_number})")
 
-            source, action_ref = value.rsplit("@", 1)
-            parts = source.split("/")
-            if len(parts) < 2 or not all(parts[:2]):
-                fail(f"unsupported external uses target {source!r} ({workflow}:{line_number})")
-            action = "/".join(parts[:2])
-            if not FULL_SHA_PATTERN.fullmatch(action_ref):
-                fail(f"{source} is not pinned to a full commit SHA ({workflow}:{line_number})")
+        source, action_ref = value.rsplit("@", 1)
+        parts = source.split("/")
+        if len(parts) < 2 or not all(parts[:2]):
+            fail(f"unsupported external uses target {source!r} ({workflow}:{line_number})")
+        action = "/".join(parts[:2])
+        if not FULL_SHA_PATTERN.fullmatch(action_ref):
+            fail(f"{source} is not pinned to a full commit SHA ({workflow}:{line_number})")
 
-            tag = match.group("comment")
-            if tag is None or not MAJOR_TAG_PATTERN.fullmatch(tag):
-                fail(f"{source} pin has no moving major tag comment ({workflow}:{line_number})")
-            pins.add((action, action_ref, tag))
+        source_line = workflow_lines[workflow][line_number - 1]
+        tag_match = MAJOR_TAG_COMMENT_PATTERN.search(source_line)
+        tag = tag_match.group(1) if tag_match else None
+        if tag is None or not MAJOR_TAG_PATTERN.fullmatch(tag):
+            fail(f"{source} pin has no moving major tag comment ({workflow}:{line_number})")
+        pins.add((action, action_ref, tag))
     if not pins:
         fail(f"no pinned third-party Actions found in {workflow_dir}")
     return sorted(pins)
