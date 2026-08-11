@@ -14,7 +14,7 @@ class RegistryHealthTests(unittest.TestCase):
     def run_checker(
         self,
         *,
-        claude_version="1.2.0",
+        claude_version="1.2.1",
         claude_document=None,
         security_level="NONE",
         multiplier=2.02,
@@ -28,11 +28,11 @@ class RegistryHealthTests(unittest.TestCase):
             tessl_version = fixture_dir / "tessl-version.json"
 
             claude_manifest.write_text(
-                json.dumps({"name": "app-store-review", "version": "1.2.0"}),
+                json.dumps({"name": "app-store-review", "version": "1.2.1"}),
                 encoding="utf-8",
             )
             tessl_manifest.write_text(
-                json.dumps({"name": "maj-labs/app-store-review", "version": "1.2.0"}),
+                json.dumps({"name": "maj-labs/app-store-review", "version": "1.2.1"}),
                 encoding="utf-8",
             )
             if claude_document is None:
@@ -57,7 +57,7 @@ class RegistryHealthTests(unittest.TestCase):
                             "attributes": {
                                 "name": "app-store-review",
                                 "fullName": "maj-labs/app-store-review",
-                                "latestVersion": "1.2.0",
+                                "latestVersion": "1.2.1",
                             },
                         },
                     }
@@ -67,12 +67,12 @@ class RegistryHealthTests(unittest.TestCase):
             tessl_version.write_text(
                 json.dumps(
                     {
-                        "links": {"self": "https://api.tessl.io/example/1.2.0"},
+                        "links": {"self": "https://api.tessl.io/example/1.2.1"},
                         "data": {
                             "id": "version-id",
                             "type": "tile-version",
                             "attributes": {
-                                "version": "1.2.0",
+                                "version": "1.2.1",
                                 "moderationStatus": "pass",
                                 "moderationPassed": True,
                                 "evalScore": 95,
@@ -80,7 +80,7 @@ class RegistryHealthTests(unittest.TestCase):
                                 "evalImprovement": 48,
                                 "evalImprovementMultiplier": multiplier,
                                 "scores": {
-                                    "version": "1.2.0",
+                                    "version": "1.2.1",
                                     "aggregate": 0.95,
                                     "quality": None,
                                     "impact": 0.95,
@@ -123,8 +123,8 @@ class RegistryHealthTests(unittest.TestCase):
         result = self.run_checker()
 
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn("ClaudePluginHub: 1.2.0", result.stdout)
-        self.assertIn("Tessl: 1.2.0", result.stdout)
+        self.assertIn("ClaudePluginHub: 1.2.1", result.stdout)
+        self.assertIn("Tessl: 1.2.1", result.stdout)
         self.assertIn("multiplier 2.02x", result.stdout)
 
     def test_stale_claudepluginhub_version_fails_with_observed_version(self):
@@ -132,14 +132,14 @@ class RegistryHealthTests(unittest.TestCase):
 
         self.assertNotEqual(result.returncode, 0)
         self.assertIn(
-            "ClaudePluginHub version mismatch: expected 1.2.0, observed 1.1.4",
+            "ClaudePluginHub version mismatch: expected 1.2.1, observed 1.1.4",
             result.stderr,
         )
 
     def test_version_outside_json_ld_does_not_satisfy_listing_check(self):
         result = self.run_checker(
             claude_document=(
-                '<div data-cache=\'{"softwareVersion":"1.2.0"}\'></div>'
+                '<div data-cache=\'{"softwareVersion":"1.2.1"}\'></div>'
                 '<script type="application/ld+json">{"name":"App Store Review"}</script>'
             )
         )
@@ -151,7 +151,7 @@ class RegistryHealthTests(unittest.TestCase):
         result = self.run_checker(
             claude_document=(
                 '<script type="application/ld+json">'
-                '{"url":"https://example.com/another-plugin","softwareVersion":"1.2.0"}'
+                '{"url":"https://example.com/another-plugin","softwareVersion":"1.2.1"}'
                 "</script>"
             )
         )

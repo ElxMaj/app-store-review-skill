@@ -23,10 +23,38 @@ MANIFESTS = (
     ROOT / ".tessl-plugin" / "plugin.json",
     ROOT / "copilot-plugin" / ".github" / "plugin" / "plugin.json",
 )
-EXPECTED_VERSION = "1.2.0"
+EXPECTED_VERSION = "1.2.1"
 
 
 class PackageConsistencyTests(unittest.TestCase):
+    def test_claude_review_command_delegates_to_canonical_skill(self):
+        command_path = ROOT / "commands" / "review.md"
+        self.assertTrue(command_path.is_file(), "commands/review.md is missing")
+
+        command = command_path.read_text(encoding="utf-8")
+        self.assertIn("app-store-review:app-store-review", command)
+        self.assertIn("$ARGUMENTS", command)
+        self.assertNotIn("Mode A:", command)
+        self.assertNotIn("Mode B:", command)
+        self.assertLessEqual(len(command.splitlines()), 16)
+
+    def test_install_guide_covers_every_supported_distribution_path(self):
+        install_path = ROOT / "INSTALL.md"
+        self.assertTrue(install_path.is_file(), "INSTALL.md is missing")
+
+        install = install_path.read_text(encoding="utf-8")
+        required_commands = (
+            "npx skills add ElxMaj/app-store-review-skill",
+            "npx claudepluginhub elxmaj/app-store-review-skill --plugin app-store-review",
+            "/plugin marketplace add ElxMaj/app-store-review-skill",
+            "/plugin install app-store-review@app-store-review-skill",
+            "npx tessl install maj-labs/app-store-review",
+            "/app-store-review",
+        )
+        for command in required_commands:
+            with self.subTest(command=command):
+                self.assertIn(command, install)
+
     def test_manifest_and_report_contract_versions_are_current(self):
         for manifest in MANIFESTS:
             with self.subTest(manifest=manifest):
@@ -41,9 +69,9 @@ class PackageConsistencyTests(unittest.TestCase):
             with self.subTest(scanner=scanner):
                 self.assertRegex(
                     scanner.read_text(encoding="utf-8"),
-                    r'(?m)^VERSION = "1\.2\.0"$',
+                    r'(?m)^VERSION = "1\.2\.1"$',
                 )
-        self.assertIn('"version": "1.2.0"', contract)
+        self.assertIn('"version": "1.2.1"', contract)
 
     def test_public_sample_uses_current_report_contract(self):
         sample = json.loads(
