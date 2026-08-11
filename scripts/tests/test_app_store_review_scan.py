@@ -222,7 +222,7 @@ class ScannerTests(unittest.TestCase):
             report = scan(Path(temporary))
 
             self.assertEqual("2026-08-10", report["policy_verified_at"])
-            self.assertEqual("1.2.0", report["scanner"]["version"])
+            self.assertEqual("1.2.1", report["scanner"]["version"])
 
     def test_metadata_report_discloses_language_live_state_and_visual_limits(self):
         with tempfile.TemporaryDirectory() as temporary:

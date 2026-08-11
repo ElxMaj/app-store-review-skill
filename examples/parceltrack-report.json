@@ -234,7 +234,7 @@
   ],
   "scanner": {
     "name": "app_store_review_scan",
-    "version": "1.2.0"
+    "version": "1.2.1"
   },
   "disclaimer": "Fictional sample based on public guidance. Approval is not guaranteed. Not affiliated with Apple."
 }
