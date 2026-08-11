@@ -30,5 +30,9 @@ jobs:
           python3 -m json.tool .codex-plugin/plugin.json >/dev/null
           python3 -m json.tool copilot-plugin/.github/plugin/plugin.json >/dev/null
           find evals -name '*.json' -print0 | xargs -0 -n1 python3 -m json.tool >/dev/null
+      - name: Validate maintenance scripts and workflows
+        run: |
+          bash -n scripts/check_registry_health.sh
+          ruby -e 'require "yaml"; Dir[".github/workflows/*.yml"].each { |path| YAML.parse_file(path) }'
       - name: Check portable archive
         run: unzip -t app-store-review-skill.skill
