@@ -6,9 +6,9 @@
 
 <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-blue.svg"></a> <a href="https://developer.apple.com/app-store/review/guidelines/"><img alt="Guidelines verified August 10, 2026" src="https://img.shields.io/badge/guidelines-verified%202026--08--10-0A7E07.svg"></a> <a href="https://tessl.io/registry/maj-labs/app-store-review"><img alt="Tessl quality and impact score" src="https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.tessl.io%2Fv1%2Fbadges%2Fmaj-labs%2Fapp-store-review"></a> [![Listed on ClaudePluginHub](https://www.claudepluginhub.com/badge/elxmaj-app-store-review)](https://www.claudepluginhub.com/plugins/elxmaj-app-store-review?ref=badge)
 
-<a href="examples/parceltrack-report.html"><img src="https://raw.githubusercontent.com/ElxMaj/app-store-review-skill/main/assets/visual-report-example.png" alt="Sample ParcelTrack App Store review report showing the release verdict, evidence counts, review scope, and first confirmed blocker" width="100%"></a>
+<a href="https://elxmaj.github.io/app-store-review-skill/"><img src="https://raw.githubusercontent.com/ElxMaj/app-store-review-skill/main/assets/visual-report-example.png" alt="Sample ParcelTrack App Store review report showing the release verdict, evidence counts, review scope, and first confirmed blocker" width="100%"></a>
 
-[Open the complete sample report](examples/parceltrack-report.html) · [Inspect its source JSON](examples/parceltrack-report.json)
+[Open the complete sample report](https://elxmaj.github.io/app-store-review-skill/) · [Inspect its source JSON](https://elxmaj.github.io/app-store-review-skill/parceltrack-report.json)
 
 [Quick start](#quick-start) · [Review modes](#three-review-modes) · [Report preview](#report-preview) · [Coverage](#coverage)
 
