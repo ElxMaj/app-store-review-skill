@@ -24,31 +24,31 @@ Guideline 4.3 needs a different kind of review. A clean build can still look gen
 
 ## Quick start
 
-Install for Codex, Claude Code, or another compatible agent:
+Install through the Skills CLI or ClaudePluginHub:
 
 ```bash
 npx skills add ElxMaj/app-store-review-skill
+npx claudepluginhub elxmaj/app-store-review-skill --plugin app-store-review
 ```
 
-Install the [managed Tessl release](https://tessl.io/registry/maj-labs/app-store-review):
+For the managed [Tessl release](https://tessl.io/registry/maj-labs/app-store-review):
 
 ```bash
 npx tessl install maj-labs/app-store-review
 ```
 
-Install as a Claude Code marketplace plugin:
+For the Claude Code marketplace plugin:
 
 ```text
 /plugin marketplace add ElxMaj/app-store-review-skill
 /plugin install app-store-review@app-store-review-skill
 ```
-
-Then use normal language:
+Full setup, updates, and verification are in [INSTALL.md](INSTALL.md). Then use normal language or `/app-store-review`:
 
 ```text
-Audit this Expo app before submission. Report first and do not edit files.
-Apple rejected build 42 under 4.3(a). Find the cause and draft my reply.
-Run the human-craft audit. Show me what feels generic or unfinished.
+/app-store-review Audit this Expo app before submission. Report first and do not edit files.
+/app-store-review Apple rejected build 42 under 4.3(a). Find the cause and draft my reply.
+/app-store-review Run the human-craft audit. Show me what feels generic or unfinished.
 ```
 
 ## Three review modes
