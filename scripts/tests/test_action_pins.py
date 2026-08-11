@@ -53,6 +53,7 @@ class ActionPinTests(unittest.TestCase):
 
             environment = os.environ.copy()
             environment.pop("GITHUB_TOKEN", None)
+            environment.pop("GH_TOKEN", None)
             environment.update(
                 {
                     "ASR_WORKFLOW_DIR": str(workflows),
