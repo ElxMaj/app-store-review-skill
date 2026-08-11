@@ -18,6 +18,7 @@ class ActionPinTests(unittest.TestCase):
         tag_sha="a" * 40,
         ref=None,
         extra_uses=None,
+        raw_extra_step=None,
     ):
         with tempfile.TemporaryDirectory() as directory:
             fixture_dir = Path(directory)
@@ -37,6 +38,8 @@ class ActionPinTests(unittest.TestCase):
             )
             if extra_uses is not None:
                 workflow_text += f"      - uses: {extra_uses}\n"
+            if raw_extra_step is not None:
+                workflow_text += f"      {raw_extra_step}\n"
             workflows.joinpath("check.yml").write_text(workflow_text, encoding="utf-8")
             tag_response.write_text(
                 json.dumps(
@@ -90,6 +93,18 @@ class ActionPinTests(unittest.TestCase):
 
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("acme/example/subpath is not pinned to a full commit SHA", result.stderr)
+
+    def test_quoted_uses_key_is_rejected_instead_of_ignored(self):
+        result = self.run_checker(raw_extra_step='- "uses": acme/example@v1')
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("unsupported uses syntax", result.stderr)
+
+    def test_flow_mapping_uses_key_is_rejected_instead_of_ignored(self):
+        result = self.run_checker(raw_extra_step="- {uses: acme/example@v1}")
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("unsupported uses syntax", result.stderr)
 
 
 if __name__ == "__main__":

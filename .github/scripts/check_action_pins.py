@@ -21,6 +21,8 @@ USES_PATTERN = re.compile(
 )
 FULL_SHA_PATTERN = re.compile(r"^[0-9a-f]{40}$")
 MAJOR_TAG_PATTERN = re.compile(r"^v[0-9]+$")
+MAPPING_USES_KEY_PATTERN = re.compile(r"^(?:-\s*)?(?:uses|\"uses\"|'uses')\s*:")
+FLOW_USES_KEY_PATTERN = re.compile(r"(?:\{|,)\s*(?:uses|\"uses\"|'uses')\s*:")
 
 
 def fail(message: str) -> None:
@@ -83,7 +85,13 @@ def workflow_action_pins(workflow_dir: Path) -> list[tuple[str, str, str]]:
     for workflow in sorted((*workflow_dir.glob("*.yml"), *workflow_dir.glob("*.yaml"))):
         for line_number, line in enumerate(workflow.read_text(encoding="utf-8").splitlines(), 1):
             stripped = line.lstrip()
-            if stripped.startswith("#") or not re.match(r"^-?\s*uses\s*:", stripped):
+            if stripped.startswith("#"):
+                continue
+            has_uses_key = bool(
+                MAPPING_USES_KEY_PATTERN.search(stripped)
+                or FLOW_USES_KEY_PATTERN.search(stripped)
+            )
+            if not has_uses_key:
                 continue
 
             match = USES_PATTERN.match(line)

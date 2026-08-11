@@ -306,7 +306,7 @@ Check the repository's automated security-fix state. If enabled, disable automat
 
 ### Reviewer follow-up: Preserve Action update visibility
 
-Before publication, add `.github/scripts/check_action_pins.py`, its offline tests, and `.github/workflows/action-pin-health.yml`. The monthly workflow verifies each full Action SHA against its moving major-version tag without opening pull requests. Update existing pins to the current major tags, document quarterly major-version and advisory review plus GitHub's 60-day scheduled-workflow limitation in `CONTRIBUTING.md`, and keep vulnerability alerts enabled.
+Before publication, add `.github/scripts/check_action_pins.py`, its offline tests, and `.github/workflows/action-pin-health.yml`. The monthly workflow verifies each full Action SHA against its moving major-version tag without opening pull requests. Update existing pins to the current major tags, document quarterly major-version and advisory review, monthly schedule checks, and GitHub's 60-day scheduled-workflow limitation in `CONTRIBUTING.md`, and keep vulnerability alerts enabled.
 
 ### Task 4: Complete deployment and enforce administrator protection
 

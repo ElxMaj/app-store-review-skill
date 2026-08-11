@@ -23,4 +23,4 @@ Do not add approval-rate claims, unattributed rejection text, or guesses about A
 
 Dependabot pull requests are disabled. The monthly `Action Pin Health` workflow verifies that every full GitHub Action SHA still matches its moving major-version tag. During the quarterly evidence refresh, maintainers review new major Action releases, GitHub advisories, and the release and security notes for every Action in use.
 
-`Registry Health` checks ClaudePluginHub and Tessl each day at 08:17 UTC. GitHub can disable scheduled workflows after 60 days without repository activity, so the repository owner checks both maintenance schedules during each quarterly refresh and owns their failure notifications. Vulnerability alerts stay enabled, but they do not replace the Action pin check.
+`Registry Health` is scheduled to check ClaudePluginHub and Tessl each day at 08:17 UTC. GitHub can disable scheduled workflows after 60 days without repository activity, so the repository owner checks both maintenance schedules every month, re-enables them when needed, and owns their failure notifications. Vulnerability alerts stay enabled, but they do not replace the Action pin check.

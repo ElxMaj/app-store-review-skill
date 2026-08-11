@@ -57,7 +57,7 @@ Remove `.github/dependabot.yml`. Close pull requests #6 and #7 with a short expl
 
 Dependabot is already absent from the repository's contributor list. This cleanup removes the remaining open bot activity without rewriting history.
 
-Add a monthly `Action Pin Health` workflow and offline-tested checker under `.github/scripts/`. It verifies every full Action SHA against the action's moving major-version tag without adding repository-maintenance code to the distributed skill. Maintainers review new major versions, GitHub advisories, and Action release and security notes quarterly, keep GitHub vulnerability alerts enabled, and re-enable scheduled workflows if GitHub disables them after 60 days of repository inactivity.
+Add a monthly `Action Pin Health` workflow and offline-tested checker under `.github/scripts/`. It verifies every full Action SHA against the action's moving major-version tag without adding repository-maintenance code to the distributed skill. Maintainers review new major versions, GitHub advisories, and Action release and security notes quarterly, keep GitHub vulnerability alerts enabled, and check scheduled-workflow status every month so a 60-day inactivity shutdown is caught in time.
 
 ## Branch protection
 
