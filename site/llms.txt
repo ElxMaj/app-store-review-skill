@@ -1,0 +1,23 @@
+# App Store Review Skill
+
+> An open-source, evidence-first App Store review workflow for Codex and Claude Code. The first pass is read-only. It does not guarantee Apple approval and is not affiliated with Apple Inc.
+
+## Review modes
+
+- Pre-submission audit: check an iOS or iPadOS project before upload.
+- Rejection recovery: preserve Apple's message, investigate evidence, and draft a response.
+- Human-craft audit: find generic, copied, unfinished, or weakly differentiated product choices.
+
+## Primary sources
+
+- Website: https://elxmaj.github.io/app-store-review-skill/
+- Canonical skill: https://github.com/ElxMaj/app-store-review-skill/blob/main/SKILL.md
+- Installation: https://github.com/ElxMaj/app-store-review-skill/blob/main/INSTALL.md
+- Source repository: https://github.com/ElxMaj/app-store-review-skill
+- Sample report: https://elxmaj.github.io/app-store-review-skill/report/
+- AI-built app guide: https://elxmaj.github.io/app-store-review-skill/guides/will-apple-reject-ai-built-apps/
+- Apple App Review Guidelines: https://developer.apple.com/app-store/review/guidelines/
+
+## Supported project types
+
+Xcode, Expo, React Native, and Flutter projects. Repository checks are combined with explicit manual checks for App Store Connect state, release-build behavior, and context that source files cannot prove.

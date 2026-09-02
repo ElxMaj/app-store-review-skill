@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>App Store review for Codex and Claude Code | Maj Labs</title>
+  <meta name="description" content="Audit iOS and iPadOS apps before App Review, investigate rejections, and find generic product risks with a read-only skill for Codex and Claude Code projects.">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://elxmaj.github.io/app-store-review-skill/">
+  <link rel="sitemap" type="application/xml" href="/app-store-review-skill/sitemap.xml">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="App Store Review Skill">
+  <meta property="og:title" content="App Store review for Codex and Claude Code">
+  <meta property="og:description" content="Find submission blockers, investigate rejections, and review product craft before sending an iOS app to Apple.">
+  <meta property="og:url" content="https://elxmaj.github.io/app-store-review-skill/">
+  <meta property="og:image" content="https://elxmaj.github.io/app-store-review-skill/assets/visual-report-example.png">
+  <meta property="og:image:width" content="1440">
+  <meta property="og:image:height" content="1500">
+  <meta property="og:image:alt" content="Sample App Store review report for an iOS app">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="App Store review for Codex and Claude Code">
+  <meta name="twitter:description" content="A read-only first pass for App Store submission risks, rejection recovery, and product craft.">
+  <meta name="twitter:image" content="https://elxmaj.github.io/app-store-review-skill/assets/visual-report-example.png">
+  <link rel="stylesheet" href="/app-store-review-skill/styles.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://elxmaj.github.io/app-store-review-skill/#website",
+        "url": "https://elxmaj.github.io/app-store-review-skill/",
+        "name": "App Store Review Skill",
+        "description": "A read-only App Store review workflow for Codex and Claude Code.",
+        "inLanguage": "en"
+      },
+      {
+        "@type": "SoftwareSourceCode",
+        "@id": "https://elxmaj.github.io/app-store-review-skill/#software",
+        "name": "App Store Review Skill",
+        "description": "Audit iOS and iPadOS projects before submission, investigate App Review rejections, and review product craft.",
+        "url": "https://elxmaj.github.io/app-store-review-skill/",
+        "codeRepository": "https://github.com/ElxMaj/app-store-review-skill",
+        "license": "https://github.com/ElxMaj/app-store-review-skill/blob/main/LICENSE",
+        "version": "1.2.1",
+        "programmingLanguage": ["Markdown", "Python"],
+        "runtimePlatform": ["Codex", "Claude Code"],
+        "isAccessibleForFree": true,
+        "author": {
+          "@type": "Person",
+          "name": "Elie Majorel",
+          "url": "https://github.com/ElxMaj"
+        },
+        "keywords": "App Store review, iOS, iPadOS, Codex skill, Claude Code skill, rejection recovery"
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://elxmaj.github.io/app-store-review-skill/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Does it guarantee App Store approval?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. It finds evidence and prepares review work, but Apple makes the decision."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does it detect AI-written code?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. It reviews product evidence, policy risks, and app quality. It does not claim to detect AI-written code."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does it edit my project?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The first pass is read-only. You see the report before any proposed fix group is applied."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="/app-store-review-skill/" aria-label="App Store Review Skill home">
+      <span class="brand-mark" aria-hidden="true">AS</span>
+      <span>App Store Review</span>
+    </a>
+    <nav class="site-nav" aria-label="Primary navigation">
+      <a href="/app-store-review-skill/guides/will-apple-reject-ai-built-apps/">AI-built apps</a>
+      <a href="/app-store-review-skill/report/">Sample report</a>
+      <a href="https://github.com/ElxMaj/app-store-review-skill">GitHub</a>
+    </nav>
+  </header>
+
+  <main class="page-shell" id="main">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">Open source · Read-only first pass</p>
+        <h1>App Store review for Codex and Claude Code</h1>
+        <p class="lede">Find submission blockers, investigate Apple rejections, and catch the generic product choices that a clean build cannot reveal.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="https://github.com/ElxMaj/app-store-review-skill">Star on GitHub</a>
+          <a class="button button-secondary" href="/app-store-review-skill/report/">Open sample report</a>
+        </div>
+      </div>
+      <div class="install-card" aria-label="Install command">
+        <span class="install-label">Install with Skills CLI</span>
+        <pre><code>npx skills add ElxMaj/app-store-review-skill</code></pre>
+        <p class="install-links">
+          <a href="https://github.com/ElxMaj/app-store-review-skill/blob/main/INSTALL.md">All install methods</a>
+          <a href="https://tessl.io/registry/maj-labs/app-store-review">Tessl release</a>
+          <a href="https://www.claudepluginhub.com/plugins/elxmaj-app-store-review">ClaudePluginHub</a>
+        </p>
+      </div>
+    </section>
+
+    <section class="proof-strip" aria-label="Independent evaluation and product facts">
+      <div class="proof-item">
+        <span class="proof-value">97%</span>
+        <a class="proof-label" href="https://tessl.io/registry/maj-labs/app-store-review/1.2.1/quality">97% quality on Tessl</a>
+      </div>
+      <div class="proof-item">
+        <span class="proof-value">98%</span>
+        <a class="proof-label" href="https://tessl.io/registry/maj-labs/app-store-review/1.2.1/quality">98% impact on Tessl</a>
+      </div>
+      <div class="proof-item">
+        <span class="proof-value">3</span>
+        <span class="proof-label">Focused review modes</span>
+      </div>
+      <div class="proof-item">
+        <span class="proof-value">0</span>
+        <span class="proof-label">Files changed on the first pass</span>
+      </div>
+    </section>
+    <p class="evaluation-note"><strong>Evaluation note:</strong> Tessl also reports one low-severity W011 finding because the static scanner reads local project text. <a href="https://tessl.io/registry/maj-labs/app-store-review/1.2.1/security">Review the finding</a>.</p>
+
+    <section class="section" id="modes">
+      <div class="section-heading">
+        <div>
+          <p class="section-label">One front door</p>
+          <h2>Three ways into App Review</h2>
+        </div>
+        <p>The skill finds the project type, gathers deterministic evidence, and keeps confirmed facts separate from manual checks and inference.</p>
+      </div>
+      <div class="mode-grid">
+        <article class="mode">
+          <p class="mode-number">01</p>
+          <h3>Pre-submission audit</h3>
+          <p>Check native targets, permissions, privacy manifests, purchases, account deletion, metadata, reviewer access, and release paths before upload.</p>
+        </article>
+        <article class="mode">
+          <p class="mode-number">02</p>
+          <h3>Rejection recovery</h3>
+          <p>Preserve Apple’s exact message, classify the response as fix, clarify, appeal, or request interpretation, then draft a precise reply.</p>
+        </article>
+        <article class="mode">
+          <p class="mode-number">03</p>
+          <h3>Human-craft audit</h3>
+          <p>Review distinction, provenance, visual identity, microcopy, missing states, accessibility, and the App Store product page.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="split">
+        <div class="split-copy">
+          <p class="section-label">Evidence before advice</p>
+          <h2>A report you can inspect</h2>
+          <p>Every finding shows what was found, where it was found, why it matters, what to change, and how to verify the result.</p>
+          <a class="text-link" href="/app-store-review-skill/report/">Read the complete sample report</a>
+        </div>
+        <ol class="evidence-list">
+          <li>
+            <span class="evidence-index">01</span>
+            <div><strong>Confirmed blockers</strong><br><span>File-level evidence tied to a published rule or a broken review path.</span></div>
+          </li>
+          <li>
+            <span class="evidence-index">02</span>
+            <div><strong>Warnings</strong><br><span>Signals that need product or target-level review before they become conclusions.</span></div>
+          </li>
+          <li>
+            <span class="evidence-index">03</span>
+            <div><strong>Manual checks</strong><br><span>App Store Connect state, real-device behavior, and context the repository cannot prove.</span></div>
+          </li>
+          <li>
+            <span class="evidence-index">04</span>
+            <div><strong>Approval-gated fixes</strong><br><span>The report arrives first. Proposed changes stay grouped until you authorize them.</span></div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <div>
+          <p class="section-label">The question behind 4.2.6</p>
+          <h2>AI code is not the review category</h2>
+        </div>
+        <div>
+          <p>Apple’s published rules focus on the app that ships: useful functionality, distinct value, truthful metadata, privacy, safety, and who submits template-generated work.</p>
+          <a class="text-link" href="/app-store-review-skill/guides/will-apple-reject-ai-built-apps/">Read the guide to Guidelines 4.2.6 and 4.3</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <div>
+          <p class="section-label">Sample output</p>
+          <h2>From repository evidence to a release verdict</h2>
+        </div>
+        <p>The visual report is self-contained, responsive, printable, and backed by stable JSON for later checks or CI.</p>
+      </div>
+      <figure>
+        <a class="report-frame" href="/app-store-review-skill/report/">
+          <img src="/app-store-review-skill/assets/visual-report-example.png" width="1440" height="1500" loading="lazy" alt="Sample ParcelTrack App Store review report showing a not-ready verdict and review evidence">
+        </a>
+        <figcaption class="report-caption">
+          <span>Fictional project evidence for demonstration</span>
+          <a href="/app-store-review-skill/report/parceltrack-report.json">Inspect the source JSON</a>
+        </figcaption>
+      </figure>
+    </section>
+
+    <section class="section" id="faq">
+      <div class="section-heading">
+        <div>
+          <p class="section-label">Limits</p>
+          <h2>What the skill does not claim</h2>
+        </div>
+        <p>A useful review keeps unknowns visible. It does not turn a repository scan into a promise from Apple.</p>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item">
+          <h3>Does it guarantee App Store approval?</h3>
+          <p>No. It finds evidence and prepares review work, but Apple makes the decision.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Does it detect AI-written code?</h3>
+          <p>No. It reviews product evidence, policy risks, and app quality. It does not claim to detect AI-written code.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Does it edit my project?</h3>
+          <p>The first pass is read-only. You see the report before any proposed fix group is applied.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Built by <a href="https://github.com/ElxMaj">Elie Majorel</a> under <a href="https://tessl.io/registry/maj-labs">Maj Labs</a>.</p>
+    <p>MIT licensed. Not affiliated with or endorsed by Apple Inc.</p>
+  </footer>
+</body>
+</html>
