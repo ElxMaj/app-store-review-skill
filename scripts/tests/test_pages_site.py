@@ -101,7 +101,7 @@ class PagesSiteTests(unittest.TestCase):
         self.assertEqual({"WebSite", "SoftwareSourceCode", "FAQPage"}, set(by_type))
         software = by_type["SoftwareSourceCode"]
         self.assertEqual("App Store Review Skill", software["name"])
-        self.assertEqual("1.2.1", software["version"])
+        self.assertEqual("1.2.2", software["version"])
         self.assertEqual(
             "https://github.com/ElxMaj/app-store-review-skill",
             software["codeRepository"],

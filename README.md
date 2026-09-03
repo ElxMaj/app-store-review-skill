@@ -49,6 +49,7 @@ Full setup, updates, and verification are in [INSTALL.md](INSTALL.md). Then use 
 /app-store-review Audit this Expo app before submission. Report first and do not edit files.
 /app-store-review Apple rejected build 42 under 4.3(a). Find the cause and draft my reply.
 /app-store-review Run the human-craft audit. Show me what feels generic or unfinished.
+/app-store-review Audit this iPad app's Apple design and HIG quality, including motion and gestures.
 ```
 
 ## Three review modes

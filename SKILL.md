@@ -1,6 +1,6 @@
 ---
 name: app-store-review
-description: Full-lifecycle Apple App Store review for iOS and iPadOS apps. Use for pre-submission audits, rejection diagnosis and Resolution Center replies, Guideline 4.3 spam or similarity recovery, human-craft and low-effort audits, App Review Notes, privacy manifests, Info.plist permission strings, subscriptions, Sign in with Apple, account deletion, UGC, third-party AI consent, TestFlight or App Store readiness, and vague requests such as "review my app" or "will Apple approve this" when an Xcode, Expo, React Native, or Flutter project is present. Produces evidence-tagged Markdown, JSON, and a self-contained visual HTML report, runs a read-only deterministic scan first, and only offers grouped fixes after the report.
+description: Full-lifecycle Apple App Store review for iOS and iPadOS apps. Use for pre-submission audits, rejection diagnosis and Resolution Center replies, Guideline 4.3 spam or similarity recovery, human-craft and low-effort audits, Apple design and Human Interface Guidelines audits of native interaction, motion, gestures, materials, haptics, accessibility, and iPad adaptation, App Review Notes, privacy manifests, Info.plist permission strings, subscriptions, Sign in with Apple, account deletion, UGC, third-party AI consent, TestFlight or App Store readiness, and vague requests such as "review my app" or "will Apple approve this" when an Xcode, Expo, React Native, or Flutter project is present. Produces evidence-tagged Markdown, JSON, and a self-contained visual HTML report, runs a read-only deterministic scan first, and only offers grouped fixes after the report.
 ---
 
 # App Store Review
@@ -33,9 +33,11 @@ State the mode before starting. Use more than one when needed.
 |---|---|---|
 | A. Pre-submission audit | A repository, build, metadata set, or feature spec is being prepared | `references/guidelines-checklist.md`, `references/frameworks.md` |
 | B. Rejection recovery | The user supplies a rejection, asks why it happened, or needs a reply or appeal | `references/rejection-playbook.md` |
-| C. Human-craft audit | The user mentions 4.3(b), templates, low effort, AI slop, differentiation, or product polish | `references/human-craft-audit.md` |
+| C. Human-craft audit | The user requests an audit of 4.3(b), templates, low effort, AI slop, differentiation, product polish, Apple design, Human Interface Guidelines, motion, gestures, materials, haptics, accessibility, or iPad adaptation | `references/human-craft-audit.md` |
 
 Run A then C for a full pre-launch review. Run B then the relevant parts of A or C when a rejection exposes a product or configuration gap.
+
+Use Mode C for design-quality audits and submission-facing evaluation. Do not route a standalone SwiftUI implementation or debugging request to this skill merely because it mentions animation, motion, gestures, or accessibility.
 
 ## Output gates
 
@@ -193,7 +195,7 @@ When the task depends on current requirements and network access is available, v
 - `https://developer.apple.com/news/upcoming-requirements/`
 - the relevant App Store Connect Help page
 
-Record the verification date in the report. If offline, state that bundled references were last verified on 2026-08-10 and list the policy items the user should recheck.
+Record the verification date in the report. If offline, state that bundled App Review policy references were last verified on 2026-08-10. When Apple-design guidance is used, separately state that bundled design sources were verified on 2026-09-03. List the policy items the user should recheck.
 
 If live verification is unavailable or does not complete promptly, use the bundled verification date, disclose that limitation, and finish the report. Do not withhold the requested audit while waiting for network evidence.
 
