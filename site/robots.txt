@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://elxmaj.github.io/app-store-review-skill/sitemap.xml
