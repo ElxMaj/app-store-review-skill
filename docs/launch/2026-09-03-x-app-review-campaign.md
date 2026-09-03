@@ -2,6 +2,8 @@
 
 > Draft only. The planned cap is EUR 105, but authorized spend remains EUR 0 until the advertiser handle, funding source, dates, final preview, and exact payload are confirmed.
 
+The JSON campaign file is the source of truth for every exact payload value.
+
 ## One idea
 
 The campaign sells one job: find App Store Review risks before submission. Codex and Claude Code are delivery details on the landing page, not targeting themes or the lead message.
@@ -29,7 +31,7 @@ The creative uses the product's own evidence system as the visual identity: an e
 | Audience expansion | Off for the first controlled test |
 | X Pixel | Off; measure the bounded test with X link-click reporting and timestamped GitHub snapshots |
 
-Use one ad group so the small budget is not fragmented. Rotate all three creatives evenly at the start. Do not add broad AI, coding-assistant, startup, or generic developer interests.
+Use one ad group so the small budget is not fragmented. Launch all three creatives together; delivery is algorithmic, so compare normalized rates only after each has adequate exposure. Do not add broad AI, coding-assistant, startup, or generic developer interests.
 
 ## Creative 1 — pre-submission
 

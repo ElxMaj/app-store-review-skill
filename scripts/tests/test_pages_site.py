@@ -12,6 +12,7 @@ SITE = ROOT / "site"
 SITE_URL = "https://elxmaj.github.io/app-store-review-skill/"
 GUIDE_PATH = "guides/will-apple-reject-ai-built-apps/"
 X_CAMPAIGN = ROOT / "docs" / "launch" / "2026-09-03-x-app-review-campaign.json"
+X_CAMPAIGN_DOC = ROOT / "docs" / "launch" / "2026-09-03-x-app-review-campaign.md"
 X_CREATIVE = SITE / "assets" / "x-app-review-preflight.png"
 
 
@@ -62,8 +63,13 @@ class PagesSiteTests(unittest.TestCase):
                 self.assertIn(f'<meta property="{property_name}"', landing)
         self.assertIn('<meta name="twitter:card" content="summary_large_image">', landing)
         social_image = f"{SITE_URL}assets/x-app-review-preflight.png"
+        social_image_alt = "App Store Review preflight with evidence-led release findings"
         self.assertIn(f'<meta property="og:image" content="{social_image}">', landing)
         self.assertIn(f'<meta name="twitter:image" content="{social_image}">', landing)
+        self.assertIn(
+            f'<meta name="twitter:image:alt" content="{social_image_alt}">',
+            landing,
+        )
 
         for visible_claim in (
             "npx skills add ElxMaj/app-store-review-skill",
@@ -125,8 +131,13 @@ class PagesSiteTests(unittest.TestCase):
         self.assertIn("<h1>Will Apple reject an AI-built app?</h1>", guide)
         self.assertIn(f'<link rel="canonical" href="{expected_url}">', guide)
         social_image = f"{SITE_URL}assets/x-app-review-preflight.png"
+        social_image_alt = "App Store Review preflight with evidence-led release findings"
         self.assertIn(f'<meta property="og:image" content="{social_image}">', guide)
         self.assertIn(f'<meta name="twitter:image" content="{social_image}">', guide)
+        self.assertIn(
+            f'<meta name="twitter:image:alt" content="{social_image_alt}">',
+            guide,
+        )
         self.assertIn("AI-generated code is not a named rejection category", guide)
         for topic in ("Guideline 4.2.6", "Guideline 4.3(a)", "Guideline 4.3(b)"):
             with self.subTest(topic=topic):
@@ -333,6 +344,47 @@ class PagesSiteTests(unittest.TestCase):
         self.assertTrue(X_CREATIVE.is_file(), f"{X_CREATIVE.relative_to(ROOT)} is missing")
         self.assertEqual((1200, 628), png_dimensions(X_CREATIVE))
         self.assertLessEqual(X_CREATIVE.stat().st_size, 5_000_000)
+
+    def test_x_campaign_markdown_matches_json_source_of_truth(self):
+        payload = json.loads(read(X_CAMPAIGN))
+        campaign_doc = read(X_CAMPAIGN_DOC)
+
+        self.assertIn(
+            "The JSON campaign file is the source of truth for every exact payload value.",
+            campaign_doc,
+        )
+        self.assertNotIn("Rotate all three creatives evenly", campaign_doc)
+        self.assertIn("Launch all three creatives together", campaign_doc)
+        self.assertIn("delivery is algorithmic", campaign_doc)
+
+        campaign = payload["campaign"]
+        for expected_setting in (
+            f"| Daily budget | EUR {campaign['daily_budget_eur']} |",
+            f"| Duration | {campaign['duration_days']} days |",
+            f"| Planned maximum | EUR {campaign['planned_cap_eur']} |",
+        ):
+            with self.subTest(expected_setting=expected_setting):
+                self.assertIn(expected_setting, campaign_doc)
+
+        for creative in payload["creatives"]:
+            with self.subTest(creative=creative["id"]):
+                self.assertIn(f"> {creative['post_copy']}", campaign_doc)
+                self.assertIn(
+                    f"**Card headline:** {creative['card_headline']}",
+                    campaign_doc,
+                )
+                self.assertIn(
+                    f"**Destination:** `{creative['destination_url']}`",
+                    campaign_doc,
+                )
+                self.assertIn(creative["alt_text"], campaign_doc)
+
+        for keyword in (
+            payload["audience"]["include_keywords"]
+            + payload["audience"]["exclude_keywords"]
+        ):
+            with self.subTest(keyword=keyword):
+                self.assertIn(keyword, campaign_doc)
 
 
 if __name__ == "__main__":
