@@ -65,6 +65,11 @@ class PagesSiteTests(unittest.TestCase):
         self.assertIn('href="https://github.com/ElxMaj/app-store-review-skill"', landing)
         self.assertIn(f'href="/app-store-review-skill/{GUIDE_PATH}"', landing)
         self.assertIn('href="/app-store-review-skill/report/"', landing)
+        self.assertIn(
+            "Apple’s published guidelines do not name AI-written code as a rejection category",
+            landing,
+        )
+        self.assertNotIn("AI code is not the review category", landing)
 
     def test_landing_json_ld_uses_supported_source_truth(self):
         landing = read(SITE / "index.html")
@@ -117,6 +122,7 @@ class PagesSiteTests(unittest.TestCase):
         )
         self.assertIn("Last checked against Apple’s guidelines: September 2, 2026", guide)
         self.assertIn("does not guarantee approval", guide)
+        self.assertNotIn("Not because a coding assistant wrote the source", guide)
 
         nodes = graph_nodes(json_ld_documents(guide))
         article = next(node for node in nodes if node["@type"] == "Article")
@@ -170,6 +176,9 @@ class PagesSiteTests(unittest.TestCase):
             workflow,
         )
         self.assertNotIn("cp examples/parceltrack-report.html _site/index.html", workflow)
+        focused_test = "python3 -m unittest discover -s scripts/tests -p 'test_pages_site.py' -v"
+        self.assertIn(focused_test, workflow)
+        self.assertLess(workflow.index(focused_test), workflow.index("actions/upload-pages-artifact"))
 
     def test_readme_routes_people_to_product_page_and_report(self):
         readme = read(ROOT / "README.md")
@@ -207,6 +216,22 @@ class PagesSiteTests(unittest.TestCase):
             with self.subTest(required=required):
                 self.assertIn(required, launch)
         self.assertNotRegex(launch.lower(), r"ask for (an |your )?(upvote|vote)s?")
+
+        channel_sections = {
+            heading: re.split(r"\n#{2,3} ", launch.split(heading, 1)[1], maxsplit=1)[0]
+            for heading in (
+                "### r/ClaudeCode weekly showcase comment",
+                "### Product Hunt package",
+                "### LinkedIn post",
+                "### X post",
+            )
+        }
+        for heading, section in channel_sections.items():
+            with self.subTest(heading=heading):
+                self.assertIn("not affiliated with Apple", section)
+
+        x_post = channel_sections["### X post"].strip()
+        self.assertLessEqual(len(x_post), 280)
 
 
 if __name__ == "__main__":

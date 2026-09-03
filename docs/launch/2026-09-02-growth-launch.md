@@ -57,6 +57,8 @@ Repo and install: https://github.com/ElxMaj/app-store-review-skill
 
 I would value concrete false positives or missing checks from anyone shipping iOS, Expo, React Native, or Flutter apps.
 
+This is an independent project and is not affiliated with Apple.
+
 ### Product Hunt package
 
 - **Name:** App Store Review Skill
@@ -75,7 +77,7 @@ I built it around a gap I kept seeing in release work: a project can compile and
 
 The skill starts read-only and keeps three evidence levels separate: confirmed findings, warnings, and manual checks. It also has a rejection-recovery mode that preserves Apple's message before suggesting whether to fix, clarify, appeal, or request interpretation.
 
-The project is MIT licensed. I’m especially interested in false positives and framework-specific gaps from people shipping real iOS apps.
+The project is MIT licensed and is not affiliated with Apple. I’m especially interested in false positives and framework-specific gaps from people shipping real iOS apps.
 
 ### LinkedIn post
 
@@ -92,9 +94,11 @@ https://elxmaj.github.io/app-store-review-skill/
 
 If you work on iOS, Expo, React Native, or Flutter releases, I would welcome a concrete false positive or missing check.
 
+This is an independent project and is not affiliated with Apple.
+
 ### X post
 
-I built an App Store review skill for Codex + Claude Code: pre-submission audits, rejection recovery, and a human-craft pass for 4.2/4.3. It starts read-only and shows evidence, not an approval promise. Open source + report: https://elxmaj.github.io/app-store-review-skill/
+I built an independent App Store review skill for Codex + Claude Code: read-only audits, rejection recovery, and a human-craft pass for 4.2/4.3. Evidence, not approval promises. It is not affiliated with Apple. Open source: https://elxmaj.github.io/app-store-review-skill/
 
 ## Proposed discovery metadata
 
