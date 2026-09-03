@@ -8,9 +8,9 @@
 
 <a href="https://elxmaj.github.io/app-store-review-skill/"><img src="https://raw.githubusercontent.com/ElxMaj/app-store-review-skill/main/assets/visual-report-example.png" alt="Sample ParcelTrack App Store review report showing the release verdict, evidence counts, review scope, and first confirmed blocker" width="100%"></a>
 
-[Open the complete sample report](https://elxmaj.github.io/app-store-review-skill/) · [Inspect its source JSON](https://elxmaj.github.io/app-store-review-skill/parceltrack-report.json)
+[Product page](https://elxmaj.github.io/app-store-review-skill/) · [Star on GitHub](https://github.com/ElxMaj/app-store-review-skill) · [Open the complete sample report](https://elxmaj.github.io/app-store-review-skill/report/) · [Inspect its source JSON](https://elxmaj.github.io/app-store-review-skill/report/parceltrack-report.json)
 
-[Quick start](#quick-start) · [Review modes](#three-review-modes) · [Report preview](#report-preview) · [Coverage](#coverage)
+[Quick start](#quick-start) · [Review modes](#three-review-modes) · [AI-built app guide](https://elxmaj.github.io/app-store-review-skill/guides/will-apple-reject-ai-built-apps/) · [Coverage](#coverage)
 
 </div>
 

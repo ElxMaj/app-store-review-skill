@@ -6,6 +6,8 @@ on:
     paths:
       - ".github/workflows/pages.yml"
       - "README.md"
+      - "site/**"
+      - "assets/visual-report-example.png"
       - "examples/parceltrack-report.html"
       - "examples/parceltrack-report.json"
       - "scripts/render_app_store_report.py"
@@ -30,12 +32,20 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: "3.11"
+      - name: Run product site tests
+        run: python3 -m unittest discover -s scripts/tests -p 'test_pages_site.py' -v
       - uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
-      - name: Assemble report site
+      - name: Assemble product site
         run: |
-          mkdir -p _site
-          cp examples/parceltrack-report.html _site/index.html
+          mkdir -p _site/report _site/assets
+          cp -R site/. _site/
+          cp examples/parceltrack-report.html _site/report/index.html
+          cp examples/parceltrack-report.json _site/report/parceltrack-report.json
           cp examples/parceltrack-report.json _site/parceltrack-report.json
+          cp assets/visual-report-example.png _site/assets/visual-report-example.png
       - uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
         with:
           path: _site
