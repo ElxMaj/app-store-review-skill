@@ -1,0 +1,4 @@
+{
+  "description": "Apple-design interaction and accessibility audit for a domain-specific iOS and iPadOS app",
+  "include": ["./inputs"]
+}

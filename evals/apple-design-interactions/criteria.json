@@ -1,0 +1,56 @@
+{
+  "context": "Tests whether the human-craft audit can apply Apple design principles to native interaction evidence without confusing craft with App Review policy. CueLine has credible domain-specific value but confirmed direct-manipulation, interruption, spatial, feedback, Dynamic Type, Reduce Motion, Reduce Transparency, and color-only status problems.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Exact Mode C contract",
+      "description": "The audit begins with `Mode C: Human-craft audit` and the five required grade lines using only DISTINCT, CREDIBLE, GENERIC, HIGH RISK, or UNVERIFIED",
+      "max_score": 12
+    },
+    {
+      "name": "Evidence and policy boundary",
+      "description": "The answer distinguishes confirmed runtime or accessibility observations, official Apple guidance, and optional craft recommendations; it does not promise approval or treat every Apple-style preference as an App Review rule",
+      "max_score": 12
+    },
+    {
+      "name": "Credible product purpose preserved",
+      "description": "CueLine's stage-management script, numbered cue, rehearsal timing, offline, and discrepancy-report workflow is treated as credible domain-specific product evidence rather than dismissed as a generic template",
+      "max_score": 7
+    },
+    {
+      "name": "Response and direct manipulation",
+      "description": "The audit identifies the delayed drag response and center jump, then recommends immediate continuous tracking that preserves the original grab offset",
+      "max_score": 13
+    },
+    {
+      "name": "Interruptibility and momentum",
+      "description": "The audit identifies animation input lockout and position-only detent selection, then recommends interruption from the current visible state and release-direction or velocity-aware target selection where momentum is present",
+      "max_score": 14
+    },
+    {
+      "name": "Spatial consistency and boundaries",
+      "description": "The audit identifies the bottom-entry/right-exit mismatch and hard drag stop, recommending a matching reversible path and progressive boundary resistance",
+      "max_score": 9
+    },
+    {
+      "name": "Purposeful multimodal feedback",
+      "description": "The audit identifies gratuitous tab bounce, indiscriminate haptics, missing immediate Save feedback, delayed status, and missing success or actionable export recovery feedback",
+      "max_score": 10
+    },
+    {
+      "name": "Accessibility, type, and materials",
+      "description": "The audit addresses Dynamic Type clipping, Reduce Motion, Reduce Transparency, color-only cue status, and stacked translucent-material legibility; untested VoiceOver, pointer, and keyboard behavior stays unverified",
+      "max_score": 13
+    },
+    {
+      "name": "Evidence-backed interventions",
+      "description": "The top interventions cite supplied evidence, explain impact, include effort, and state an observable verification step",
+      "max_score": 7
+    },
+    {
+      "name": "Native and independent guidance",
+      "description": "The answer gives framework-neutral native outcomes, does not paste web CSS or Pointer Events code, does not copy Apple branding, and does not imply Apple endorsement",
+      "max_score": 3
+    }
+  ]
+}

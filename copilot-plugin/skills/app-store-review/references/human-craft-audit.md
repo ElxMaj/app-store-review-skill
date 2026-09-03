@@ -24,6 +24,12 @@ Grade every dimension:
 
 Grades summarize inspected evidence. They are not approval probabilities.
 
+## Apple-design lens
+
+When supplied evidence includes a running build, screenshots, interaction recordings, motion, gestures, materials, typography, feedback, haptics, accessibility settings, or iPad adaptation, read `apple-design-review.md` completely. Map that evidence into the same five grades. Apple-design craft is not a sixth grade and does not replace product distinction.
+
+Keep three things separate: a confirmed runtime observation, current `OFFICIAL` Apple guidance, and a `Craft recommendation:`. A Human Interface Guidelines preference is not automatically an App Review rejection rule. A craft issue becomes review risk only when the observed result makes a feature broken, incomplete, misleading, inaccessible, or difficult to operate.
+
 ## 1. Product distinction
 
 Inspect:
@@ -107,6 +113,11 @@ Inspect screenshots or run the app. Do not grade from source filenames alone.
 
 - feedback marks meaningful state changes
 - motion explains hierarchy or progress
+- direct manipulation responds continuously and preserves the original grab position
+- in-flight motion can be interrupted from its current visible state
+- momentum-driven releases consider direction or velocity instead of position alone
+- reversible surfaces enter and exit along a consistent spatial path
+- gesture boundaries remain responsive instead of freezing at a hard stop
 - Reduce Motion is respected
 - haptics are not attached indiscriminately to every tap
 
@@ -191,13 +202,14 @@ Inspect:
 ## Output
 
 ```text
-# Human-craft audit: <app>
-
+Mode C: Human-craft audit
 Product distinction: <GRADE>
 Provenance: <GRADE>
-Visual identity: <GRADE>
+Visual identity and accessibility: <GRADE>
 Microcopy and states: <GRADE>
 Product page: <GRADE>
+
+# Human-craft audit: <app>
 
 ## Why these grades
 <path, screen, metadata, or supplied evidence for each>
