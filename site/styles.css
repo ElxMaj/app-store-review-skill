@@ -146,6 +146,10 @@ pre,
   border-bottom: 1px solid var(--rule-strong);
 }
 
+.hero > * {
+  min-width: 0;
+}
+
 .eyebrow,
 .section-label,
 .proof-label,
