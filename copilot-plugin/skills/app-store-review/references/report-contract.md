@@ -72,7 +72,7 @@ Emit UTF-8 JSON with this top-level shape:
   "limitations": [],
   "scanner": {
     "name": "app_store_review_scan",
-    "version": "1.2.1"
+    "version": "1.2.2"
   }
 }
 ```

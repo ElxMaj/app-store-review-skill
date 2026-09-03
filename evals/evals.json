@@ -112,6 +112,22 @@
         "Checks the HTML near 1440 px and 390 px and reports any remaining visual limitation",
         "Does not edit the audited app before the user approves grouped fixes"
       ]
+    },
+    {
+      "id": "apple-design-interaction-audit",
+      "prompt": "Use $app-store-review to audit the Apple-design quality of the CueLine interaction evidence in evals/apple-design-interactions/inputs/product-evidence.md. Explain which observations are App Review risks versus craft recommendations. Report first and do not change files.",
+      "assertions": [
+        "Uses the exact Mode C grade contract without adding approval odds",
+        "Treats CueLine's domain-specific workflow as credible product evidence instead of calling it a generic template",
+        "Finds delayed drag feedback and the sheet jump caused by losing the original grab offset",
+        "Finds animation lockout and requires transitions to remain interruptible from the current visible state",
+        "Finds position-only snapping and recommends using release direction or velocity to preserve momentum",
+        "Finds the mismatched enter and exit paths and hard gesture boundary",
+        "Finds gratuitous bounce, indiscriminate haptics, delayed status, and missing completion or recovery feedback",
+        "Checks Dynamic Type, Reduce Motion, Reduce Transparency, non-color status, and stacked material legibility",
+        "Separates official Apple guidance and confirmed accessibility failures from optional craft recommendations",
+        "Does not paste web CSS or claim that Apple-design polish guarantees approval"
+      ]
     }
   ]
 }

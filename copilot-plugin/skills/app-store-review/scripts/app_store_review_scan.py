@@ -25,7 +25,7 @@ from typing import Any, Dict, Iterable, List, Optional, Sequence, Set, Tuple
 from render_app_store_report import render_report_html
 
 
-VERSION = "1.2.1"
+VERSION = "1.2.2"
 POLICY_VERIFIED_AT = "2026-08-10"
 
 DEFAULT_IGNORED_DIRS = {

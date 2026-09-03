@@ -2,6 +2,8 @@
 
 Read this before generating or reviewing the HTML report.
 
+This file governs the report artifact. Use `apple-design-review.md` when auditing the native app's screens, interactions, motion, materials, typography, feedback, or accessibility.
+
 ## Design direction
 
 Build a calm editorial compliance dossier, not a SaaS dashboard and not a marketing landing page. The app name is the focal point. The verdict is prominent but not theatrical. Evidence must feel more important than decoration.
@@ -130,10 +132,18 @@ At the end of each pass, remove anything that does not help the reader understan
 
 ## Design sources
 
-Verified 2026-07-17:
+Apple-design sources verified 2026-09-03:
 
-- Apple design skill: `https://github.com/emilkowalski/skills/tree/main/skills/apple-design`
+- Apple design skill: `https://github.com/emilkowalski/skills/blob/main/skills/apple-design/SKILL.md`
+- Apple Human Interface Guidelines: `https://developer.apple.com/design/human-interface-guidelines`
+- Apple design principles: `https://developer.apple.com/design/human-interface-guidelines/design-principles`
+- Apple motion guidance: `https://developer.apple.com/design/human-interface-guidelines/motion`
+- Apple gesture guidance: `https://developer.apple.com/design/human-interface-guidelines/gestures`
+- Apple feedback guidance: `https://developer.apple.com/design/human-interface-guidelines/feedback`
+- Apple haptics guidance: `https://developer.apple.com/design/human-interface-guidelines/playing-haptics`
+- Apple accessibility guidance: `https://developer.apple.com/design/human-interface-guidelines/accessibility`
+
+Additional visual sources last verified 2026-07-17:
+
 - Emil design engineering skill: `https://github.com/emilkowalski/skills/tree/main/skills/emil-design-eng`
 - Luke Web Design free premium workflow: `https://lukewebdesign.com/free-guide`
-- Apple Human Interface Guidelines: `https://developer.apple.com/design/human-interface-guidelines`
-- Apple accessibility guidance: `https://developer.apple.com/design/human-interface-guidelines/accessibility`

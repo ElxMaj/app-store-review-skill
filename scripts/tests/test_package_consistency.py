@@ -23,10 +23,64 @@ MANIFESTS = (
     ROOT / ".tessl-plugin" / "plugin.json",
     ROOT / "copilot-plugin" / ".github" / "plugin" / "plugin.json",
 )
-EXPECTED_VERSION = "1.2.1"
+EXPECTED_VERSION = "1.2.2"
 
 
 class PackageConsistencyTests(unittest.TestCase):
+    def test_apple_design_audits_are_discoverable_without_broad_animation_trigger(self):
+        root_skill = (ROOT / "SKILL.md").read_text(encoding="utf-8")
+        loader = (ROOT / "skills" / "app-store-review" / "SKILL.md").read_text(
+            encoding="utf-8"
+        )
+        trigger_evals = json.loads(
+            (ROOT / "evals" / "trigger-evals.json").read_text(encoding="utf-8")
+        )
+
+        for skill in (root_skill, loader):
+            frontmatter = skill.split("---", 2)[1].lower()
+            for required in ("apple design", "human interface guidelines", "motion", "gestures"):
+                with self.subTest(skill=skill[:40], required=required):
+                    self.assertIn(required, frontmatter)
+
+        mode_c = next(line for line in root_skill.splitlines() if "C. Human-craft audit" in line)
+        for required in ("apple design", "human interface guidelines", "motion", "gestures"):
+            with self.subTest(mode_c=required):
+                self.assertIn(required, mode_c.lower())
+
+        positive_prompts = " ".join(trigger_evals["should_trigger"]).lower()
+        self.assertIn("human interface guidelines", positive_prompts)
+        self.assertIn("apple design", positive_prompts)
+        self.assertIn(
+            "Fix this SwiftUI animation bug without discussing App Review",
+            trigger_evals["should_not_trigger"],
+        )
+
+    def test_mode_c_routes_to_bundled_apple_design_guidance(self):
+        reference_path = ROOT / "references" / "apple-design-review.md"
+        self.assertTrue(reference_path.is_file(), "Apple design review guidance is missing")
+
+        root_skill = (ROOT / "SKILL.md").read_text(encoding="utf-8")
+        craft_audit = (ROOT / "references" / "human-craft-audit.md").read_text(
+            encoding="utf-8"
+        )
+        reference = reference_path.read_text(encoding="utf-8")
+
+        self.assertIn("references/apple-design-review.md", root_skill)
+        self.assertIn("apple-design-review.md", craft_audit)
+        for required in (
+            "direct manipulation",
+            "interruptibility",
+            "spatial consistency",
+            "reduce motion",
+            "dynamic type",
+            "craft recommendation",
+            "emilkowalski/skills",
+            "developer.apple.com/design/human-interface-guidelines",
+            "copyright (c) 2026 emil kowalski",
+        ):
+            with self.subTest(required=required):
+                self.assertIn(required, reference.lower())
+
     def test_claude_review_command_delegates_to_canonical_skill(self):
         command_path = ROOT / "commands" / "review.md"
         self.assertTrue(command_path.is_file(), "commands/review.md is missing")
@@ -69,9 +123,9 @@ class PackageConsistencyTests(unittest.TestCase):
             with self.subTest(scanner=scanner):
                 self.assertRegex(
                     scanner.read_text(encoding="utf-8"),
-                    r'(?m)^VERSION = "1\.2\.1"$',
+                    rf'(?m)^VERSION = "{re.escape(EXPECTED_VERSION)}"$',
                 )
-        self.assertIn('"version": "1.2.1"', contract)
+        self.assertIn(f'"version": "{EXPECTED_VERSION}"', contract)
 
     def test_public_sample_uses_current_report_contract(self):
         sample = json.loads(

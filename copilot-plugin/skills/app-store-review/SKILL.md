@@ -1,6 +1,6 @@
 ---
 name: app-store-review
-description: Full-lifecycle Apple App Store review for iOS and iPadOS apps. Use for pre-submission audits, rejection diagnosis and Resolution Center replies, Guideline 4.3 spam or similarity recovery, human-craft and low-effort audits, App Review Notes, privacy manifests, Info.plist permission strings, subscriptions, Sign in with Apple, account deletion, UGC, third-party AI consent, TestFlight or App Store readiness, and vague requests such as "review my app" or "will Apple approve this" when an Xcode, Expo, React Native, or Flutter project is present. Produces evidence-tagged Markdown, JSON, and a self-contained visual HTML report, runs a read-only deterministic scan first, and only offers grouped fixes after the report.
+description: Full-lifecycle Apple App Store review for iOS and iPadOS apps. Use for pre-submission audits, rejection diagnosis and Resolution Center replies, Guideline 4.3 spam or similarity recovery, human-craft and low-effort audits, Apple design and Human Interface Guidelines audits of native interaction, motion, gestures, materials, haptics, accessibility, and iPad adaptation, App Review Notes, privacy manifests, Info.plist permission strings, subscriptions, Sign in with Apple, account deletion, UGC, third-party AI consent, TestFlight or App Store readiness, and vague requests such as "review my app" or "will Apple approve this" when an Xcode, Expo, React Native, or Flutter project is present. Produces evidence-tagged Markdown, JSON, and a self-contained visual HTML report, runs a read-only deterministic scan first, and only offers grouped fixes after the report.
 ---
 
 # App Store Review
@@ -33,18 +33,21 @@ State the mode before starting. Use more than one when needed.
 |---|---|---|
 | A. Pre-submission audit | A repository, build, metadata set, or feature spec is being prepared | `references/guidelines-checklist.md`, `references/frameworks.md` |
 | B. Rejection recovery | The user supplies a rejection, asks why it happened, or needs a reply or appeal | `references/rejection-playbook.md` |
-| C. Human-craft audit | The user mentions 4.3(b), templates, low effort, AI slop, differentiation, or product polish | `references/human-craft-audit.md` |
+| C. Human-craft audit | The user requests an audit of 4.3(b), templates, low effort, AI slop, differentiation, product polish, Apple design, Human Interface Guidelines, motion, gestures, materials, haptics, accessibility, or iPad adaptation | `references/human-craft-audit.md` |
 
 Run A then C for a full pre-launch review. Run B then the relevant parts of A or C when a rejection exposes a product or configuration gap.
+
+Use Mode C for design-quality audits and submission-facing evaluation. Do not route a standalone SwiftUI implementation or debugging request to this skill merely because it mentions animation, motion, gestures, or accessibility.
 
 ## Output gates
 
 Before saving a deliverable, verify the applicable gate literally appears in the requested file:
 
 - Mode A starts with `Mode A: Pre-submission audit` before findings.
-- A combined pre-launch review includes the complete five-line Mode C grade block under `Mode C: Human-craft audit`.
+- A combined pre-launch review places the complete six-line Mode C contract at the start of its craft section.
 - If generated native files are absent, label target membership, merged plist, and archive conclusions `MANUAL CHECK`.
 - Mode B includes the complete Apple message under `Apple's message (verbatim)` and exactly one `Response classification:` line.
+- A dedicated Mode C deliverable uses the complete six-line contract as its first six non-empty lines; the title and analysis follow it.
 - Every material policy or review-behavior claim uses an allowed evidence-confidence label.
 - A visual handoff lists `Markdown:`, `JSON:`, `HTML:`, and `Verification:` on separate lines.
 
@@ -169,7 +172,9 @@ Preserve the complete message before analysis and print exactly one primary `Res
 
 Read and follow `references/human-craft-audit.md` completely for the five dimensions, grading anchors, reviewer-path evidence, and intervention ranking.
 
-Start every Mode C deliverable with this exact contract before narrative analysis:
+When the task includes a running build, screenshots, interaction recordings, or questions about Apple design, Human Interface Guidelines, motion, gestures, materials, typography, feedback, haptics, or accessibility, also read and follow `references/apple-design-review.md` completely. Use it to classify evidence within the existing five grades, not to create an Apple-likeness score.
+
+For a dedicated Mode C deliverable, the first six non-empty lines are exactly this contract. For a combined Mode A and Mode C review, place the same contract at the start of the craft section. Put the craft title and narrative analysis after it:
 
 ```text
 Mode C: Human-craft audit
@@ -190,7 +195,7 @@ When the task depends on current requirements and network access is available, v
 - `https://developer.apple.com/news/upcoming-requirements/`
 - the relevant App Store Connect Help page
 
-Record the verification date in the report. If offline, state that bundled references were last verified on 2026-08-10 and list the policy items the user should recheck.
+Record the verification date in the report. If offline, state that bundled App Review policy references were last verified on 2026-08-10. When Apple-design guidance is used, separately state that bundled design sources were verified on 2026-09-03. List the policy items the user should recheck.
 
 If live verification is unavailable or does not complete promptly, use the bundled verification date, disclose that limitation, and finish the report. Do not withhold the requested audit while waiting for network evidence.
 
@@ -200,6 +205,7 @@ Use `references/research-prompt.md` for a quarterly evidence refresh. New commun
 
 These explicit links keep the GitHub Copilot distribution self-contained and verifiable:
 
+- [Apple-design review](references/apple-design-review.md)
 - [Evidence policy](references/evidence-policy.md)
 - [Framework detection](references/frameworks.md)
 - [Guidelines checklist](references/guidelines-checklist.md)
