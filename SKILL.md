@@ -42,9 +42,10 @@ Run A then C for a full pre-launch review. Run B then the relevant parts of A or
 Before saving a deliverable, verify the applicable gate literally appears in the requested file:
 
 - Mode A starts with `Mode A: Pre-submission audit` before findings.
-- A combined pre-launch review includes the complete five-line Mode C grade block under `Mode C: Human-craft audit`.
+- A combined pre-launch review places the complete six-line Mode C contract at the start of its craft section.
 - If generated native files are absent, label target membership, merged plist, and archive conclusions `MANUAL CHECK`.
 - Mode B includes the complete Apple message under `Apple's message (verbatim)` and exactly one `Response classification:` line.
+- A dedicated Mode C deliverable uses the complete six-line contract as its first six non-empty lines; the title and analysis follow it.
 - Every material policy or review-behavior claim uses an allowed evidence-confidence label.
 - A visual handoff lists `Markdown:`, `JSON:`, `HTML:`, and `Verification:` on separate lines.
 
@@ -169,7 +170,9 @@ Preserve the complete message before analysis and print exactly one primary `Res
 
 Read and follow `references/human-craft-audit.md` completely for the five dimensions, grading anchors, reviewer-path evidence, and intervention ranking.
 
-Start every Mode C deliverable with this exact contract before narrative analysis:
+When the task includes a running build, screenshots, interaction recordings, or questions about Apple design, Human Interface Guidelines, motion, gestures, materials, typography, feedback, haptics, or accessibility, also read and follow `references/apple-design-review.md` completely. Use it to classify evidence within the existing five grades, not to create an Apple-likeness score.
+
+For a dedicated Mode C deliverable, the first six non-empty lines are exactly this contract. For a combined Mode A and Mode C review, place the same contract at the start of the craft section. Put the craft title and narrative analysis after it:
 
 ```text
 Mode C: Human-craft audit

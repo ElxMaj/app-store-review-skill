@@ -27,6 +27,32 @@ EXPECTED_VERSION = "1.2.1"
 
 
 class PackageConsistencyTests(unittest.TestCase):
+    def test_mode_c_routes_to_bundled_apple_design_guidance(self):
+        reference_path = ROOT / "references" / "apple-design-review.md"
+        self.assertTrue(reference_path.is_file(), "Apple design review guidance is missing")
+
+        root_skill = (ROOT / "SKILL.md").read_text(encoding="utf-8")
+        craft_audit = (ROOT / "references" / "human-craft-audit.md").read_text(
+            encoding="utf-8"
+        )
+        reference = reference_path.read_text(encoding="utf-8")
+
+        self.assertIn("references/apple-design-review.md", root_skill)
+        self.assertIn("apple-design-review.md", craft_audit)
+        for required in (
+            "direct manipulation",
+            "interruptibility",
+            "spatial consistency",
+            "reduce motion",
+            "dynamic type",
+            "craft recommendation",
+            "emilkowalski/skills",
+            "developer.apple.com/design/human-interface-guidelines",
+            "copyright (c) 2026 emil kowalski",
+        ):
+            with self.subTest(required=required):
+                self.assertIn(required, reference.lower())
+
     def test_claude_review_command_delegates_to_canonical_skill(self):
         command_path = ROOT / "commands" / "review.md"
         self.assertTrue(command_path.is_file(), "commands/review.md is missing")

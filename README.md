@@ -20,7 +20,7 @@
 
 A build can work on your phone and still be difficult for App Review. A widget may have no privacy manifest. The camera call may not match a purpose string. Account deletion may stop at the app instead of the server. Review notes may leave the reviewer with no usable path.
 
-Guideline 4.3 needs a different kind of review. A clean build can still look generic, copied, or unfinished. This skill checks the parts Apple can actually review, such as product depth, asset reuse, template provenance, microcopy, missing states, accessibility, and the App Store product page. It does not claim to detect AI-written code.
+Guideline 4.3 needs a different kind of review. A clean build can still look generic, copied, or unfinished. This skill checks the parts Apple can actually review, such as product depth, asset reuse, template provenance, microcopy, missing states, accessibility, and the App Store product page. Its bundled Apple-design lens also reviews response, direct manipulation, interruptibility, spatial consistency, purposeful feedback, typography, materials, and accessibility variants. It does not claim to detect AI-written code.
 
 ## Quick start
 
@@ -65,7 +65,7 @@ The rejection message is kept exactly as Apple wrote it. The skill classifies th
 
 ### 3. Human-craft audit
 
-The app is graded across product distinction, provenance, visual identity, microcopy and states, and product-page specificity. Grades are `DISTINCT`, `CREDIBLE`, `GENERIC`, `HIGH RISK`, or `UNVERIFIED`. The aim is to improve a thin or generic app, not hide it with a new color palette.
+The app is graded across product distinction, provenance, visual identity and accessibility, microcopy and states, and product-page specificity. Grades are `DISTINCT`, `CREDIBLE`, `GENERIC`, `HIGH RISK`, or `UNVERIFIED`. The Apple-design review is adapted from [Emil Kowalski's MIT-licensed skill](https://github.com/emilkowalski/skills/blob/main/skills/apple-design/SKILL.md) and grounded in current Apple guidance. The aim is to improve a thin or generic app, not hide it with a new color palette or imitate Apple styling.
 
 ## Report preview
 
@@ -102,7 +102,7 @@ python3 scripts/app_store_review_scan.py <project-path> --metadata subtitle:en-U
 
 ```text
 SKILL.md                         Main workflow and review rules
-references/                      Policy, recovery, craft, framework, and report guidance
+references/                      Policy, recovery, Apple-design, craft, framework, and report guidance
 scripts/app_store_review_scan.py Read-only deterministic scanner
 scripts/render_app_store_report.py Self-contained visual HTML renderer
 scripts/tests/                   Scanner regression tests
