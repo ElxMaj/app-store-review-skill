@@ -1,0 +1,154 @@
+{
+  "state": "draft_only",
+  "updated_at": "2026-09-03",
+  "activation": {
+    "authorized": false,
+    "authorized_spend_eur": 0,
+    "requires_final_preview": true,
+    "required_before_activation": [
+      "account_eligibility",
+      "advertiser_handle",
+      "funding_source",
+      "start_at",
+      "final_payload_confirmation"
+    ]
+  },
+  "campaign": {
+    "name": "app_store_review_preflight_x_2026_09",
+    "objective": "website_traffic",
+    "optimization_goal": "link_clicks",
+    "pay_by": "link_clicks",
+    "bid_strategy": "autobid",
+    "daily_budget_eur": 15,
+    "duration_days": 7,
+    "planned_cap_eur": 105,
+    "landing_page": "https://elxmaj.github.io/app-store-review-skill/"
+  },
+  "audience": {
+    "language": [
+      "en"
+    ],
+    "locations": [
+      "Australia",
+      "Canada",
+      "Germany",
+      "Ireland",
+      "Netherlands",
+      "New Zealand",
+      "United Kingdom",
+      "United States"
+    ],
+    "minimum_age": 18,
+    "optimized_targeting": false,
+    "audience_expansion": false,
+    "placements": [
+      "home_timeline",
+      "search_results"
+    ],
+    "include_keywords": [
+      "App Store Review",
+      "App Review",
+      "App Review rejection",
+      "App Store rejection",
+      "App Store rejected",
+      "rejected by Apple",
+      "iOS app rejected",
+      "App Store submission",
+      "iOS submission",
+      "submit to App Store",
+      "App Store Connect",
+      "TestFlight review",
+      "App Review Guidelines",
+      "Guideline 4.3",
+      "Guideline 4.2",
+      "minimum functionality",
+      "privacy manifest",
+      "PrivacyInfo.xcprivacy",
+      "App Store metadata",
+      "App privacy details",
+      "App Review notes",
+      "reviewer access",
+      "demo account App Review",
+      "in app purchase review",
+      "subscription review",
+      "account deletion iOS",
+      "Sign in with Apple review",
+      "App Store screenshots",
+      "App Review appeal",
+      "Resolution Center",
+      "App Store rejection appeal",
+      "iOS release checklist",
+      "App Store release checklist"
+    ],
+    "exclude_keywords": [
+      "book review",
+      "customer review",
+      "employee review",
+      "film review",
+      "game review",
+      "job review",
+      "movie review",
+      "performance review",
+      "restaurant review",
+      "salary"
+    ]
+  },
+  "creatives": [
+    {
+      "id": "preflight",
+      "role": "pre_submission",
+      "post_copy": "A clean build can still hide App Store Review risks: privacy declarations, reviewer access, purchases, metadata, and product depth. I built a read-only, open-source preflight for iOS submissions. Independent and not affiliated with Apple.",
+      "card_headline": "Find review risks before submission",
+      "destination_url": "https://elxmaj.github.io/app-store-review-skill/?utm_source=x&utm_medium=paid_social&utm_campaign=app_store_review_preflight&utm_content=preflight",
+      "image_path": "/app-store-review-skill/assets/x-app-review-preflight.png",
+      "alt_text": "Editorial App Store Review preflight card asking ‘Ready for App Review?’ beside a sample not-ready verdict with one blocker, two warnings, and three manual checks."
+    },
+    {
+      "id": "rejection_recovery",
+      "role": "rejection_recovery",
+      "post_copy": "App Store Review rejection? Start with Apple’s exact message, then separate confirmed evidence from warnings and manual checks. I built an open-source recovery workflow for iOS teams. Independent and not affiliated with Apple.",
+      "card_headline": "Turn a rejection into a clear next step",
+      "destination_url": "https://elxmaj.github.io/app-store-review-skill/?utm_source=x&utm_medium=paid_social&utm_campaign=app_store_review_preflight&utm_content=rejection_recovery",
+      "image_path": "/app-store-review-skill/assets/x-app-review-preflight.png",
+      "alt_text": "Editorial App Store Review preflight card asking ‘Ready for App Review?’ beside a sample not-ready verdict with one blocker, two warnings, and three manual checks."
+    },
+    {
+      "id": "product_depth",
+      "role": "guidelines_4_2_4_3",
+      "post_copy": "Guidelines 4.2 and 4.3 are product questions, not just build errors. I built an open-source App Store Review skill that checks template residue, product depth, metadata, and reviewer paths. Independent and not affiliated with Apple.",
+      "card_headline": "Audit product depth before submission",
+      "destination_url": "https://elxmaj.github.io/app-store-review-skill/?utm_source=x&utm_medium=paid_social&utm_campaign=app_store_review_preflight&utm_content=product_depth",
+      "image_path": "/app-store-review-skill/assets/x-app-review-preflight.png",
+      "alt_text": "Editorial App Store Review preflight card asking ‘Ready for App Review?’ beside a sample not-ready verdict with one blocker, two warnings, and three manual checks."
+    }
+  ],
+  "measurement": {
+    "x_pixel_enabled": false,
+    "x_pixel_reason": "Use X link-click reporting for the first bounded test; do not add a third-party tracking pixel before consent and privacy requirements are designed.",
+    "baseline_captured_at": "2026-09-03",
+    "baseline": {
+      "github_stars": 2,
+      "github_views_14d": 7,
+      "github_unique_visitors_14d": 4,
+      "github_clones_14d": 50,
+      "github_unique_cloners_14d": 32
+    },
+    "review_after_spend_eur": 50,
+    "minimum_clicks_at_review": 25,
+    "minimum_clicks_at_completion": 50,
+    "minimum_adoption_signals_at_completion": 3,
+    "adoption_signals": [
+      "new GitHub star",
+      "installation question",
+      "substantive issue or pull request",
+      "verified registry install or copy-click increase"
+    ],
+    "reporting_schedule": [
+      "before activation",
+      "after EUR 25 spend",
+      "after EUR 50 spend",
+      "at campaign completion",
+      "seven days after completion"
+    ]
+  }
+}
