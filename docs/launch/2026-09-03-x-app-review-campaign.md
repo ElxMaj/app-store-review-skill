@@ -10,7 +10,7 @@ The campaign sells one job: find App Store Review risks before submission. Codex
 
 The copy assumes it will run from Elie's public, eligible maker account. If a company account is used instead, rewrite the first-person maker sentence and reapprove the complete payload.
 
-The creative uses the product's own evidence system as the visual identity: an editorial release sheet, a decisive red review signal, and a visible distinction between blockers, warnings, and manual checks. It should feel authored, useful, and immediately recognizable in a fast timeline.
+The creative compresses the product into one visual story: a neutral blue app tile crosses a red review scan, which exposes privacy, purchase, and warning symbols before a green route forward. The single-object hierarchy is designed to remain recognizable in a fast mobile timeline.
 
 ## Ads Manager setup
 
@@ -65,12 +65,12 @@ Use one ad group so the small budget is not fragmented. Launch all three creativ
 
 ## Image and accessibility
 
-- Asset: `/app-store-review-skill/assets/x-app-review-preflight.png`
+- Asset: `/app-store-review-skill/assets/x-app-review-preflight-v2.png`
 - Required size: 1200 x 628 PNG, under 5 MB
-- Alt text: “Editorial App Store Review preflight card asking ‘Ready for App Review?’ beside a sample not-ready verdict with one blocker, two warnings, and three manual checks.”
+- Alt text: “Glossy blue app tile passing through a red review scan with privacy, purchase, and warning symbols”
 - Do not add Apple logos, App Store badges, device mockups, approval seals, fake testimonials, or claims that imply endorsement.
 
-The final image was generated from the repository's own sample report as the only visual reference, then cropped and resized to the exact X card contract. The art direction borrows general high-craft editorial principles—one dominant idea, expressive type, disciplined hierarchy, and a memorable signal color—without copying a specific agency campaign or using external campaign artwork.
+The final image is original 3D artwork generated without external visual references. Three distinct concepts were compared at 600 x 314 feed size; the selected scan concept preserved the clearest hook, symbols, and red-to-green story, then it was resized to the exact X card contract. The app tile is intentionally neutral and does not reproduce or alter Apple artwork.
 
 ## Included keywords
 

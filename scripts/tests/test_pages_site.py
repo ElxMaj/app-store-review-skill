@@ -13,7 +13,13 @@ SITE_URL = "https://elxmaj.github.io/app-store-review-skill/"
 GUIDE_PATH = "guides/will-apple-reject-ai-built-apps/"
 X_CAMPAIGN = ROOT / "docs" / "launch" / "2026-09-03-x-app-review-campaign.json"
 X_CAMPAIGN_DOC = ROOT / "docs" / "launch" / "2026-09-03-x-app-review-campaign.md"
-X_CREATIVE = SITE / "assets" / "x-app-review-preflight.png"
+X_CREATIVE_FILENAME = "x-app-review-preflight-v2.png"
+X_CREATIVE_WEB_PATH = f"/app-store-review-skill/assets/{X_CREATIVE_FILENAME}"
+X_CREATIVE_ALT = (
+    "Glossy blue app tile passing through a red review scan with privacy, "
+    "purchase, and warning symbols"
+)
+X_CREATIVE = SITE / "assets" / X_CREATIVE_FILENAME
 
 
 def read(path: Path) -> str:
@@ -62,12 +68,11 @@ class PagesSiteTests(unittest.TestCase):
             with self.subTest(property_name=property_name):
                 self.assertIn(f'<meta property="{property_name}"', landing)
         self.assertIn('<meta name="twitter:card" content="summary_large_image">', landing)
-        social_image = f"{SITE_URL}assets/x-app-review-preflight.png"
-        social_image_alt = "App Store Review preflight with evidence-led release findings"
+        social_image = f"{SITE_URL}assets/{X_CREATIVE_FILENAME}"
         self.assertIn(f'<meta property="og:image" content="{social_image}">', landing)
         self.assertIn(f'<meta name="twitter:image" content="{social_image}">', landing)
         self.assertIn(
-            f'<meta name="twitter:image:alt" content="{social_image_alt}">',
+            f'<meta name="twitter:image:alt" content="{X_CREATIVE_ALT}">',
             landing,
         )
 
@@ -130,12 +135,11 @@ class PagesSiteTests(unittest.TestCase):
         self.assertEqual(1, len(re.findall(r"<h1(?:\s|>)", guide)))
         self.assertIn("<h1>Will Apple reject an AI-built app?</h1>", guide)
         self.assertIn(f'<link rel="canonical" href="{expected_url}">', guide)
-        social_image = f"{SITE_URL}assets/x-app-review-preflight.png"
-        social_image_alt = "App Store Review preflight with evidence-led release findings"
+        social_image = f"{SITE_URL}assets/{X_CREATIVE_FILENAME}"
         self.assertIn(f'<meta property="og:image" content="{social_image}">', guide)
         self.assertIn(f'<meta name="twitter:image" content="{social_image}">', guide)
         self.assertIn(
-            f'<meta name="twitter:image:alt" content="{social_image_alt}">',
+            f'<meta name="twitter:image:alt" content="{X_CREATIVE_ALT}">',
             guide,
         )
         self.assertIn("AI-generated code is not a named rejection category", guide)
@@ -318,11 +322,8 @@ class PagesSiteTests(unittest.TestCase):
                     r"guarantee(?:d)? approval|approval rate|detect(?:s|ion)? ai-written code",
                 )
                 self.assertLessEqual(len(creative["card_headline"]), 50)
-                self.assertEqual(
-                    "/app-store-review-skill/assets/x-app-review-preflight.png",
-                    creative["image_path"],
-                )
-                self.assertTrue(creative["alt_text"].strip())
+                self.assertEqual(X_CREATIVE_WEB_PATH, creative["image_path"])
+                self.assertEqual(X_CREATIVE_ALT, creative["alt_text"])
 
                 destination = urlparse(creative["destination_url"])
                 self.assertEqual("https", destination.scheme)
