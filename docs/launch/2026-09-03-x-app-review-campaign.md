@@ -10,7 +10,7 @@ The campaign sells one job: find App Store Review risks before submission. Codex
 
 The copy assumes it will run from Elie's public, eligible maker account. If a company account is used instead, rewrite the first-person maker sentence and reapprove the complete payload.
 
-The creative compresses the product into one visual story: a neutral blue app tile crosses a red review scan, which exposes privacy, purchase, and warning symbols before a green route forward. The single-object hierarchy is designed to remain recognizable in a fast mobile timeline.
+The creative compresses the product into one visual story: a neutral blue checklist tile collides with a red warning symbol among privacy and purchase risks, with a green route forward. The single-object hierarchy is designed to remain recognizable in a fast mobile timeline.
 
 ## Ads Manager setup
 
@@ -65,12 +65,12 @@ Use one ad group so the small budget is not fragmented. Launch all three creativ
 
 ## Image and accessibility
 
-- Asset: `/app-store-review-skill/assets/x-app-review-preflight-v2.png`
+- Asset: `/app-store-review-skill/assets/x-app-review-preflight-v3.png`
 - Required size: 1200 x 628 PNG, under 5 MB
-- Alt text: “3D App Store Review graphic reading ‘REJECTED? Find risks first,’ with a blue checklist tile crossing a red scan past privacy, warning, and purchase symbols toward a green check”
+- Alt text: “3D App Store Review graphic reading ‘REJECTED? Find risks first,’ with a blue checklist tile colliding with a red warning symbol among privacy and purchase icons, leading toward a green check”
 - Do not add Apple logos, App Store badges, device mockups, approval seals, fake testimonials, or claims that imply endorsement.
 
-The final image is original 3D artwork generated without external visual references. Three distinct concepts were compared at 600 x 314 feed size; the selected scan concept preserved the clearest hook, symbols, and red-to-green story, then it was resized to the exact X card contract. The app tile is intentionally neutral and does not reproduce or alter Apple artwork.
+The final image is original 3D artwork. Its 3D scene uses the approved collision concept, while its title hierarchy follows the user-supplied typography reference: a widely tracked kicker, a large white condensed headline, a red light underline, and a widely tracked supporting line. It was checked at 600 x 314 feed size, then resized to the exact X card contract. The app tile is intentionally neutral and does not reproduce or alter Apple artwork.
 
 ## Included keywords
 

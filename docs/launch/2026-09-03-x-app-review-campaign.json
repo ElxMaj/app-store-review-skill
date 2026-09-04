@@ -1,6 +1,6 @@
 {
   "state": "draft_only",
-  "updated_at": "2026-09-03",
+  "updated_at": "2026-09-04",
   "activation": {
     "authorized": false,
     "authorized_spend_eur": 0,
@@ -100,8 +100,8 @@
       "post_copy": "A clean build can still hide App Store Review risks: privacy declarations, reviewer access, purchases, metadata, and product depth. I built a read-only, open-source preflight for iOS submissions. Independent and not affiliated with Apple.",
       "card_headline": "Find review risks before submission",
       "destination_url": "https://elxmaj.github.io/app-store-review-skill/?utm_source=x&utm_medium=paid_social&utm_campaign=app_store_review_preflight&utm_content=preflight",
-      "image_path": "/app-store-review-skill/assets/x-app-review-preflight-v2.png",
-      "alt_text": "3D App Store Review graphic reading ‘REJECTED? Find risks first,’ with a blue checklist tile crossing a red scan past privacy, warning, and purchase symbols toward a green check"
+      "image_path": "/app-store-review-skill/assets/x-app-review-preflight-v3.png",
+      "alt_text": "3D App Store Review graphic reading ‘REJECTED? Find risks first,’ with a blue checklist tile colliding with a red warning symbol among privacy and purchase icons, leading toward a green check"
     },
     {
       "id": "rejection_recovery",
@@ -109,8 +109,8 @@
       "post_copy": "App Store Review rejection? Start with Apple’s exact message, then separate confirmed evidence from warnings and manual checks. I built an open-source recovery workflow for iOS teams. Independent and not affiliated with Apple.",
       "card_headline": "Turn a rejection into a clear next step",
       "destination_url": "https://elxmaj.github.io/app-store-review-skill/?utm_source=x&utm_medium=paid_social&utm_campaign=app_store_review_preflight&utm_content=rejection_recovery",
-      "image_path": "/app-store-review-skill/assets/x-app-review-preflight-v2.png",
-      "alt_text": "3D App Store Review graphic reading ‘REJECTED? Find risks first,’ with a blue checklist tile crossing a red scan past privacy, warning, and purchase symbols toward a green check"
+      "image_path": "/app-store-review-skill/assets/x-app-review-preflight-v3.png",
+      "alt_text": "3D App Store Review graphic reading ‘REJECTED? Find risks first,’ with a blue checklist tile colliding with a red warning symbol among privacy and purchase icons, leading toward a green check"
     },
     {
       "id": "product_depth",
@@ -118,8 +118,8 @@
       "post_copy": "Guidelines 4.2 and 4.3 are product questions, not just build errors. I built an open-source App Store Review skill that checks template residue, product depth, metadata, and reviewer paths. Independent and not affiliated with Apple.",
       "card_headline": "Audit product depth before submission",
       "destination_url": "https://elxmaj.github.io/app-store-review-skill/?utm_source=x&utm_medium=paid_social&utm_campaign=app_store_review_preflight&utm_content=product_depth",
-      "image_path": "/app-store-review-skill/assets/x-app-review-preflight-v2.png",
-      "alt_text": "3D App Store Review graphic reading ‘REJECTED? Find risks first,’ with a blue checklist tile crossing a red scan past privacy, warning, and purchase symbols toward a green check"
+      "image_path": "/app-store-review-skill/assets/x-app-review-preflight-v3.png",
+      "alt_text": "3D App Store Review graphic reading ‘REJECTED? Find risks first,’ with a blue checklist tile colliding with a red warning symbol among privacy and purchase icons, leading toward a green check"
     }
   ],
   "measurement": {
