@@ -6,12 +6,11 @@
 
 <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-blue.svg"></a> <a href="https://developer.apple.com/app-store/review/guidelines/"><img alt="Guidelines verified August 10, 2026" src="https://img.shields.io/badge/guidelines-verified%202026--08--10-0A7E07.svg"></a> <a href="https://tessl.io/registry/maj-labs/app-store-review"><img alt="Tessl quality and impact score" src="https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.tessl.io%2Fv1%2Fbadges%2Fmaj-labs%2Fapp-store-review"></a> [![Listed on ClaudePluginHub](https://www.claudepluginhub.com/badge/elxmaj-app-store-review)](https://www.claudepluginhub.com/plugins/elxmaj-app-store-review?ref=badge)
 
-<a href="https://elxmaj.github.io/app-store-review-skill/"><img src="https://raw.githubusercontent.com/ElxMaj/app-store-review-skill/main/assets/visual-report-example.png" alt="Sample ParcelTrack App Store review report showing the release verdict, evidence counts, review scope, and first confirmed blocker" width="100%"></a>
+<a href="https://elxmaj.github.io/app-store-review-skill/"><img src="https://raw.githubusercontent.com/ElxMaj/app-store-review-skill/main/assets/github-hero.png" alt="App Store review audit moving from a blue evidence scan through red review risks toward a green clearance check" width="100%"></a>
 
 [Product page](https://elxmaj.github.io/app-store-review-skill/) · [Star on GitHub](https://github.com/ElxMaj/app-store-review-skill) · [Open the complete sample report](https://elxmaj.github.io/app-store-review-skill/report/) · [Inspect its source JSON](https://elxmaj.github.io/app-store-review-skill/report/parceltrack-report.json)
 
 [Quick start](#quick-start) · [Review modes](#three-review-modes) · [AI-built app guide](https://elxmaj.github.io/app-store-review-skill/guides/will-apple-reject-ai-built-apps/) · [Coverage](#coverage)
-
 </div>
 
 `app-store-review` reads an iOS or iPadOS project and looks for evidence that can cause trouble during App Review. Use it before submission, after a rejection, or when an app feels too close to a template. It detects Xcode, Expo, React Native, and Flutter projects. The first pass is read-only. You get the report first, then a grouped fix plan if you want one. The policy references were verified on August 10, 2026 and include Apple's current Guideline 2.3.7 metadata rules and June 8, 2026 change to Guideline 4.3(b). Recovery advice keeps Apple's published rules separate from documented developer cases, observed patterns, and inference.
@@ -70,9 +69,9 @@ The app is graded across product distinction, provenance, visual identity and ac
 
 ## Report preview
 
-The reviewed JSON becomes a self-contained editorial report, not a dashboard. It uses the system font, one verdict accent, precise rules, light and dark appearances, phone-width reflow, and clean print output. The visual pass applies the same Apple design rules even when the optional design skill is not installed.
+<a href="https://elxmaj.github.io/app-store-review-skill/report/"><img src="https://raw.githubusercontent.com/ElxMaj/app-store-review-skill/main/assets/visual-report-example.png" alt="Sample ParcelTrack App Store review report showing the release verdict, evidence counts, review scope, and first confirmed blocker" width="100%"></a>
 
-Every finding shows what was found, where it was found, why it matters, what to change, and how to verify it. Reports also come as readable Markdown and stable JSON. Scanner findings keep stable IDs for CI, issue reports, and later audits.
+The reviewed JSON becomes a self-contained editorial report, not a dashboard. It uses the system font, one verdict accent, precise rules, light and dark appearances, phone-width reflow, and clean print output. The visual pass applies the same Apple design rules even when the optional design skill is not installed. Every finding shows what was found, where it was found, why it matters, what to change, and how to verify it. Reports also come as readable Markdown and stable JSON. Scanner findings keep stable IDs for CI, issue reports, and later audits.
 
 ## How it works
 
