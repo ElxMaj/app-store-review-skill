@@ -13,12 +13,12 @@ SITE_URL = "https://elxmaj.github.io/app-store-review-skill/"
 GUIDE_PATH = "guides/will-apple-reject-ai-built-apps/"
 X_CAMPAIGN = ROOT / "docs" / "launch" / "2026-09-03-x-app-review-campaign.json"
 X_CAMPAIGN_DOC = ROOT / "docs" / "launch" / "2026-09-03-x-app-review-campaign.md"
-X_CREATIVE_FILENAME = "x-app-review-preflight-v2.png"
+X_CREATIVE_FILENAME = "x-app-review-preflight-v3.png"
 X_CREATIVE_WEB_PATH = f"/app-store-review-skill/assets/{X_CREATIVE_FILENAME}"
 X_CREATIVE_ALT = (
     "3D App Store Review graphic reading ‘REJECTED? Find risks first,’ with a "
-    "blue checklist tile crossing a red scan past privacy, warning, and purchase "
-    "symbols toward a green check"
+    "blue checklist tile colliding with a red warning symbol among privacy and "
+    "purchase icons, leading toward a green check"
 )
 X_CREATIVE = SITE / "assets" / X_CREATIVE_FILENAME
 
