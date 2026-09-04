@@ -21,6 +21,16 @@ X_CREATIVE_ALT = (
     "purchase icons, leading toward a green check"
 )
 X_CREATIVE = SITE / "assets" / X_CREATIVE_FILENAME
+SOCIAL_CARD_FILENAME = "review-gate-social.png"
+SOCIAL_CARD_WEB_PATH = f"/app-store-review-skill/assets/{SOCIAL_CARD_FILENAME}"
+SOCIAL_CARD_ALT = (
+    "A luminous review gate turning iOS project evidence into an inspectable "
+    "App Store review report"
+)
+SOCIAL_CARD = SITE / "assets" / SOCIAL_CARD_FILENAME
+README_HERO = ROOT / "assets" / "review-gate-hero.png"
+CINEMATIC_ART = SITE / "assets" / "review-gate-cinematic.png"
+SITE_MARK = SITE / "assets" / "review-gate-mark.svg"
 
 
 def read(path: Path) -> str:
@@ -60,8 +70,11 @@ class PagesSiteTests(unittest.TestCase):
         landing = read(landing_path)
 
         self.assertEqual(1, len(re.findall(r"<h1(?:\s|>)", landing)))
-        self.assertIn("<title>App Store Review preflight for iOS apps</title>", landing)
-        self.assertIn("<h1>Find App Store Review risks before submission</h1>", landing)
+        self.assertIn(
+            "<title>App Store Review Skill — Submit with evidence, not hope</title>",
+            landing,
+        )
+        self.assertIn("<h1>Submit with evidence.<span>Not hope.</span></h1>", landing)
         self.assertIn("Runs in Codex and Claude Code", landing)
         self.assertIn(f'<link rel="canonical" href="{SITE_URL}">', landing)
         self.assertRegex(landing, r'<meta name="description" content="[^\"]{140,180}">')
@@ -69,11 +82,11 @@ class PagesSiteTests(unittest.TestCase):
             with self.subTest(property_name=property_name):
                 self.assertIn(f'<meta property="{property_name}"', landing)
         self.assertIn('<meta name="twitter:card" content="summary_large_image">', landing)
-        social_image = f"{SITE_URL}assets/{X_CREATIVE_FILENAME}"
+        social_image = f"{SITE_URL}assets/{SOCIAL_CARD_FILENAME}"
         self.assertIn(f'<meta property="og:image" content="{social_image}">', landing)
         self.assertIn(f'<meta name="twitter:image" content="{social_image}">', landing)
         self.assertIn(
-            f'<meta name="twitter:image:alt" content="{X_CREATIVE_ALT}">',
+            f'<meta name="twitter:image:alt" content="{SOCIAL_CARD_ALT}">',
             landing,
         )
 
@@ -83,12 +96,15 @@ class PagesSiteTests(unittest.TestCase):
             "Rejection recovery",
             "Human-craft audit",
             "97% quality",
-            "98% impact",
-            "low-severity W011",
+            "99% impact",
+            "Security scan passed",
             "Star on GitHub",
         ):
             with self.subTest(visible_claim=visible_claim):
                 self.assertIn(visible_claim, landing)
+
+        self.assertNotIn("98% impact", landing)
+        self.assertNotIn("low-severity W011", landing)
 
         self.assertIn('href="https://github.com/ElxMaj/app-store-review-skill"', landing)
         self.assertIn(f'href="/app-store-review-skill/{GUIDE_PATH}"', landing)
@@ -136,11 +152,11 @@ class PagesSiteTests(unittest.TestCase):
         self.assertEqual(1, len(re.findall(r"<h1(?:\s|>)", guide)))
         self.assertIn("<h1>Will Apple reject an AI-built app?</h1>", guide)
         self.assertIn(f'<link rel="canonical" href="{expected_url}">', guide)
-        social_image = f"{SITE_URL}assets/{X_CREATIVE_FILENAME}"
+        social_image = f"{SITE_URL}assets/{SOCIAL_CARD_FILENAME}"
         self.assertIn(f'<meta property="og:image" content="{social_image}">', guide)
         self.assertIn(f'<meta name="twitter:image" content="{social_image}">', guide)
         self.assertIn(
-            f'<meta name="twitter:image:alt" content="{X_CREATIVE_ALT}">',
+            f'<meta name="twitter:image:alt" content="{SOCIAL_CARD_ALT}">',
             guide,
         )
         self.assertIn("AI-generated code is not a named rejection category", guide)
@@ -168,6 +184,62 @@ class PagesSiteTests(unittest.TestCase):
         self.assertEqual("2026-09-02", article["datePublished"])
         self.assertEqual("2026-09-04", article["dateModified"])
         self.assertEqual(expected_url, article["mainEntityOfPage"])
+
+    def test_review_gate_assets_and_install_interaction_are_publishable(self):
+        landing = read(SITE / "index.html")
+        guide = read(SITE / GUIDE_PATH / "index.html")
+        readme = read(ROOT / "README.md")
+
+        self.assertTrue(README_HERO.is_file(), "README review-gate hero is missing")
+        self.assertEqual((1440, 760), png_dimensions(README_HERO))
+        self.assertIn("assets/review-gate-hero.png", readme)
+
+        self.assertTrue(CINEMATIC_ART.is_file(), "cinematic review-gate art is missing")
+        cinematic_width, cinematic_height = png_dimensions(CINEMATIC_ART)
+        self.assertGreaterEqual(cinematic_width, 1536)
+        self.assertGreaterEqual(cinematic_height, 1024)
+        self.assertIn(
+            'src="/app-store-review-skill/assets/review-gate-cinematic.png"',
+            landing,
+        )
+        self.assertNotIn("38 CHECKS", landing)
+
+        self.assertTrue(SOCIAL_CARD.is_file(), "social preview card is missing")
+        self.assertEqual((1200, 630), png_dimensions(SOCIAL_CARD))
+        self.assertIn(SOCIAL_CARD_WEB_PATH, landing)
+
+        self.assertTrue(SITE_MARK.is_file(), "review-gate site mark is missing")
+        mark_root = ET.parse(SITE_MARK).getroot()
+        self.assertEqual("0 0 64 64", mark_root.attrib.get("viewBox"))
+        mark_path = "/app-store-review-skill/assets/review-gate-mark.svg"
+        for page in (landing, guide):
+            self.assertIn(f'<link rel="icon" href="{mark_path}" type="image/svg+xml">', page)
+
+        script_path = SITE / "site.js"
+        self.assertTrue(script_path.is_file(), "progressive install interaction is missing")
+        self.assertIn(
+            '<script src="/app-store-review-skill/site.js" defer></script>',
+            landing,
+        )
+        copy_target = re.search(r'<button[^>]+data-copy-target="([^"]+)"', landing)
+        self.assertIsNotNone(copy_target, "install command has no copy control")
+        self.assertIn(f'id="{copy_target.group(1)}"', landing)
+
+    def test_review_gate_motion_and_accessibility_contract(self):
+        landing = read(SITE / "index.html")
+        css = read(SITE / "styles.css")
+
+        self.assertIn('class="review-gate"', landing)
+        self.assertRegex(landing, r'class="review-gate"[^>]+aria-label="[^"]+"')
+        self.assertIn('class="gate-visual" aria-hidden="true"', landing)
+        for section_id in ("modes", "report", "install", "faq"):
+            with self.subTest(section_id=section_id):
+                self.assertIn(f'id="{section_id}"', landing)
+
+        self.assertNotIn("transition: all", css)
+        self.assertIn("@media (prefers-reduced-motion: reduce)", css)
+        self.assertIn("@media (prefers-reduced-transparency: reduce)", css)
+        self.assertIn("@media (prefers-contrast: more)", css)
 
     def test_crawl_and_llm_discovery_files_use_canonical_urls(self):
         robots = read(SITE / "robots.txt")
