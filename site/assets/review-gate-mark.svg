@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="App Store Review evidence gate">
+  <rect width="64" height="64" rx="12" fill="#070A10"/>
+  <rect x="12.5" y="12.5" width="39" height="39" rx="2.5" fill="none" stroke="#F8F7F3"/>
+  <path d="M25 21V43M39 21V43" stroke="#F8F7F3" stroke-width="4"/>
+  <path d="M27 32H37" stroke="#87A1FF" stroke-width="2"/>
+  <circle cx="52" cy="12" r="5" fill="#61E6B5"/>
+</svg>

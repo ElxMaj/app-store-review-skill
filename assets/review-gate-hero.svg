@@ -1,0 +1,127 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="760" viewBox="0 0 1440 760" role="img" aria-labelledby="title desc">
+  <title id="title">Submit with evidence. Not hope.</title>
+  <desc id="desc">A project evidence packet moves through a luminous read-only review gate and becomes an inspectable App Store review report.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#070A10"/>
+      <stop offset="0.58" stop-color="#0A0E17"/>
+      <stop offset="1" stop-color="#111827"/>
+    </linearGradient>
+    <radialGradient id="blueGlow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#5278FF" stop-opacity="0.33"/>
+      <stop offset="1" stop-color="#5278FF" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="post" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#0C111A"/>
+      <stop offset="0.48" stop-color="#2D3850"/>
+      <stop offset="1" stop-color="#101622"/>
+    </linearGradient>
+    <linearGradient id="field" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#5278FF" stop-opacity="0.02"/>
+      <stop offset="0.5" stop-color="#5278FF" stop-opacity="0.24"/>
+      <stop offset="1" stop-color="#5278FF" stop-opacity="0.02"/>
+    </linearGradient>
+    <filter id="softGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="12"/>
+    </filter>
+    <filter id="drop" x="-40%" y="-40%" width="180%" height="200%">
+      <feDropShadow dx="0" dy="24" stdDeviation="24" flood-color="#000" flood-opacity="0.42"/>
+    </filter>
+    <pattern id="grid" width="52" height="52" patternUnits="userSpaceOnUse">
+      <path d="M52 0H0V52" fill="none" stroke="#FFFFFF" stroke-opacity="0.055"/>
+    </pattern>
+  </defs>
+
+  <rect width="1440" height="760" rx="18" fill="url(#bg)"/>
+  <rect x="1" y="1" width="1438" height="758" rx="17" fill="none" stroke="#FFFFFF" stroke-opacity="0.12"/>
+  <rect x="720" y="0" width="720" height="760" fill="url(#grid)"/>
+  <ellipse cx="1040" cy="362" rx="390" ry="310" fill="url(#blueGlow)"/>
+
+  <g transform="translate(74 62)">
+    <g fill="none" stroke="#F8F7F3">
+      <rect width="36" height="36" stroke-opacity="0.92"/>
+      <path d="M13 8V28M23 8V28" stroke-width="3"/>
+    </g>
+    <circle cx="37" cy="-1" r="4" fill="#61E6B5"/>
+    <text x="54" y="24" fill="#F8F7F3" font-family="-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif" font-size="13" font-weight="700" letter-spacing="1.6">APP STORE REVIEW</text>
+  </g>
+
+  <g transform="translate(74 176)">
+    <text fill="#F8F7F3" font-family="-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif" font-size="82" font-weight="700" letter-spacing="-5.2">
+      <tspan x="0" y="0">Submit with</tspan>
+      <tspan x="0" y="83">evidence.</tspan>
+      <tspan x="0" y="166" fill="#F8F7F3" fill-opacity="0.34">Not hope.</tspan>
+    </text>
+    <text x="2" y="238" fill="#F8F7F3" fill-opacity="0.58" font-family="-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif" font-size="20" letter-spacing="-0.25">
+      Read-only App Store Review intelligence for Codex + Claude Code.
+    </text>
+    <g transform="translate(0 286)">
+      <rect width="440" height="60" fill="#FFFFFF" fill-opacity="0.055" stroke="#FFFFFF" stroke-opacity="0.16"/>
+      <text x="18" y="37" fill="#61E6B5" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="14">$</text>
+      <text x="40" y="37" fill="#F8F7F3" fill-opacity="0.86" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="13">npx skills add ElxMaj/app-store-review-skill</text>
+    </g>
+    <g transform="translate(0 391)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10" font-weight="700" letter-spacing="1.1">
+      <circle cx="4" cy="-3" r="4" fill="#61E6B5"/>
+      <text x="17" fill="#F8F7F3" fill-opacity="0.48">97% QUALITY</text>
+      <circle cx="135" cy="-3" r="4" fill="#61E6B5"/>
+      <text x="148" fill="#F8F7F3" fill-opacity="0.48">99% IMPACT</text>
+      <circle cx="263" cy="-3" r="4" fill="#61E6B5"/>
+      <text x="276" fill="#F8F7F3" fill-opacity="0.48">SECURITY PASSED</text>
+    </g>
+  </g>
+
+  <g transform="translate(700 102)">
+    <line x1="0" y1="578" x2="664" y2="578" stroke="#FFFFFF" stroke-opacity="0.13"/>
+    <text x="0" y="609" fill="#FFFFFF" fill-opacity="0.27" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="9" font-weight="700" letter-spacing="1.4">01 / SOURCE</text>
+    <text x="563" y="609" fill="#FFFFFF" fill-opacity="0.27" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="9" font-weight="700" letter-spacing="1.4">02 / VERDICT</text>
+
+    <g transform="translate(4 190) rotate(-3 100 135)" filter="url(#drop)">
+      <rect x="-18" y="-23" width="194" height="267" fill="#141A27" stroke="#FFFFFF" stroke-opacity="0.13" transform="rotate(-5 79 111)"/>
+      <rect x="-7" y="-11" width="194" height="267" fill="#101621" stroke="#FFFFFF" stroke-opacity="0.16" transform="rotate(-2 90 122)"/>
+      <rect width="194" height="267" fill="#F6F3EB" stroke="#87A1FF" stroke-opacity="0.48"/>
+      <text x="20" y="28" fill="#111318" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="8" font-weight="800" letter-spacing="1">PROJECT EVIDENCE</text>
+      <text x="143" y="28" fill="#7B7E84" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="7">12:42</text>
+      <rect x="20" y="80" width="154" height="10" fill="#1D2330"/>
+      <rect x="20" y="110" width="118" height="6" fill="#C5C6C5"/>
+      <rect x="20" y="132" width="89" height="6" fill="#C5C6C5"/>
+      <rect x="20" y="154" width="63" height="6" fill="#C5C6C5"/>
+      <circle cx="24" cy="232" r="4" fill="#61E6B5"/>
+      <text x="35" y="235" fill="#555A62" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="8" font-weight="800" letter-spacing="0.8">READ ONLY</text>
+    </g>
+
+    <g transform="translate(247 74)">
+      <rect x="42" y="54" width="121" height="393" fill="url(#field)" stroke="#87A1FF" stroke-opacity="0.48"/>
+      <g stroke="#87A1FF" stroke-opacity="0.15">
+        <path d="M52 125H153M52 178H153M52 231H153M52 284H153M52 337H153M52 390H153"/>
+      </g>
+      <rect x="22" y="25" width="27" height="451" fill="url(#post)" stroke="#FFFFFF" stroke-opacity="0.22"/>
+      <rect x="156" y="25" width="27" height="451" fill="url(#post)" stroke="#FFFFFF" stroke-opacity="0.22"/>
+      <path d="M36 88V414M169 88V414" stroke="#87A1FF" stroke-width="3" stroke-opacity="0.72"/>
+      <path d="M48 328H157" stroke="#E7ECFF" stroke-width="4"/>
+      <path d="M48 328H157" stroke="#5278FF" stroke-width="22" stroke-opacity="0.3" filter="url(#softGlow)"/>
+      <text x="108" y="40" fill="#FFFFFF" fill-opacity="0.38" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="8" font-weight="700" letter-spacing="1.2" text-anchor="middle">EVIDENCE GATE</text>
+      <circle cx="68" cy="501" r="4" fill="#61E6B5"/>
+      <text x="79" y="504" fill="#FFFFFF" fill-opacity="0.42" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="8" font-weight="700" letter-spacing="0.8">EVIDENCE CHECKS</text>
+    </g>
+
+    <g transform="translate(457 167) rotate(2 110 150)" filter="url(#drop)">
+      <rect width="230" height="322" fill="#F8F4EA" stroke="#FFFFFF" stroke-opacity="0.5"/>
+      <text x="22" y="29" fill="#676A70" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="8" font-weight="800" letter-spacing="1">REVIEW REPORT</text>
+      <circle cx="195" cy="25" r="13" fill="none" stroke="#B9B8B2"/>
+      <text x="195" y="28" fill="#111318" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="7" font-weight="800">01</text>
+      <text x="22" y="91" fill="#111318" font-family="-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif" font-size="28" font-weight="700" letter-spacing="-1.4">
+        <tspan x="22">Fix before</tspan><tspan x="22" dy="27">submission</tspan>
+      </text>
+      <rect x="22" y="139" width="186" height="4" fill="#FF654F"/>
+      <circle cx="27" cy="173" r="4" fill="#FF654F"/>
+      <text x="39" y="177" fill="#111318" font-family="-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif" font-size="11">1 confirmed blocker</text>
+      <text x="184" y="177" fill="#777A80" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="7" font-weight="800">FIX</text>
+      <path d="M22 194H208" stroke="#111318" stroke-opacity="0.14"/>
+      <circle cx="27" cy="219" r="4" fill="#B5B7B8"/>
+      <text x="39" y="223" fill="#111318" font-family="-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif" font-size="11">3 manual checks</text>
+      <text x="170" y="223" fill="#777A80" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="7" font-weight="800">VERIFY</text>
+      <path d="M22 240H208" stroke="#111318" stroke-opacity="0.14"/>
+      <text x="22" y="282" fill="#8B8D92" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="8" letter-spacing="0.6">file · rule · fix · verify</text>
+    </g>
+  </g>
+</svg>
