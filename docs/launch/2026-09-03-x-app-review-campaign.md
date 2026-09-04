@@ -67,7 +67,7 @@ Use one ad group so the small budget is not fragmented. Launch all three creativ
 
 - Asset: `/app-store-review-skill/assets/x-app-review-preflight-v2.png`
 - Required size: 1200 x 628 PNG, under 5 MB
-- Alt text: “Glossy blue app tile passing through a red review scan with privacy, purchase, and warning symbols”
+- Alt text: “3D App Store Review graphic reading ‘REJECTED? Find risks first,’ with a blue checklist tile crossing a red scan past privacy, warning, and purchase symbols toward a green check”
 - Do not add Apple logos, App Store badges, device mockups, approval seals, fake testimonials, or claims that imply endorsement.
 
 The final image is original 3D artwork generated without external visual references. Three distinct concepts were compared at 600 x 314 feed size; the selected scan concept preserved the clearest hook, symbols, and red-to-green story, then it was resized to the exact X card contract. The app tile is intentionally neutral and does not reproduce or alter Apple artwork.

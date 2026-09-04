@@ -16,8 +16,9 @@ X_CAMPAIGN_DOC = ROOT / "docs" / "launch" / "2026-09-03-x-app-review-campaign.md
 X_CREATIVE_FILENAME = "x-app-review-preflight-v2.png"
 X_CREATIVE_WEB_PATH = f"/app-store-review-skill/assets/{X_CREATIVE_FILENAME}"
 X_CREATIVE_ALT = (
-    "Glossy blue app tile passing through a red review scan with privacy, "
-    "purchase, and warning symbols"
+    "3D App Store Review graphic reading ‘REJECTED? Find risks first,’ with a "
+    "blue checklist tile crossing a red scan past privacy, warning, and purchase "
+    "symbols toward a green check"
 )
 X_CREATIVE = SITE / "assets" / X_CREATIVE_FILENAME
 
@@ -157,11 +158,15 @@ class PagesSiteTests(unittest.TestCase):
         self.assertIn("Last checked against Apple’s guidelines: September 2, 2026", guide)
         self.assertIn("does not guarantee approval", guide)
         self.assertNotIn("Not because a coding assistant wrote the source", guide)
+        self.assertIn(
+            '<meta property="article:modified_time" content="2026-09-04">',
+            guide,
+        )
 
         nodes = graph_nodes(json_ld_documents(guide))
         article = next(node for node in nodes if node["@type"] == "Article")
         self.assertEqual("2026-09-02", article["datePublished"])
-        self.assertEqual("2026-09-02", article["dateModified"])
+        self.assertEqual("2026-09-04", article["dateModified"])
         self.assertEqual(expected_url, article["mainEntityOfPage"])
 
     def test_crawl_and_llm_discovery_files_use_canonical_urls(self):
@@ -343,8 +348,15 @@ class PagesSiteTests(unittest.TestCase):
 
     def test_x_campaign_creative_matches_declared_png_contract(self):
         self.assertTrue(X_CREATIVE.is_file(), f"{X_CREATIVE.relative_to(ROOT)} is missing")
-        self.assertEqual((1200, 628), png_dimensions(X_CREATIVE))
+        dimensions = png_dimensions(X_CREATIVE)
+        self.assertEqual((1200, 628), dimensions)
         self.assertLessEqual(X_CREATIVE.stat().st_size, 5_000_000)
+        xmp_height = re.search(
+            rb"<exif:PixelYDimension>(\d+)</exif:PixelYDimension>",
+            X_CREATIVE.read_bytes(),
+        )
+        if xmp_height:
+            self.assertEqual(str(dimensions[1]).encode(), xmp_height.group(1))
 
     def test_x_campaign_markdown_matches_json_source_of_truth(self):
         payload = json.loads(read(X_CAMPAIGN))
