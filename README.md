@@ -1,6 +1,6 @@
 <div align="center">
 
-<a href="https://elxmaj.github.io/app-store-review-skill/"><img src="assets/review-gate-hero.svg" alt="Submit with evidence, not hope — project evidence passing through a read-only review gate into an inspectable report" width="100%"></a>
+<a href="https://elxmaj.github.io/app-store-review-skill/"><img src="assets/review-gate-hero.png" alt="Submit with evidence, not hope — project evidence passing through a luminous review gate into an inspectable verdict" width="100%"></a>
 
 # App Store Review Skill
 

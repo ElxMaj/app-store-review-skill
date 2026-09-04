@@ -28,8 +28,8 @@ SOCIAL_CARD_ALT = (
     "App Store review report"
 )
 SOCIAL_CARD = SITE / "assets" / SOCIAL_CARD_FILENAME
-SOCIAL_CARD_SOURCE = SITE / "assets" / "review-gate-social.svg"
-README_HERO = ROOT / "assets" / "review-gate-hero.svg"
+README_HERO = ROOT / "assets" / "review-gate-hero.png"
+CINEMATIC_ART = SITE / "assets" / "review-gate-cinematic.png"
 SITE_MARK = SITE / "assets" / "review-gate-mark.svg"
 
 
@@ -191,11 +191,18 @@ class PagesSiteTests(unittest.TestCase):
         readme = read(ROOT / "README.md")
 
         self.assertTrue(README_HERO.is_file(), "README review-gate hero is missing")
-        hero_root = ET.parse(README_HERO).getroot()
-        self.assertEqual("0 0 1440 760", hero_root.attrib.get("viewBox"))
-        self.assertIn("assets/review-gate-hero.svg", readme)
-        for visual_source in (landing, read(README_HERO), read(SOCIAL_CARD_SOURCE)):
-            self.assertNotIn("38 CHECKS", visual_source)
+        self.assertEqual((1440, 760), png_dimensions(README_HERO))
+        self.assertIn("assets/review-gate-hero.png", readme)
+
+        self.assertTrue(CINEMATIC_ART.is_file(), "cinematic review-gate art is missing")
+        cinematic_width, cinematic_height = png_dimensions(CINEMATIC_ART)
+        self.assertGreaterEqual(cinematic_width, 1536)
+        self.assertGreaterEqual(cinematic_height, 1024)
+        self.assertIn(
+            'src="/app-store-review-skill/assets/review-gate-cinematic.png"',
+            landing,
+        )
+        self.assertNotIn("38 CHECKS", landing)
 
         self.assertTrue(SOCIAL_CARD.is_file(), "social preview card is missing")
         self.assertEqual((1200, 630), png_dimensions(SOCIAL_CARD))
