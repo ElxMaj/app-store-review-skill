@@ -237,8 +237,8 @@
 .evidence-packet {
   position: absolute;
   z-index: 3;
-  top: 42%;
-  left: 13%;
+  top: clamp(16px, 2.5vh, 22px);
+  left: 15%;
   display: grid;
   width: 220px;
   gap: 6px;

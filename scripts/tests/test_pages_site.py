@@ -347,6 +347,14 @@ class PagesSiteTests(unittest.TestCase):
         self.assertIn("@media (prefers-reduced-transparency: reduce)", home_css)
         self.assertIn("@media (prefers-contrast: more)", home_css)
         self.assertIn("@media (forced-colors: active)", home_css)
+        self.assertRegex(
+            shared_css,
+            r"(?s)\.brand\s*\{[^}]*min-width: 44px;[^}]*min-height: 44px;",
+        )
+        self.assertRegex(
+            home_css,
+            r"(?s)\.evidence-packet\s*\{[^}]*top: clamp\(16px, 2\.5vh, 22px\);",
+        )
         self.assertNotIn("transition: all", shared_css + home_css)
         self.assertNotIn("backdrop-filter", home_css)
         self.assertNotIn(".hero-proof", home_css)
