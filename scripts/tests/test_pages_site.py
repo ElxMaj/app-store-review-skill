@@ -98,14 +98,13 @@ class PagesSiteTests(unittest.TestCase):
 
         self.assertEqual(1, len(re.findall(r"<h1(?:\s|>)", landing)))
         self.assertIn(
-            "<title>App Store Review Skill — Find the risk. Prove the fix.</title>",
+            "<title>App Store Review Skill: Find the risk. Prove the fix.</title>",
             landing,
         )
         self.assertIn('<span class="headline-risk">Find the risk.</span>', landing)
         self.assertIn('<span class="headline-proof">Prove the fix.</span>', landing)
         self.assertIn(
-            "A read-only preflight that traces App Store review risks to the files, "
-            "rules, and checks behind them.",
+            "Catch App Store review blockers before you submit.",
             landing,
         )
         self.assertIn(f'<link rel="canonical" href="{SITE_URL}">', landing)
@@ -126,13 +125,10 @@ class PagesSiteTests(unittest.TestCase):
         visible_text = re.sub(r"\s+", " ", visible_text)
         for visible_claim in (
             "npx skills add ElxMaj/app-store-review-skill",
-            "Pre-submission audit",
-            "Rejection recovery",
-            "Human-craft audit",
-            "97% quality",
-            "99% impact",
-            "Tessl evaluates the skill package. It is not an App Store approval rate.",
-            "Fictional ParcelTrack evidence",
+            "Risk",
+            "Source",
+            "Proof",
+            "Fictional ParcelTrack sample",
         ):
             with self.subTest(visible_claim=visible_claim):
                 self.assertIn(visible_claim, visible_text)
@@ -152,38 +148,92 @@ class PagesSiteTests(unittest.TestCase):
             "report",
             "method",
             "install",
-            "modes",
-            "evaluation",
-            "policy",
-            "faq",
-            "close",
         )
         positions = [landing.index(f'id="{section_id}"') for section_id in section_order]
         self.assertEqual(sorted(positions), positions)
 
-        self.assertIn("Tessl evaluation · v1.2.2", landing)
-        self.assertIn(
-            '<time datetime="2026-09-03">Last scored 3 September 2026</time>',
-            landing,
-        )
+        self.assertIn("https://tessl.io/registry/maj-labs/app-store-review", landing)
         self.assertNotIn("aggregateRating", landing)
         self.assertNotIn("approval rate</strong>", landing)
 
         self.assertIn('href="https://github.com/ElxMaj/app-store-review-skill"', landing)
         self.assertIn(f'href="/app-store-review-skill/{GUIDE_PATH}"', landing)
         self.assertIn('href="/app-store-review-skill/report/"', landing)
+        self.assertIn("AI-built app guide", landing)
+        self.assertNotIn("AI code is not the review category", landing)
+
+    def test_landing_page_keeps_the_decision_path_short(self):
+        landing = read(SITE / "index.html")
+
         self.assertIn(
-            "Apple’s published guidelines do not name AI-written code as a rejection category",
+            "Catch App Store review blockers before you submit.",
             landing,
         )
-        self.assertNotIn("AI code is not the review category", landing)
+        self.assertEqual(4, len(re.findall(r"<section(?:\s|>)", landing)))
+        self.assertEqual(
+            1,
+            landing.count("npx skills add ElxMaj/app-store-review-skill"),
+        )
+        self.assertEqual(1, landing.count('class="button button-primary"'))
+        self.assertNotIn('class="button button-secondary"', landing)
+        self.assertNotIn('class="command-dock"', landing.split("</section>", 1)[0])
+        self.assertNotIn('class="hero-reassurance"', landing)
+        self.assertNotIn('class="evidence-packet"', landing)
+        self.assertNotIn('class="gate-aperture"', landing)
+        self.assertNotIn('id="modes"', landing)
+        self.assertNotIn('id="evaluation"', landing)
+        self.assertNotIn('id="policy"', landing)
+        self.assertNotIn('id="faq"', landing)
+        self.assertNotIn('id="close"', landing)
+        self.assertNotIn("—", landing)
+        self.assertNotIn("–", landing)
+        self.assertNotIn("·", landing)
+
+    def test_landing_styles_match_the_reduced_content_system(self):
+        home_css = read(HOME_CSS)
+
+        self.assertRegex(
+            home_css,
+            r"(?s)\.home-page\s*\{[^}]*color-scheme:\s*dark;",
+        )
+        self.assertIn("100dvh", home_css)
+        self.assertIn(".decision-path", home_css)
+        self.assertIn(".install-primary", home_css)
+        self.assertRegex(
+            home_css,
+            r"(?s)@media \(max-width: 1279px\).*?\.hero-report-sheet\s*\{[^}]*right: clamp\(184px, 18vw, 230px\);",
+        )
+        self.assertRegex(
+            home_css,
+            r"(?s)@media \(max-width: 767px\).*?\.hero-report-sheet\s*\{[^}]*right: 22%;",
+        )
+        copy_motion = home_css[
+            home_css.index("@keyframes copy-enter") : home_css.index(
+                "@keyframes report-resolve"
+            )
+        ]
+        self.assertNotIn("opacity:", copy_motion)
+        for retired_selector in (
+            ".button-secondary",
+            ".hero-reassurance",
+            ".evidence-packet",
+            ".gate-aperture",
+            ".evidence-trace",
+            ".mode-path",
+            ".evaluation-record",
+            ".policy-number",
+            ".faq-list",
+            ".closing-field",
+        ):
+            with self.subTest(retired_selector=retired_selector):
+                self.assertNotIn(retired_selector, home_css)
 
     def test_landing_json_ld_uses_supported_source_truth(self):
         landing = read(SITE / "index.html")
         nodes = graph_nodes(json_ld_documents(landing))
         by_type = {node["@type"]: node for node in nodes}
 
-        self.assertEqual({"WebSite", "SoftwareSourceCode", "FAQPage"}, set(by_type))
+        self.assertEqual({"WebSite", "SoftwareSourceCode"}, set(by_type))
         software = by_type["SoftwareSourceCode"]
         self.assertEqual("App Store Review Skill", software["name"])
         self.assertEqual("1.2.2", software["version"])
@@ -198,13 +248,6 @@ class PagesSiteTests(unittest.TestCase):
         serialized = json.dumps(nodes)
         self.assertNotIn("aggregateRating", serialized)
         self.assertNotIn('"review"', serialized)
-
-        visible_text = re.sub(r"<[^>]+>", " ", landing)
-        visible_text = re.sub(r"\s+", " ", visible_text)
-        for item in by_type["FAQPage"]["mainEntity"]:
-            with self.subTest(question=item["name"]):
-                self.assertIn(item["name"], visible_text)
-                self.assertIn(item["acceptedAnswer"]["text"], visible_text)
 
     def test_ai_built_app_guide_states_apple_policy_without_inventing_a_ban(self):
         guide_path = SITE / GUIDE_PATH / "index.html"
@@ -313,9 +356,8 @@ class PagesSiteTests(unittest.TestCase):
 
         self.assertIn('class="gate-sequence" aria-hidden="true"', landing)
         self.assertIn("data-gate-sequence", landing)
-        self.assertIn('class="evidence-packet"', landing)
         self.assertIn('class="hero-report-sheet"', landing)
-        self.assertIn("Camera flow has no purpose string", landing)
+        self.assertIn("Camera permission text missing", landing)
         self.assertIn("app.json:18", landing)
         self.assertIn('aria-live="polite"', landing)
         self.assertIn('href="#install"', landing)
@@ -323,11 +365,6 @@ class PagesSiteTests(unittest.TestCase):
             "report",
             "method",
             "install",
-            "modes",
-            "evaluation",
-            "policy",
-            "faq",
-            "close",
         ):
             with self.subTest(section_id=section_id):
                 self.assertIn(f'id="{section_id}"', landing)
@@ -351,10 +388,6 @@ class PagesSiteTests(unittest.TestCase):
             shared_css,
             r"(?s)\.brand\s*\{[^}]*min-width: 44px;[^}]*min-height: 44px;",
         )
-        self.assertRegex(
-            home_css,
-            r"(?s)\.evidence-packet\s*\{[^}]*top: clamp\(16px, 2\.5vh, 22px\);",
-        )
         self.assertNotIn("transition: all", shared_css + home_css)
         self.assertNotIn("backdrop-filter", home_css)
         self.assertNotIn(".hero-proof", home_css)
@@ -363,13 +396,10 @@ class PagesSiteTests(unittest.TestCase):
 
         site_js = read(SITE / "site.js")
         self.assertIn('document.documentElement.classList.add("has-js")', landing)
-        self.assertIn("@keyframes evidence-enter", home_css)
-        self.assertIn("@keyframes gate-scan", home_css)
+        self.assertIn("@keyframes copy-enter", home_css)
         self.assertIn("@keyframes report-resolve", home_css)
         self.assertNotIn("infinite", home_css)
-        self.assertIn('data-copy-status="hero-copy-status"', landing)
         self.assertIn('data-copy-status="install-copy-status"', landing)
-        self.assertIn('data-copy-status="close-copy-status"', landing)
         self.assertIn('status.textContent = "Install command copied."', site_js)
         self.assertIn(
             'status.textContent = "Command selected. Press Command-C or Control-C."',

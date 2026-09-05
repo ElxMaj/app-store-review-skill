@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>App Store Review Skill — Find the risk. Prove the fix.</title>
+  <title>App Store Review Skill: Find the risk. Prove the fix.</title>
   <meta name="description" content="Run a read-only App Store review preflight in Codex or Claude Code. Trace iOS submission risks to project evidence, published guidance, and verification steps.">
   <meta name="robots" content="index,follow">
   <meta name="theme-color" content="#070a10">
@@ -59,27 +59,6 @@
           "url": "https://github.com/ElxMaj"
         },
         "keywords": "App Store review, iOS, iPadOS, Codex skill, Claude Code skill, rejection recovery"
-      },
-      {
-        "@type": "FAQPage",
-        "@id": "https://elxmaj.github.io/app-store-review-skill/#faq",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "Does it guarantee App Store approval?",
-            "acceptedAnswer": {"@type": "Answer", "text": "No. It finds evidence and prepares review work, but Apple makes the decision."}
-          },
-          {
-            "@type": "Question",
-            "name": "Does it detect AI-written code?",
-            "acceptedAnswer": {"@type": "Answer", "text": "No. It reviews product evidence, policy risks, and app quality. It does not claim to detect AI-written code."}
-          },
-          {
-            "@type": "Question",
-            "name": "Does it edit my project?",
-            "acceptedAnswer": {"@type": "Answer", "text": "The first pass is read-only. You see the report before any proposed fix group is applied."}
-          }
-        ]
       }
     ]
   }
@@ -94,7 +73,6 @@
     </a>
     <nav class="site-nav" aria-label="Primary navigation">
       <a href="#report">Report</a>
-      <a class="nav-install" href="#install">Install</a>
       <a class="nav-github" href="https://github.com/ElxMaj/app-store-review-skill">GitHub <span aria-hidden="true">↗</span></a>
     </nav>
   </header>
@@ -106,17 +84,10 @@
           <span class="headline-risk">Find the risk.</span>
           <span class="headline-proof">Prove the fix.</span>
         </h1>
-        <p class="hero-lede">A read-only preflight that traces App Store review risks to the files, rules, and checks behind them.</p>
+        <p class="hero-lede">Catch App Store review blockers before you submit.</p>
         <div class="hero-actions">
           <a class="button button-primary" href="#install">Run the preflight</a>
-          <a class="button button-secondary" href="/app-store-review-skill/report/">Inspect the sample report</a>
         </div>
-        <div class="command-dock" role="group" aria-label="Install with Skills CLI">
-          <code id="hero-install-command">npx skills add ElxMaj/app-store-review-skill</code>
-          <button class="copy-button" type="button" data-copy-target="hero-install-command" data-copy-status="hero-copy-status" aria-label="Copy install command"><span aria-hidden="true">Copy</span></button>
-          <span class="sr-only" id="hero-copy-status" aria-live="polite"></span>
-        </div>
-        <p class="hero-reassurance">First pass: read-only <span aria-hidden="true">·</span> Codex + Claude Code <span aria-hidden="true">·</span> Xcode, Expo, React Native, and Flutter</p>
       </div>
 
       <div class="gate-sequence" aria-hidden="true" data-gate-sequence>
@@ -127,58 +98,42 @@
           <source type="image/webp" srcset="/app-store-review-skill/assets/review-gate-cinematic-1440.webp">
           <img src="/app-store-review-skill/assets/review-gate-cinematic.png" width="1536" height="1024" alt="" fetchpriority="high">
         </picture>
-        <div class="evidence-packet">
-          <span>Source evidence</span>
-          <code>app.json:18</code>
-          <strong>NSCameraUsageDescription missing</strong>
-        </div>
-        <div class="gate-aperture"><span>Review gate</span><i></i></div>
         <article class="hero-report-sheet">
-          <div class="hero-report-meta"><span>ParcelTrack</span><span>Sample report</span></div>
-          <div class="hero-report-verdict"><span>Release verdict</span><strong>NOT READY</strong></div>
-          <p>Camera flow has no purpose string</p>
-          <code>app.json:18 · Guideline 5.1.1(ii)</code>
-          <div class="hero-report-check"><i></i><span>Verify in merged release Info.plist</span></div>
+          <strong>NOT READY</strong>
+          <p>Camera permission text missing</p>
+          <code>app.json:18</code>
         </article>
       </div>
     </section>
 
     <section class="report-proof" id="report" aria-labelledby="report-title">
       <div class="report-proof-copy">
-        <h2 id="report-title">The report arrives before the fix.</h2>
-        <p>See the verdict, confirmed blockers, manual checks, App Review Notes draft, and approval-gated fix groups before a project file changes.</p>
-        <div class="report-actions">
-          <a class="button button-paper" href="/app-store-review-skill/report/">Open the complete report</a>
-          <a class="text-link" href="/app-store-review-skill/report/parceltrack-report.json">Inspect source JSON <span aria-hidden="true">↗</span></a>
-        </div>
-        <p class="sample-note">Fictional ParcelTrack evidence · No private project data</p>
+        <h2 id="report-title">See the blocker. Trace the fix.</h2>
+        <p>A decision-first report points to the file, rule, and verification step.</p>
+        <a class="text-link" href="/app-store-review-skill/report/">Open the sample report <span aria-hidden="true">↗</span></a>
       </div>
       <figure class="report-figure">
-        <a href="/app-store-review-skill/report/" aria-label="Open the complete ParcelTrack sample report">
-          <img src="/app-store-review-skill/assets/visual-report-example.png" width="1440" height="1500" loading="lazy" decoding="async" alt="ParcelTrack sample review report marked Not Ready with one blocker and three manual checks">
-        </a>
-        <figcaption><span>NOT READY</span><span>1 blocker · 3 manual checks</span></figcaption>
+        <img src="/app-store-review-skill/assets/visual-report-example.png" width="1440" height="1500" loading="lazy" decoding="async" alt="ParcelTrack sample review report marked Not Ready with one blocker and three manual checks">
+        <figcaption>Fictional ParcelTrack sample. No private project data.</figcaption>
       </figure>
     </section>
 
     <section class="method" id="method" aria-labelledby="method-title">
       <div class="section-intro">
-        <h2 id="method-title">Every claim has a return address.</h2>
-        <p>Confirmed evidence stays separate from inference and checks that still need a person or release build.</p>
+        <h2 id="method-title">Each finding points to evidence.</h2>
       </div>
-      <ol class="evidence-trace">
-        <li><span>01</span><div><strong>What was found</strong><p>The camera permission is requested in <code>src/features/scan/LabelScanner.tsx:42</code>.</p></div></li>
-        <li><span>02</span><div><strong>Where the gap lives</strong><p><code>app.json:18</code> has no <code>NSCameraUsageDescription</code>.</p></div></li>
-        <li><span>03</span><div><strong>Why it matters</strong><p>The sample maps the missing explanation to published Guideline 5.1.1(ii).</p></div></li>
-        <li><span>04</span><div><strong>How to prove the fix</strong><p>Build the release archive, inspect the merged <code>Info.plist</code>, then retest the scanner on a clean device.</p></div></li>
+      <ol class="decision-path">
+        <li><strong>Risk</strong><p>What can block review.</p></li>
+        <li><strong>Source</strong><p>The exact file and rule.</p></li>
+        <li><strong>Proof</strong><p>The check that closes it.</p></li>
       </ol>
       <a class="text-link" href="https://github.com/ElxMaj/app-store-review-skill/blob/main/SKILL.md">Read the review contract <span aria-hidden="true">↗</span></a>
     </section>
 
     <section class="install" id="install" aria-labelledby="install-title">
       <div class="install-copy">
-        <h2 id="install-title">Install once. Ask in plain language.</h2>
-        <p>The recommended Skills CLI route works with Codex and agents that support the open skills format.</p>
+        <h2 id="install-title">Run it before you submit.</h2>
+        <p>Works in Codex and Claude Code. The first pass is read-only.</p>
       </div>
       <div class="install-primary">
         <div class="command-dock command-dock-light" role="group" aria-label="Recommended install command">
@@ -186,7 +141,7 @@
           <button class="copy-button" type="button" data-copy-target="install-command" data-copy-status="install-copy-status" aria-label="Copy recommended install command"><span aria-hidden="true">Copy</span></button>
           <span class="sr-only" id="install-copy-status" aria-live="polite"></span>
         </div>
-        <blockquote>Audit this iOS app before submission. Report first and do not edit files.</blockquote>
+        <blockquote>Audit this iOS app before submission. Report first. Do not edit files.</blockquote>
       </div>
       <details class="alternate-installs">
         <summary>Other install methods</summary>
@@ -195,64 +150,16 @@
         <a href="https://github.com/ElxMaj/app-store-review-skill/blob/main/INSTALL.md">See every install method <span aria-hidden="true">↗</span></a>
       </details>
     </section>
-
-    <section class="modes" id="modes" aria-labelledby="modes-title">
-      <div class="section-intro">
-        <h2 id="modes-title">Meet the review where you are.</h2>
-      </div>
-      <ol class="mode-path">
-        <li><span>01 / Before upload</span><h3>Pre-submission audit</h3><p>Produces an evidence-ranked verdict across permissions, privacy, purchases, metadata, reviewer access, and release paths.</p></li>
-        <li><span>02 / After rejection</span><h3>Rejection recovery</h3><p>Preserves Apple’s exact message and produces a sourced next move: fix, clarify, appeal, or ask.</p></li>
-        <li><span>03 / Before it feels done</span><h3>Human-craft audit</h3><p>Produces a specific refinement plan for distinction, provenance, visual identity, microcopy, accessibility, and missing states.</p></li>
-      </ol>
-    </section>
-
-    <section class="evaluation" id="evaluation" aria-labelledby="evaluation-title">
-      <div>
-        <h2 id="evaluation-title">Proof with a date and a boundary.</h2>
-      </div>
-      <a class="evaluation-record" href="https://tessl.io/registry/maj-labs/app-store-review">
-        <span>Tessl evaluation · v1.2.2</span>
-        <strong><b>97%</b> quality <i></i> <b>99%</b> impact</strong>
-        <time datetime="2026-09-03">Last scored 3 September 2026</time>
-        <p>Tessl evaluates the skill package. It is not an App Store approval rate.</p>
-      </a>
-    </section>
-
-    <section class="policy" id="policy" aria-labelledby="policy-title">
-      <span class="policy-number" aria-hidden="true">4.3</span>
-      <div>
-        <h2 id="policy-title">Apple’s published guidelines do not name AI-written code as a rejection category.</h2>
-        <p>The rules focus on the product that ships: useful functionality, distinct value, truthful metadata, privacy, safety, and who submits template-generated work.</p>
-        <a class="text-link" href="/app-store-review-skill/guides/will-apple-reject-ai-built-apps/">Read the source-based guide to 4.2.6 and 4.3 <span aria-hidden="true">→</span></a>
-      </div>
-    </section>
-
-    <section class="faq" id="faq" aria-labelledby="faq-title">
-      <div class="section-intro">
-        <h2 id="faq-title">A useful review keeps its limits visible.</h2>
-      </div>
-      <div class="faq-list">
-        <div><h3>Does it guarantee App Store approval?</h3><p>No. It finds evidence and prepares review work, but Apple makes the decision.</p></div>
-        <div><h3>Does it detect AI-written code?</h3><p>No. It reviews product evidence, policy risks, and app quality. It does not claim to detect AI-written code.</p></div>
-        <div><h3>Does it edit my project?</h3><p>The first pass is read-only. You see the report before any proposed fix group is applied.</p></div>
-      </div>
-    </section>
-
-    <section class="closing-field" id="close" aria-labelledby="close-title">
-      <h2 id="close-title">See the evidence before the reviewer sees the gap.</h2>
-      <div class="command-dock" role="group" aria-label="Install App Store Review Skill">
-        <code id="close-install-command">npx skills add ElxMaj/app-store-review-skill</code>
-        <button class="copy-button" type="button" data-copy-target="close-install-command" data-copy-status="close-copy-status" aria-label="Copy install command"><span aria-hidden="true">Copy</span></button>
-        <span class="sr-only" id="close-copy-status" aria-live="polite"></span>
-      </div>
-      <p>Open source · First pass read-only · Independent and not affiliated with Apple Inc.</p>
-    </section>
   </main>
 
   <footer class="site-footer site-footer-dark">
-    <p><strong>App Store Review Skill</strong><br>Built by <a href="https://github.com/ElxMaj">Elie Majorel</a> · <a href="https://tessl.io/registry/maj-labs">Maj Labs</a></p>
-    <p><a href="https://github.com/ElxMaj/app-store-review-skill/blob/main/LICENSE">MIT licensed</a>.<br>Not affiliated with or endorsed by Apple Inc.</p>
+    <p><strong>App Store Review Skill</strong><br>By <a href="https://github.com/ElxMaj">Elie Majorel</a> for <a href="https://tessl.io/registry/maj-labs">Maj Labs</a>.</p>
+    <nav aria-label="Footer navigation">
+      <a href="/app-store-review-skill/guides/will-apple-reject-ai-built-apps/">AI-built app guide</a>
+      <a href="https://tessl.io/registry/maj-labs/app-store-review">Tessl</a>
+      <a href="https://github.com/ElxMaj/app-store-review-skill/blob/main/LICENSE">MIT</a>
+    </nav>
+    <p>Independent. Not affiliated with Apple Inc.</p>
   </footer>
 </body>
 </html>
