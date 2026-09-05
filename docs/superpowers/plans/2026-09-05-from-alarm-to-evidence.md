@@ -22,6 +22,7 @@
 - Use `#070A10`, `#111318`, `#F6F3EB`, `#147CFF`, `#FF2748`, and `#61E6B5` for night, ink, report paper, evidence, risk, and verification respectively.
 - Blue, red, and green must carry semantic state and have a non-color label or shape cue; glow stays inside the CGI plate and one gate scan.
 - Use self-hosted Hubot Sans only for display; system sans for body; system monospace for commands and literal evidence.
+- Use no eyebrow/kicker labels above headings. The approved ad-handoff `h1` is the only display size allowed above 6rem; keep its tracking at the `-0.04em` floor and keep every body heading at or below 6rem.
 - Keep runtime dependencies at zero. Pinned `uvx` and `npx` tooling is allowed only to produce committed assets.
 - Keep compressed critical HTML + CSS + JS ≤ 120 KB, font ≤ 100 KB, mobile hero imagery ≤ 450 KB, desktop hero imagery ≤ 900 KB, and minified/production JavaScript ≤ 12 KB.
 - Preserve no-JavaScript readability, WCAG 2.2 AA contrast, 44×44 CSS-pixel primary controls, visible focus, 200% zoom usability, and explicit reduced-motion/transparency/contrast/forced-colors states.
@@ -405,7 +406,6 @@ Use this semantic structure and copy:
 <main id="main">
   <section class="hero" aria-labelledby="hero-title">
     <div class="hero-copy">
-      <p class="hero-context">Independent review gate · Codex + Claude Code</p>
       <h1 id="hero-title">
         <span class="headline-risk">Find the risk.</span>
         <span class="headline-proof">Prove the fix.</span>
@@ -416,12 +416,11 @@ Use this semantic structure and copy:
         <a class="button button-secondary" href="/app-store-review-skill/report/">Inspect the sample report</a>
       </div>
       <div class="command-dock" role="group" aria-label="Install with Skills CLI">
-        <span class="command-step" aria-hidden="true">01</span>
         <code id="hero-install-command">npx skills add ElxMaj/app-store-review-skill</code>
         <button class="copy-button" type="button" data-copy-target="hero-install-command" data-copy-status="hero-copy-status" aria-label="Copy install command"><span aria-hidden="true">Copy</span></button>
         <span class="sr-only" id="hero-copy-status" aria-live="polite"></span>
       </div>
-      <p class="hero-reassurance">First pass: read-only <span aria-hidden="true">·</span> Xcode, Expo, React Native, and Flutter</p>
+      <p class="hero-reassurance">First pass: read-only <span aria-hidden="true">·</span> Codex + Claude Code <span aria-hidden="true">·</span> Xcode, Expo, React Native, and Flutter</p>
     </div>
 
     <div class="gate-sequence" aria-hidden="true" data-gate-sequence>
@@ -458,7 +457,6 @@ After the hero, implement these sections in this exact DOM order:
 ```html
 <section class="report-proof" id="report" aria-labelledby="report-title">
   <div class="report-proof-copy">
-    <p class="section-label">Proof / ParcelTrack sample</p>
     <h2 id="report-title">The report arrives before the fix.</h2>
     <p>See the verdict, confirmed blockers, manual checks, App Review Notes draft, and approval-gated fix groups before a project file changes.</p>
     <div class="report-actions">
@@ -477,7 +475,6 @@ After the hero, implement these sections in this exact DOM order:
 
 <section class="method" id="method" aria-labelledby="method-title">
   <div class="section-intro">
-    <p class="section-label">Method / One finding, end to end</p>
     <h2 id="method-title">Every claim has a return address.</h2>
     <p>Confirmed evidence stays separate from inference and checks that still need a person or release build.</p>
   </div>
@@ -492,13 +489,11 @@ After the hero, implement these sections in this exact DOM order:
 
 <section class="install" id="install" aria-labelledby="install-title">
   <div class="install-copy">
-    <p class="section-label">Action / Take it into your repo</p>
     <h2 id="install-title">Install once. Ask in plain language.</h2>
     <p>The recommended Skills CLI route works with Codex and agents that support the open skills format.</p>
   </div>
   <div class="install-primary">
     <div class="command-dock command-dock-light" role="group" aria-label="Recommended install command">
-      <span class="command-step" aria-hidden="true">01</span>
       <code id="install-command">npx skills add ElxMaj/app-store-review-skill</code>
       <button class="copy-button" type="button" data-copy-target="install-command" data-copy-status="install-copy-status" aria-label="Copy recommended install command"><span aria-hidden="true">Copy</span></button>
       <span class="sr-only" id="install-copy-status" aria-live="polite"></span>
@@ -515,7 +510,6 @@ After the hero, implement these sections in this exact DOM order:
 
 <section class="modes" id="modes" aria-labelledby="modes-title">
   <div class="section-intro">
-    <p class="section-label">Reassurance / Three points in the journey</p>
     <h2 id="modes-title">Meet the review where you are.</h2>
   </div>
   <ol class="mode-path">
@@ -527,7 +521,6 @@ After the hero, implement these sections in this exact DOM order:
 
 <section class="evaluation" id="evaluation" aria-labelledby="evaluation-title">
   <div>
-    <p class="section-label">Independent evaluation / Precisely scoped</p>
     <h2 id="evaluation-title">Proof with a date and a boundary.</h2>
   </div>
   <a class="evaluation-record" href="https://tessl.io/registry/maj-labs/app-store-review">
@@ -541,7 +534,6 @@ After the hero, implement these sections in this exact DOM order:
 <section class="policy" id="policy" aria-labelledby="policy-title">
   <span class="policy-number" aria-hidden="true">4.3</span>
   <div>
-    <p class="section-label">Published policy / AI-built apps</p>
     <h2 id="policy-title">Apple’s published guidelines do not name AI-written code as a rejection category.</h2>
     <p>The rules focus on the product that ships: useful functionality, distinct value, truthful metadata, privacy, safety, and who submits template-generated work.</p>
     <a class="text-link" href="/app-store-review-skill/guides/will-apple-reject-ai-built-apps/">Read the source-based guide to 4.2.6 and 4.3 <span aria-hidden="true">→</span></a>
@@ -550,7 +542,6 @@ After the hero, implement these sections in this exact DOM order:
 
 <section class="faq" id="faq" aria-labelledby="faq-title">
   <div class="section-intro">
-    <p class="section-label">Limits / No magic claims</p>
     <h2 id="faq-title">A useful review keeps its limits visible.</h2>
   </div>
   <div class="faq-list">
@@ -561,7 +552,6 @@ After the hero, implement these sections in this exact DOM order:
 </section>
 
 <section class="closing-field" id="close" aria-labelledby="close-title">
-  <p class="section-label">Close / Run the review gate</p>
   <h2 id="close-title">See the evidence before the reviewer sees the gap.</h2>
   <div class="command-dock" role="group" aria-label="Install App Store Review Skill">
     <code id="close-install-command">npx skills add ElxMaj/app-store-review-skill</code>
@@ -749,8 +739,10 @@ Start `site/home.css` with:
   --gutter: clamp(18px, 3.4vw, 52px);
   --section-space: clamp(92px, 12vw, 180px);
   background: var(--paper);
+  scrollbar-color: var(--risk) var(--night);
 }
 
+.home-page ::selection { background: var(--evidence); color: #fff; }
 .home-page main { overflow-x: clip; }
 .home-page .site-header-dark {
   width: 100%;
@@ -763,6 +755,11 @@ Start `site/home.css` with:
 .home-page .nav-install {
   border-bottom: 2px solid var(--verified);
   color: #fff;
+}
+
+.home-page .copy-button:disabled {
+  cursor: wait;
+  opacity: 0.82;
 }
 
 .hero {
@@ -785,10 +782,10 @@ Start `site/home.css` with:
 
 .hero h1 {
   margin: 0;
-  font-family: "Hubot Sans", Impact, sans-serif;
-  font-size: clamp(72px, 8.8vw, 142px);
+  font-family: "Hubot Sans", sans-serif;
+  font-size: clamp(68px, 8vw, 124px);
   font-weight: 850;
-  letter-spacing: -0.072em;
+  letter-spacing: -0.04em;
   line-height: 0.82;
 }
 
@@ -1003,7 +1000,7 @@ Add these breakpoints and behaviors:
   .hero-lede { max-width: 35ch; margin-top: 22px; font-size: 17px; }
   .hero-actions { margin-top: 24px; }
   .button { min-height: 48px; }
-  .command-dock { grid-template-columns: auto minmax(0, 1fr) 48px; }
+  .command-dock { grid-template-columns: minmax(0, 1fr) 48px; }
   .command-dock code { min-width: 0; overflow-x: auto; font-size: 11px; }
   .copy-button { min-width: 48px; min-height: 48px; }
 
@@ -1310,7 +1307,7 @@ Create `scripts/assets/review-gate-social.html` as a fixed canvas with no extern
     body { position: relative; background: #070a10; color: #fff; font-family: Arial, sans-serif; }
     .machine { position: absolute; inset: 0 0 0 430px; width: 770px; height: 630px; object-fit: cover; object-position: 72% center; opacity: 0.72; }
     .wordmark { position: absolute; top: 50px; left: 56px; font-size: 14px; font-weight: 700; letter-spacing: 0.08em; }
-    h1 { position: absolute; top: 142px; left: 56px; z-index: 2; margin: 0; font-family: "Hubot Sans", Impact, sans-serif; font-size: 82px; font-weight: 850; letter-spacing: -0.065em; line-height: 0.82; }
+    h1 { position: absolute; top: 142px; left: 56px; z-index: 2; margin: 0; font-family: "Hubot Sans", sans-serif; font-size: 82px; font-weight: 850; letter-spacing: -0.04em; line-height: 0.82; }
     h1 span { display: block; white-space: nowrap; }
     h1 span:first-child { font-stretch: 78%; }
     h1 span:last-child { font-stretch: 112%; }
