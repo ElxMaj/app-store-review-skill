@@ -151,6 +151,7 @@ unzip -p "$landing_font_tmp/Hubot-Sans.zip" 'Hubot Sans/Hubot-Sans.woff2' \
 unzip -p "$landing_font_tmp/Hubot-Sans.zip" 'Hubot Sans/LICENSE' \
   > "$landing_font_tmp/OFL.txt"
 uvx --from 'fonttools[woff]==4.64.0' fonttools varLib.instancer \
+  --no-recalc-timestamp \
   "$landing_font_tmp/Hubot-Sans.woff2" slnt=0 \
   --output="$landing_font_tmp/Hubot-Sans-upright.woff2"
 uvx --from 'fonttools[woff]==4.64.0' pyftsubset \
@@ -162,14 +163,15 @@ uvx --from 'fonttools[woff]==4.64.0' pyftsubset \
   --name-IDs='0,1,2,3,4,5,6,13,14' \
   --name-languages='*' \
   --notdef-glyph \
-  --recommended-glyphs
+  --recommended-glyphs \
+  --no-recalc-timestamp
 mkdir -p site/assets/fonts
 install -m 0644 "$landing_font_tmp/Hubot-Sans-display.woff2" \
   site/assets/fonts/Hubot-Sans-display.woff2
 install -m 0644 "$landing_font_tmp/OFL.txt" site/assets/fonts/OFL.txt
 ```
 
-Expected source ZIP SHA-256: `b460d36097a5c9a3e45710cbe1554589eaa5765d7c2c88df364516f3e27159b1`. Expected subset size with the pinned toolchain: approximately 62,476 bytes, below the 100 KB gate.
+Expected source ZIP SHA-256: `b460d36097a5c9a3e45710cbe1554589eaa5765d7c2c88df364516f3e27159b1`. Expected deterministic subset size with the pinned toolchain: 62,376 bytes, below the 100 KB gate.
 
 - [ ] **Step 4: Generate responsive CGI derivatives**
 
@@ -225,7 +227,7 @@ Create `site/assets/fonts/README.md` with:
 - License: SIL Open Font License 1.1; copied as `OFL.txt`
 - Toolchain: `fonttools[woff]==4.64.0`
 - Transformation: remove the unused slant axis, retain variable weight and width, subset to the Latin and interface characters listed in the implementation plan.
-- Output SHA-256: `99723d2830039e35e4bb99c8fe8aa161bb56bab8b0097a109a1985cce7b6935b`
+- Output SHA-256: `d48383a1e421d6bec4b5e7a578ede43398047c637fa1311e5a9558e35e2dd9ee`
 
 ## Review-gate responsive derivatives
 
