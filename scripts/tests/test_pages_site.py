@@ -25,10 +25,11 @@ X_CREATIVE = SITE / "assets" / X_CREATIVE_FILENAME
 SOCIAL_CARD_FILENAME = "review-gate-social.png"
 SOCIAL_CARD_WEB_PATH = f"/app-store-review-skill/assets/{SOCIAL_CARD_FILENAME}"
 SOCIAL_CARD_ALT = (
-    "A luminous review gate turning iOS project evidence into an inspectable "
-    "App Store review report"
+    "App Store Review Skill evidence crossing a red review gate into a "
+    "ParcelTrack report marked Not Ready"
 )
 SOCIAL_CARD = SITE / "assets" / SOCIAL_CARD_FILENAME
+SOCIAL_CARD_SOURCE = ROOT / "scripts" / "assets" / "review-gate-social.html"
 README_HERO = ROOT / "assets" / "review-gate-hero.png"
 CINEMATIC_ART = SITE / "assets" / "review-gate-cinematic.png"
 SITE_MARK = SITE / "assets" / "review-gate-mark.svg"
@@ -279,6 +280,16 @@ class PagesSiteTests(unittest.TestCase):
         self.assertTrue(SOCIAL_CARD.is_file(), "social preview card is missing")
         self.assertEqual((1200, 630), png_dimensions(SOCIAL_CARD))
         self.assertIn(SOCIAL_CARD_WEB_PATH, landing)
+        self.assertTrue(SOCIAL_CARD_SOURCE.is_file(), "social-card source is missing")
+        social_source = read(SOCIAL_CARD_SOURCE)
+        self.assertIn("Find the risk.", social_source)
+        self.assertIn("Prove the fix.", social_source)
+        self.assertIn("Camera flow has no purpose string", social_source)
+        self.assertIn("NOT READY", social_source)
+        self.assertNotIn("97%", social_source)
+        self.assertNotIn("99%", social_source)
+        self.assertNotIn("Apple logo", social_source)
+        self.assertLessEqual(SOCIAL_CARD.stat().st_size, 650_000)
 
         self.assertTrue(SITE_MARK.is_file(), "review-gate site mark is missing")
         mark_root = ET.parse(SITE_MARK).getroot()

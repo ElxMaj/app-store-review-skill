@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1200, initial-scale=1">
+  <style>
+    @font-face {
+      font-family: "Hubot Sans";
+      src: url("../../site/assets/fonts/Hubot-Sans-display.woff2") format("woff2-variations");
+      font-weight: 200 900;
+      font-stretch: 75% 125%;
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      width: 1200px;
+      height: 630px;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    body {
+      position: relative;
+      background: #070a10;
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+
+    body::before {
+      position: absolute;
+      z-index: 1;
+      inset: 0;
+      background: linear-gradient(90deg, #070a10 0 34%, rgb(7 10 16 / 88%) 43%, rgb(7 10 16 / 28%) 62%, transparent 76%);
+      content: "";
+    }
+
+    body::after {
+      position: absolute;
+      z-index: 5;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      height: 6px;
+      background: linear-gradient(90deg, #147cff 0 42%, #ff2748 42% 82%, #61e6b5 82% 100%);
+      content: "";
+    }
+
+    .machine {
+      position: absolute;
+      inset: 0 0 0 430px;
+      width: 770px;
+      height: 630px;
+      object-fit: cover;
+      object-position: 72% center;
+      opacity: 0.78;
+    }
+
+    .wordmark {
+      position: absolute;
+      z-index: 2;
+      top: 50px;
+      left: 56px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+
+    h1 {
+      position: absolute;
+      z-index: 2;
+      top: 142px;
+      left: 56px;
+      margin: 0;
+      font-family: "Hubot Sans", sans-serif;
+      font-size: 82px;
+      font-weight: 850;
+      letter-spacing: -0.04em;
+      line-height: 0.82;
+    }
+
+    h1 span {
+      display: block;
+      white-space: nowrap;
+    }
+
+    h1 span:first-child { font-stretch: 78%; }
+    h1 span:last-child { font-stretch: 112%; }
+
+    .report {
+      position: absolute;
+      z-index: 3;
+      right: 64px;
+      bottom: 54px;
+      width: 420px;
+      padding: 28px;
+      border-top: 7px solid #ff2748;
+      background: #f6f3eb;
+      box-shadow: 0 24px 70px rgb(0 0 0 / 42%);
+      color: #111318;
+      transform: rotate(-1deg);
+    }
+
+    .report-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .verdict {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      margin-top: 34px;
+      padding-block: 20px;
+      border-block: 1px solid rgb(17 19 24 / 28%);
+    }
+
+    .verdict strong { color: #c91432; }
+
+    .finding {
+      margin: 22px 0 6px;
+      font-size: 27px;
+      font-weight: 700;
+      line-height: 1.05;
+    }
+
+    .path {
+      color: #62656c;
+      font: 13px ui-monospace, monospace;
+    }
+
+    .tagline {
+      position: absolute;
+      z-index: 2;
+      bottom: 62px;
+      left: 56px;
+      width: 490px;
+      color: rgb(255 255 255 / 72%);
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <img class="machine" src="../../site/assets/review-gate-cinematic-1440.webp" alt="">
+  <div class="wordmark">APP STORE REVIEW SKILL</div>
+  <h1><span>Find the risk.</span><span>Prove the fix.</span></h1>
+  <p class="tagline">A read-only preflight for Codex and Claude Code.</p>
+  <article class="report">
+    <div class="report-meta"><span>ParcelTrack</span><span>Sample report</span></div>
+    <div class="verdict"><span>Release verdict</span><strong>NOT READY</strong></div>
+    <p class="finding">Camera flow has no purpose string</p>
+    <p class="path">app.json:18 · Guideline 5.1.1(ii)</p>
+  </article>
+</body>
+</html>
