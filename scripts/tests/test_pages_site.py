@@ -1,3 +1,4 @@
+import gzip
 import json
 import re
 import struct
@@ -82,6 +83,10 @@ def assert_asset_signature(testcase, path: Path, signature: bytes) -> None:
         testcase.assertIn(data[4:12], (b"ftypavif", b"ftypavis"))
     else:
         testcase.assertTrue(data.startswith(signature))
+
+
+def gzip_size(path: Path) -> int:
+    return len(gzip.compress(path.read_bytes(), compresslevel=9, mtime=0))
 
 
 class PagesSiteTests(unittest.TestCase):
@@ -315,6 +320,42 @@ class PagesSiteTests(unittest.TestCase):
         ):
             with self.subTest(section_id=section_id):
                 self.assertIn(f'id="{section_id}"', landing)
+
+        shared_css = read(SITE / "styles.css")
+        home_css = read(HOME_CSS)
+
+        self.assertIn('href="/app-store-review-skill/home.css"', landing)
+        self.assertIn("@font-face", home_css)
+        self.assertIn('font-family: "Hubot Sans"', home_css)
+        self.assertIn("font-stretch: 75% 125%", home_css)
+        self.assertIn("font-stretch: 78%", home_css)
+        self.assertIn("font-stretch: 112%", home_css)
+        self.assertIn("@media (max-width: 1279px)", home_css)
+        self.assertIn("@media (max-width: 767px)", home_css)
+        self.assertIn("@media (prefers-reduced-motion: reduce)", home_css)
+        self.assertIn("@media (prefers-reduced-transparency: reduce)", home_css)
+        self.assertIn("@media (prefers-contrast: more)", home_css)
+        self.assertIn("@media (forced-colors: active)", home_css)
+        self.assertNotIn("transition: all", shared_css + home_css)
+        self.assertNotIn("backdrop-filter", home_css)
+        self.assertNotIn(".hero-proof", home_css)
+        self.assertIn(".article-shell", shared_css)
+        self.assertNotIn(".hero-surface", shared_css)
+
+    def test_landing_critical_resources_stay_within_budget(self):
+        critical = (
+            SITE / "index.html",
+            SITE / "styles.css",
+            SITE / "home.css",
+            SITE / "site.js",
+        )
+        self.assertLessEqual(sum(gzip_size(path) for path in critical), 120_000)
+        self.assertLessEqual((SITE / "site.js").stat().st_size, 12_000)
+        report_image = ROOT / "assets" / "visual-report-example.png"
+        mobile_gate = SITE / "assets" / "review-gate-cinematic-768.avif"
+        desktop_gate = SITE / "assets" / "review-gate-cinematic-1440.avif"
+        self.assertLessEqual(mobile_gate.stat().st_size + report_image.stat().st_size, 450_000)
+        self.assertLessEqual(desktop_gate.stat().st_size + report_image.stat().st_size, 900_000)
 
     def test_crawl_and_llm_discovery_files_use_canonical_urls(self):
         robots = read(SITE / "robots.txt")
