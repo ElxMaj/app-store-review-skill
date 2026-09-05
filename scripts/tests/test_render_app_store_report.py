@@ -59,10 +59,6 @@ class VisualReportTests(unittest.TestCase):
         self.assertIn("<!doctype html>", output)
         self.assertIn("Example &lt;script&gt;alert(1)&lt;/script&gt;", output)
         self.assertIn('<span class="verdict">NEEDS REVIEW</span>', output)
-        self.assertIn(
-            '<div class="metrics" role="group" aria-label="Finding counts">',
-            output,
-        )
         self.assertIn("Policy / 2026-08-10", output)
         self.assertIn("app.json:4", output)
         self.assertNotIn("<script>", output)

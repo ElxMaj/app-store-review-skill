@@ -182,6 +182,12 @@ for (const viewport of VIEWPORTS) {
           Number.parseFloat(titleStyles.letterSpacing) /
           Number.parseFloat(titleStyles.fontSize),
         bodyFont: getComputedStyle(document.body).fontFamily,
+        reportDisclosureFontSize: Number.parseFloat(
+          getComputedStyle(document.querySelector(".report-artifact figcaption")).fontSize,
+        ),
+        commandFontSize: Number.parseFloat(
+          getComputedStyle(document.querySelector(".command-dock code")).fontSize,
+        ),
         themeSwitchIsVisible: heroBackground !== reportBackground,
         reportImageLoaded: reportImage.complete && reportImage.naturalWidth > 0,
       };
@@ -204,6 +210,8 @@ for (const viewport of VIEWPORTS) {
     expect(geometry.titleFont).toContain("Campaign Display");
     expect(geometry.titleTrackingEm).toBeGreaterThanOrEqual(-0.02);
     expect(geometry.bodyFont).toContain("Geist Sans");
+    expect(geometry.reportDisclosureFontSize).toBeGreaterThanOrEqual(12);
+    expect(geometry.commandFontSize).toBeGreaterThanOrEqual(12);
     expect(geometry.themeSwitchIsVisible).toBe(true);
     expect(geometry.reportImageLoaded).toBe(true);
   });

@@ -224,6 +224,22 @@ class PagesSiteTests(unittest.TestCase):
         self.assertNotIn("–", landing)
         self.assertNotIn("·", landing)
 
+    def test_cross_page_landing_fragments_resolve(self):
+        landing = read(SITE / "index.html")
+        landing_ids = set(re.findall(r'\bid="([^"]+)"', landing))
+        links: list[tuple[Path, str]] = []
+
+        for page in SITE.rglob("*.html"):
+            for fragment in re.findall(
+                r'href="/app-store-review-skill/#([^"]+)"', read(page)
+            ):
+                links.append((page, fragment))
+
+        self.assertTrue(links, "No cross-page landing fragments were found")
+        for page, fragment in links:
+            with self.subTest(page=page.relative_to(SITE), fragment=fragment):
+                self.assertIn(fragment, landing_ids)
+
     def test_landing_styles_render_the_campaign_poster_system(self):
         home_css = read(HOME_CSS)
 

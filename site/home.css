@@ -262,7 +262,7 @@
   background: #cfd8e2;
   color: #3b4654;
   font-family: ui-monospace, "SFMono-Regular", SFMono-Regular, Menlo, monospace;
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .evidence-stage {
@@ -673,7 +673,7 @@
 
   .report-artifact figcaption {
     padding-inline: 12px;
-    font-size: 9px;
+    font-size: 12px;
   }
 
   .evidence-stage {
@@ -736,7 +736,7 @@
 
   .command-dock code {
     padding-inline: 13px;
-    font-size: 10px;
+    font-size: 12px;
   }
 
   .home-page .copy-button {

@@ -1,10 +1,10 @@
 # From Alarm to Evidence landing-page design
 
-> **Status note (2026-09-05):** The original dark evidence-gate composition was superseded after visual review by the campaign-poster implementation in `site/index.html` and `site/home.css`. Its product-truth, accessibility, route, and publication constraints still apply. Shipped font provenance lives in `site/assets/fonts/README.md`.
+> **Status note (2026-09-05):** The original dark evidence-gate composition was superseded after visual review by the campaign-poster implementation in `site/index.html` and `site/home.css`. The later user-approved journey distillation keeps the complete HTML report as the sole visible report route; the source JSON remains published and is linked from the README instead of adding another landing-page action. Its product-truth, accessibility, route, and publication constraints still apply. Shipped font provenance lives in `site/assets/fonts/README.md`.
 
 **Date:** 2026-09-05
 
-**Status:** Concept approved; written specification awaiting review
+**Status:** Implemented; final campaign-poster overrides are documented in the status note above
 
 **Surface:** GitHub Pages product landing page
 
@@ -156,7 +156,7 @@ Adjacent copy states:
 - the distinction between blockers and manual checks;
 - that the report arrives before proposed fixes;
 - that its evidence is fictional sample data;
-- links to the complete HTML report and its source JSON.
+- links to the complete HTML report; the source JSON remains published and discoverable from the README rather than adding another landing-page action.
 
 The report image is not treated as decorative. It needs descriptive alt text, explicit dimensions, and a direct link to the accessible HTML report.
 
@@ -445,7 +445,7 @@ The redesign is accepted when all of the following are true:
 - The hero visibly transforms evidence into the actual report and does not read as a generic cybersecurity or AI-tool landing page.
 - The report is the largest body proof and appears before modes, policy content, or general reassurance.
 - The order is Alarm/Transformation → Proof → Method → Action → Reassurance → Close.
-- The current ParcelTrack example is clearly labeled fictional and links to HTML and JSON evidence.
+- The current ParcelTrack example is clearly labeled fictional and links to the complete HTML report; its source JSON remains published and linked from the README.
 - Any evaluation score includes provider, version, observation date, and scope, or is omitted.
 - No Apple-owned mark, affiliation implication, guaranteed-approval claim, invented user proof, or unsupported metric is introduced.
 - The 390×844 composition includes the proposition, command/action, and meaningful report evidence without horizontal page overflow.

@@ -1,6 +1,6 @@
 # From Alarm to Evidence Landing Page Implementation Plan
 
-> **Status note (2026-09-05):** The landing-page composition and typography in this plan were superseded after visual review by the campaign-poster refactor in `site/index.html` and `site/home.css`. `site/assets/fonts/README.md` is the canonical, reproducible record for the fonts that now ship. The product-truth, accessibility, route, and publication gates below remain active; this document is retained as the historical implementation plan for the previous composition.
+> **Status note (2026-09-05):** The landing-page composition and typography in this plan were superseded after visual review by the campaign-poster refactor in `site/index.html` and `site/home.css`. The later user-approved journey distillation also removed the source-JSON landing action while preserving the published JSON route and its README link. `site/assets/fonts/README.md` is the canonical, reproducible record for the fonts that now ship. The product-truth, accessibility, route, and publication gates below remain active; this document is retained as the historical implementation plan for the previous composition.
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
