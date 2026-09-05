@@ -92,11 +92,16 @@ class PagesSiteTests(unittest.TestCase):
 
         self.assertEqual(1, len(re.findall(r"<h1(?:\s|>)", landing)))
         self.assertIn(
-            "<title>App Store Review Skill — Submit with evidence, not hope</title>",
+            "<title>App Store Review Skill — Find the risk. Prove the fix.</title>",
             landing,
         )
-        self.assertIn("<h1>Submit with evidence.<span>Not hope.</span></h1>", landing)
-        self.assertIn("Runs in Codex and Claude Code", landing)
+        self.assertIn('<span class="headline-risk">Find the risk.</span>', landing)
+        self.assertIn('<span class="headline-proof">Prove the fix.</span>', landing)
+        self.assertIn(
+            "A read-only preflight that traces App Store review risks to the files, "
+            "rules, and checks behind them.",
+            landing,
+        )
         self.assertIn(f'<link rel="canonical" href="{SITE_URL}">', landing)
         self.assertRegex(landing, r'<meta name="description" content="[^\"]{140,180}">')
         for property_name in ("og:title", "og:description", "og:url", "og:image"):
@@ -111,6 +116,8 @@ class PagesSiteTests(unittest.TestCase):
             landing,
         )
 
+        visible_text = re.sub(r"<[^>]+>", " ", landing)
+        visible_text = re.sub(r"\s+", " ", visible_text)
         for visible_claim in (
             "npx skills add ElxMaj/app-store-review-skill",
             "Pre-submission audit",
@@ -118,14 +125,43 @@ class PagesSiteTests(unittest.TestCase):
             "Human-craft audit",
             "97% quality",
             "99% impact",
-            "Security scan passed",
-            "Star on GitHub",
+            "Tessl evaluates the skill package. It is not an App Store approval rate.",
+            "Fictional ParcelTrack evidence",
         ):
             with self.subTest(visible_claim=visible_claim):
-                self.assertIn(visible_claim, landing)
+                self.assertIn(visible_claim, visible_text)
 
+        self.assertEqual(1, landing.count('class="button button-primary"'))
+        self.assertIn(
+            'class="button button-primary" href="#install">Run the preflight</a>',
+            landing,
+        )
+        self.assertNotIn("Star on GitHub", landing)
+        self.assertNotIn("Security scan passed", landing)
+        self.assertNotIn('class="hero-proof"', landing)
         self.assertNotIn("98% impact", landing)
         self.assertNotIn("low-severity W011", landing)
+
+        section_order = (
+            "report",
+            "method",
+            "install",
+            "modes",
+            "evaluation",
+            "policy",
+            "faq",
+            "close",
+        )
+        positions = [landing.index(f'id="{section_id}"') for section_id in section_order]
+        self.assertEqual(sorted(positions), positions)
+
+        self.assertIn("Tessl evaluation · v1.2.2", landing)
+        self.assertIn(
+            '<time datetime="2026-09-03">Last scored 3 September 2026</time>',
+            landing,
+        )
+        self.assertNotIn("aggregateRating", landing)
+        self.assertNotIn("approval rate</strong>", landing)
 
         self.assertIn('href="https://github.com/ElxMaj/app-store-review-skill"', landing)
         self.assertIn(f'href="/app-store-review-skill/{GUIDE_PATH}"', landing)
@@ -258,19 +294,27 @@ class PagesSiteTests(unittest.TestCase):
 
     def test_review_gate_motion_and_accessibility_contract(self):
         landing = read(SITE / "index.html")
-        css = read(SITE / "styles.css")
 
-        self.assertIn('class="review-gate"', landing)
-        self.assertRegex(landing, r'class="review-gate"[^>]+aria-label="[^"]+"')
-        self.assertIn('class="gate-visual" aria-hidden="true"', landing)
-        for section_id in ("modes", "report", "install", "faq"):
+        self.assertIn('class="gate-sequence" aria-hidden="true"', landing)
+        self.assertIn("data-gate-sequence", landing)
+        self.assertIn('class="evidence-packet"', landing)
+        self.assertIn('class="hero-report-sheet"', landing)
+        self.assertIn("Camera flow has no purpose string", landing)
+        self.assertIn("app.json:18", landing)
+        self.assertIn('aria-live="polite"', landing)
+        self.assertIn('href="#install"', landing)
+        for section_id in (
+            "report",
+            "method",
+            "install",
+            "modes",
+            "evaluation",
+            "policy",
+            "faq",
+            "close",
+        ):
             with self.subTest(section_id=section_id):
                 self.assertIn(f'id="{section_id}"', landing)
-
-        self.assertNotIn("transition: all", css)
-        self.assertIn("@media (prefers-reduced-motion: reduce)", css)
-        self.assertIn("@media (prefers-reduced-transparency: reduce)", css)
-        self.assertIn("@media (prefers-contrast: more)", css)
 
     def test_crawl_and_llm_discovery_files_use_canonical_urls(self):
         robots = read(SITE / "robots.txt")
