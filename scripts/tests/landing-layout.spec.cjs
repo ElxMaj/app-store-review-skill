@@ -110,7 +110,7 @@ for (const viewport of VIEWPORTS) {
 
     await expect(page.locator(".campaign-hero")).toHaveCount(1);
     await expect(page.locator(".campaign-title")).toHaveCount(1);
-    await expect(page.locator(".verdict-object")).toHaveCount(1);
+    await expect(page.locator(".campaign-hero article, .campaign-hero aside")).toHaveCount(0);
     await expect(page.locator(".report-stage")).toHaveCount(1);
 
     const geometry = await page.evaluate(() => {
@@ -132,7 +132,6 @@ for (const viewport of VIEWPORTS) {
       const hero = rect(".campaign-hero");
       const title = rect(".campaign-title");
       const callToAction = rect(".button-primary");
-      const verdict = rect(".verdict-object");
       const art = rect(".campaign-art");
       const reportImage = document.querySelector(".report-artifact img");
       const heroBackground = getComputedStyle(document.querySelector(".campaign-hero")).backgroundColor;
@@ -151,13 +150,12 @@ for (const viewport of VIEWPORTS) {
           document.body.scrollWidth,
         ) - window.innerWidth,
         callToAction,
-        verdict,
-        verdictInsideHero:
-          verdict.top >= hero.top - 1 &&
-          verdict.right <= hero.right + 1 &&
-          verdict.bottom <= hero.bottom + 1 &&
-          verdict.left >= hero.left - 1,
-        verdictOverlapsTitle: overlaps(verdict, title),
+        callToActionInsideHero:
+          callToAction.top >= hero.top - 1 &&
+          callToAction.right <= hero.right + 1 &&
+          callToAction.bottom <= hero.bottom + 1 &&
+          callToAction.left >= hero.left - 1,
+        callToActionOverlapsTitle: overlaps(callToAction, title),
         artCoversHero:
           art.width >= hero.width - 1 && art.height >= hero.height - 1,
         titleLineCount: document.querySelectorAll(".campaign-title > span").length,
@@ -173,10 +171,8 @@ for (const viewport of VIEWPORTS) {
     expect(geometry.overflow).toBeLessThanOrEqual(1);
     expect(geometry.callToAction.top).toBeGreaterThanOrEqual(0);
     expect(geometry.callToAction.bottom).toBeLessThanOrEqual(viewport.height + 1);
-    expect(geometry.verdict.width).toBeGreaterThan(0);
-    expect(geometry.verdict.height).toBeGreaterThan(0);
-    expect(geometry.verdictInsideHero).toBe(true);
-    expect(geometry.verdictOverlapsTitle).toBe(false);
+    expect(geometry.callToActionInsideHero).toBe(true);
+    expect(geometry.callToActionOverlapsTitle).toBe(false);
     expect(geometry.artCoversHero).toBe(true);
     expect(geometry.titleLineCount).toBe(2);
     expect(geometry.titleVisualLineCount).toBe(2);
@@ -229,7 +225,6 @@ for (const viewport of FONT_FAILURE_VIEWPORTS) {
       const hero = bounds(document.querySelector(".campaign-hero"));
       const title = bounds(document.querySelector(".campaign-title"));
       const callToAction = bounds(document.querySelector(".button-primary"));
-      const verdict = bounds(document.querySelector(".verdict-object"));
       const titleLines = Array.from(
         document.querySelectorAll(".campaign-title > span"),
         textBounds,
@@ -243,8 +238,7 @@ for (const viewport of FONT_FAILURE_VIEWPORTS) {
         titleFitsHero: titleLines.every(
           (line) => line.left >= hero.left - 1 && line.right <= hero.right + 1,
         ),
-        titleOverlapsVerdict: overlaps(title, verdict),
-        callToActionOverlapsVerdict: overlaps(callToAction, verdict),
+        titleOverlapsCallToAction: overlaps(title, callToAction),
         callToActionVisible:
           callToAction.top >= 0 && callToAction.bottom <= window.innerHeight + 1,
       };
@@ -253,8 +247,7 @@ for (const viewport of FONT_FAILURE_VIEWPORTS) {
     expect(blockedFontRequests).toBeGreaterThan(0);
     expect(geometry.overflow).toBeLessThanOrEqual(1);
     expect(geometry.titleFitsHero).toBe(true);
-    expect(geometry.titleOverlapsVerdict).toBe(false);
-    expect(geometry.callToActionOverlapsVerdict).toBe(false);
+    expect(geometry.titleOverlapsCallToAction).toBe(false);
     expect(geometry.callToActionVisible).toBe(true);
   });
 }

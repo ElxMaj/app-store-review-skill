@@ -202,10 +202,10 @@ class PagesSiteTests(unittest.TestCase):
         self.assertNotIn('class="gate-aperture"', landing)
         self.assertIn('class="campaign-hero"', landing)
         self.assertIn('class="campaign-art" aria-hidden="true"', landing)
-        self.assertIn(
-            'class="verdict-object" aria-label="Sample release verdict"',
-            landing,
-        )
+        hero_section = landing.partition('<section class="campaign-hero"')[2].partition(
+            "</section>"
+        )[0]
+        self.assertNotRegex(hero_section, r"<(?:article|aside)(?:\s|>)")
         self.assertIn('class="report-stage" id="report"', landing)
         self.assertIn('class="evidence-stage" id="method"', landing)
         self.assertIn('class="evidence-rail"', landing)
@@ -255,7 +255,7 @@ class PagesSiteTests(unittest.TestCase):
             r"(?s)@media \(max-width: 767px\).*?\.evidence-rail\s*\{[^}]*grid-template-columns:\s*1fr;",
         )
         self.assertIn("@keyframes campaign-enter", home_css)
-        self.assertIn("@keyframes verdict-enter", home_css)
+        self.assertNotIn("@keyframes verdict-enter", home_css)
         self.assertIn("@media (prefers-reduced-motion: reduce)", home_css)
         self.assertNotIn("transition: all", home_css)
         self.assertNotIn("backdrop-filter", home_css)
@@ -278,6 +278,7 @@ class PagesSiteTests(unittest.TestCase):
             ".faq-list",
             ".closing-field",
             ".alternate-installs",
+            ".verdict-object",
         ):
             with self.subTest(retired_selector=retired_selector):
                 self.assertNotIn(retired_selector, home_css)
@@ -300,8 +301,8 @@ class PagesSiteTests(unittest.TestCase):
             with self.subTest(width=width):
                 self.assertIn(f"width: {width}", browser_test)
         self.assertIn("document.documentElement.scrollWidth", browser_test)
-        self.assertIn("verdictInsideHero", browser_test)
-        self.assertIn("verdictOverlapsTitle", browser_test)
+        self.assertIn("callToActionInsideHero", browser_test)
+        self.assertIn("callToActionOverlapsTitle", browser_test)
         self.assertIn('"Campaign Display"', browser_test)
         self.assertIn('"Geist Sans"', browser_test)
 
@@ -468,12 +469,10 @@ class PagesSiteTests(unittest.TestCase):
 
         self.assertIn('class="campaign-art" aria-hidden="true"', landing)
         self.assertIn('class="campaign-scrim" aria-hidden="true"', landing)
-        self.assertIn(
-            'class="verdict-object" aria-label="Sample release verdict"',
-            landing,
-        )
-        self.assertIn("Camera permission text missing", landing)
-        self.assertIn("app.json:18", landing)
+        hero_section = landing.partition('<section class="campaign-hero"')[2].partition(
+            "</section>"
+        )[0]
+        self.assertNotRegex(hero_section, r"<(?:article|aside)(?:\s|>)")
         self.assertIn('aria-live="polite"', landing)
         self.assertIn('href="#install"', landing)
         for section_id in (
@@ -506,14 +505,6 @@ class PagesSiteTests(unittest.TestCase):
         self.assertNotIn("backdrop-filter", home_css)
         self.assertRegex(
             home_css,
-            r"(?s)\.verdict-object > p\s*\{[^}]*line-height:\s*1\.2;",
-        )
-        self.assertRegex(
-            home_css,
-            r"(?s)@media \(max-width: 767px\).*?\.verdict-object > p\s*\{[^}]*line-height:\s*1\.3;",
-        )
-        self.assertRegex(
-            home_css,
             r"(?s)@media \(max-width: 380px\).*?\.command-dock code\s*\{[^}]*overflow-wrap:\s*anywhere;[^}]*white-space:\s*normal;",
         )
         self.assertIn(".command-dock code:focus-visible", home_css)
@@ -524,7 +515,7 @@ class PagesSiteTests(unittest.TestCase):
         site_js = read(SITE / "site.js")
         self.assertIn('document.documentElement.classList.add("has-js")', landing)
         self.assertIn("@keyframes campaign-enter", home_css)
-        self.assertIn("@keyframes verdict-enter", home_css)
+        self.assertNotIn("@keyframes verdict-enter", home_css)
         self.assertNotIn("infinite", home_css)
         self.assertIn('data-copy-status="install-copy-status"', landing)
         self.assertIn('status.textContent = "Install command copied."', site_js)
