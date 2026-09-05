@@ -209,6 +209,26 @@ class PagesSiteTests(unittest.TestCase):
             home_css,
             r"(?s)\.home-page\s*\{[^}]*color-scheme:\s*dark;",
         )
+        self.assertRegex(
+            home_css,
+            r'(?s)\.home-page\s*\{[^}]*font-family:\s*"Hubot Sans", sans-serif;[^}]*font-stretch:\s*100%;',
+        )
+        self.assertRegex(
+            home_css,
+            r"(?s)\.hero-report-sheet\s*\{[^}]*box-shadow:\s*inset 0 0 0 1px rgb\(17 19 24 / 12%\),\s*0 28px 76px rgb\(3 9 22 / 46%\);",
+        )
+        self.assertRegex(
+            home_css,
+            r"(?s)\.report-figure\s*\{[^}]*box-shadow:\s*inset 0 1px 0 rgb\(255 255 255 / 18%\),\s*0 34px 90px rgb\(2 9 24 / 48%\);",
+        )
+        self.assertRegex(
+            home_css,
+            r"(?s)\.home-page \.button-primary\s*\{[^}]*transition:\s*background-color 180ms var\(--ease-out\),\s*border-color 180ms var\(--ease-out\),\s*color 180ms var\(--ease-out\),\s*transform 180ms var\(--ease-out\);",
+        )
+        self.assertRegex(
+            home_css,
+            r"(?s)\.copy-button\s*\{[^}]*transition:\s*background-color 180ms var\(--ease-out\),\s*color 180ms var\(--ease-out\),\s*transform 180ms var\(--ease-out\);",
+        )
         self.assertIn("100dvh", home_css)
         self.assertIn(".decision-path", home_css)
         self.assertIn(".install-primary", home_css)
