@@ -151,7 +151,7 @@
   font-size: clamp(78px, 10.8vw, 164px);
   font-style: italic;
   font-weight: 900;
-  letter-spacing: -0.045em;
+  letter-spacing: -0.018em;
   line-height: 0.76;
   text-transform: uppercase;
   text-wrap: balance;
@@ -617,7 +617,7 @@
   .campaign-title {
     width: calc(100% + var(--gutter));
     max-width: none;
-    font-size: clamp(52px, 17.5vw, 70px);
+    font-size: clamp(52px, 16.5vw, 70px);
     line-height: 0.78;
   }
 

@@ -136,6 +136,7 @@ for (const viewport of VIEWPORTS) {
       const reportImage = document.querySelector(".report-artifact img");
       const heroBackground = getComputedStyle(document.querySelector(".campaign-hero")).backgroundColor;
       const reportBackground = getComputedStyle(document.querySelector(".report-stage")).backgroundColor;
+      const titleStyles = getComputedStyle(document.querySelector(".campaign-title"));
       const titleVisualLineCount = Array.from(
         document.querySelectorAll(".campaign-title > span"),
       ).reduce((count, span) => {
@@ -160,7 +161,10 @@ for (const viewport of VIEWPORTS) {
           art.width >= hero.width - 1 && art.height >= hero.height - 1,
         titleLineCount: document.querySelectorAll(".campaign-title > span").length,
         titleVisualLineCount,
-        titleFont: getComputedStyle(document.querySelector(".campaign-title")).fontFamily,
+        titleFont: titleStyles.fontFamily,
+        titleTrackingEm:
+          Number.parseFloat(titleStyles.letterSpacing) /
+          Number.parseFloat(titleStyles.fontSize),
         bodyFont: getComputedStyle(document.body).fontFamily,
         themeSwitchIsVisible: heroBackground !== reportBackground,
         reportImageLoaded: reportImage.complete && reportImage.naturalWidth > 0,
@@ -177,6 +181,7 @@ for (const viewport of VIEWPORTS) {
     expect(geometry.titleLineCount).toBe(2);
     expect(geometry.titleVisualLineCount).toBe(2);
     expect(geometry.titleFont).toContain("Campaign Display");
+    expect(geometry.titleTrackingEm).toBeGreaterThanOrEqual(-0.02);
     expect(geometry.bodyFont).toContain("Geist Sans");
     expect(geometry.themeSwitchIsVisible).toBe(true);
     expect(geometry.reportImageLoaded).toBe(true);
