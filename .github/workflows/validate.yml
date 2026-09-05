@@ -20,6 +20,12 @@ jobs:
           python-version: "3.11"
       - name: Run scanner tests
         run: python3 -m unittest discover -s scripts/tests -v
+      - name: Install landing-page test dependency
+        run: npm ci
+      - name: Install landing-page browser
+        run: npx playwright install --with-deps chromium
+      - name: Verify landing-page geometry
+        run: npm run test:landing-layout
       - name: Check JSON output
         run: python3 scripts/app_store_review_scan.py . --format json | python3 -m json.tool >/dev/null
       - name: Validate package and evaluation JSON

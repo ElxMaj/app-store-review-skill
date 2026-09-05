@@ -1,0 +1,10 @@
+{
+  "name": "app-store-review-skill-site",
+  "private": true,
+  "scripts": {
+    "test:landing-layout": "playwright test scripts/tests/landing-layout.spec.cjs --reporter=line --output=/tmp/landing-layout-results"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.55.0"
+  }
+}

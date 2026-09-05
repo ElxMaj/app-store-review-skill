@@ -164,6 +164,7 @@ class PagesSiteTests(unittest.TestCase):
 
     def test_landing_page_keeps_the_decision_path_short(self):
         landing = read(SITE / "index.html")
+        install_section = landing[landing.index('<section class="install"') :]
 
         self.assertIn(
             "Catch App Store review blockers before you submit.",
@@ -174,9 +175,21 @@ class PagesSiteTests(unittest.TestCase):
             1,
             landing.count("npx skills add ElxMaj/app-store-review-skill"),
         )
+        self.assertEqual(1, landing.count('class="command-dock command-dock-light"'))
+        self.assertEqual(1, landing.count("data-copy-target="))
+        self.assertEqual(1, len(re.findall(r"<code(?:\s|>)", install_section)))
+        self.assertIn(
+            '<code id="install-command" tabindex="0">',
+            landing,
+        )
         self.assertEqual(1, landing.count('class="button button-primary"'))
         self.assertNotIn('class="button button-secondary"', landing)
         self.assertNotIn('class="command-dock"', landing.split("</section>", 1)[0])
+        self.assertNotIn('class="alternate-installs"', landing)
+        self.assertIn(
+            'href="https://github.com/ElxMaj/app-store-review-skill/blob/main/INSTALL.md"',
+            landing,
+        )
         self.assertNotIn('class="hero-reassurance"', landing)
         self.assertNotIn('class="evidence-packet"', landing)
         self.assertNotIn('class="gate-aperture"', landing)
@@ -212,7 +225,9 @@ class PagesSiteTests(unittest.TestCase):
                 "@keyframes report-resolve"
             )
         ]
+        report_motion = home_css[home_css.index("@keyframes report-resolve") :]
         self.assertNotIn("opacity:", copy_motion)
+        self.assertNotIn("rotate(", report_motion)
         for retired_selector in (
             ".button-secondary",
             ".hero-reassurance",
@@ -224,9 +239,31 @@ class PagesSiteTests(unittest.TestCase):
             ".policy-number",
             ".faq-list",
             ".closing-field",
+            ".alternate-installs",
         ):
             with self.subTest(retired_selector=retired_selector):
                 self.assertNotIn(retired_selector, home_css)
+
+    def test_validate_workflow_runs_real_landing_geometry_checks(self):
+        workflow = read(ROOT / ".github" / "workflows" / "validate.yml")
+        browser_test = read(ROOT / "scripts" / "tests" / "landing-layout.spec.cjs")
+
+        package = json.loads(read(ROOT / "package.json"))
+
+        self.assertEqual("1.55.0", package["devDependencies"]["@playwright/test"])
+        self.assertIn("npm ci", workflow)
+        self.assertIn("npx playwright install --with-deps chromium", workflow)
+        self.assertIn("npm run test:landing-layout", workflow)
+        self.assertIn(
+            "landing-layout.spec.cjs",
+            package["scripts"]["test:landing-layout"],
+        )
+        for width in (320, 390, 768, 901, 1024, 1280, 1440):
+            with self.subTest(width=width):
+                self.assertIn(f"width: {width}", browser_test)
+        self.assertIn("document.documentElement.scrollWidth", browser_test)
+        self.assertIn("reportInsideHero", browser_test)
+        self.assertIn("reportOverlapsCopy", browser_test)
 
     def test_landing_json_ld_uses_supported_source_truth(self):
         landing = read(SITE / "index.html")
@@ -354,9 +391,16 @@ class PagesSiteTests(unittest.TestCase):
     def test_review_gate_motion_and_accessibility_contract(self):
         landing = read(SITE / "index.html")
 
-        self.assertIn('class="gate-sequence" aria-hidden="true"', landing)
+        self.assertIn('class="gate-sequence" data-gate-sequence', landing)
+        self.assertNotIn('class="gate-sequence" aria-hidden="true"', landing)
         self.assertIn("data-gate-sequence", landing)
-        self.assertIn('class="hero-report-sheet"', landing)
+        self.assertIn('class="gate-machine" aria-hidden="true"', landing)
+        self.assertIn('class="gate-wash" aria-hidden="true"', landing)
+        self.assertIn('class="gate-floor" aria-hidden="true"', landing)
+        self.assertIn(
+            'class="hero-report-sheet" aria-label="Sample release verdict"',
+            landing,
+        )
         self.assertIn("Camera permission text missing", landing)
         self.assertIn("app.json:18", landing)
         self.assertIn('aria-live="polite"', landing)
@@ -390,6 +434,20 @@ class PagesSiteTests(unittest.TestCase):
         )
         self.assertNotIn("transition: all", shared_css + home_css)
         self.assertNotIn("backdrop-filter", home_css)
+        self.assertNotIn(".gate-sequence::", home_css)
+        self.assertRegex(
+            home_css,
+            r"(?s)\.hero-report-sheet > p\s*\{[^}]*line-height:\s*1\.2;",
+        )
+        self.assertRegex(
+            home_css,
+            r"(?s)@media \(max-width: 767px\).*?\.hero-report-sheet > p\s*\{[^}]*line-height:\s*1\.3;",
+        )
+        self.assertRegex(
+            home_css,
+            r"(?s)@media \(max-width: 380px\).*?\.command-dock code\s*\{[^}]*overflow-wrap:\s*anywhere;[^}]*white-space:\s*normal;",
+        )
+        self.assertIn(".command-dock code:focus-visible", home_css)
         self.assertNotIn(".hero-proof", home_css)
         self.assertIn(".article-shell", shared_css)
         self.assertNotIn(".hero-surface", shared_css)

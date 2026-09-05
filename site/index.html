@@ -90,15 +90,17 @@
         </div>
       </div>
 
-      <div class="gate-sequence" aria-hidden="true" data-gate-sequence>
-        <picture class="gate-machine">
+      <div class="gate-sequence" data-gate-sequence>
+        <picture class="gate-machine" aria-hidden="true">
           <source media="(max-width: 767px)" type="image/avif" srcset="/app-store-review-skill/assets/review-gate-cinematic-768.avif">
           <source media="(max-width: 767px)" type="image/webp" srcset="/app-store-review-skill/assets/review-gate-cinematic-768.webp">
           <source type="image/avif" srcset="/app-store-review-skill/assets/review-gate-cinematic-1440.avif">
           <source type="image/webp" srcset="/app-store-review-skill/assets/review-gate-cinematic-1440.webp">
           <img src="/app-store-review-skill/assets/review-gate-cinematic.png" width="1536" height="1024" alt="" fetchpriority="high">
         </picture>
-        <article class="hero-report-sheet">
+        <span class="gate-wash" aria-hidden="true"></span>
+        <span class="gate-floor" aria-hidden="true"></span>
+        <article class="hero-report-sheet" aria-label="Sample release verdict">
           <strong>NOT READY</strong>
           <p>Camera permission text missing</p>
           <code>app.json:18</code>
@@ -137,18 +139,13 @@
       </div>
       <div class="install-primary">
         <div class="command-dock command-dock-light" role="group" aria-label="Recommended install command">
-          <code id="install-command">npx skills add ElxMaj/app-store-review-skill</code>
+          <code id="install-command" tabindex="0">npx skills add ElxMaj/app-store-review-skill</code>
           <button class="copy-button" type="button" data-copy-target="install-command" data-copy-status="install-copy-status" aria-label="Copy recommended install command"><span aria-hidden="true">Copy</span></button>
           <span class="sr-only" id="install-copy-status" aria-live="polite"></span>
         </div>
         <blockquote>Audit this iOS app before submission. Report first. Do not edit files.</blockquote>
+        <a class="install-guide-link" href="https://github.com/ElxMaj/app-store-review-skill/blob/main/INSTALL.md">Other install methods <span aria-hidden="true">↗</span></a>
       </div>
-      <details class="alternate-installs">
-        <summary>Other install methods</summary>
-        <div><strong>Tessl</strong><code>npx tessl install maj-labs/app-store-review</code></div>
-        <div><strong>Claude Code</strong><code>/plugin marketplace add ElxMaj/app-store-review-skill</code></div>
-        <a href="https://github.com/ElxMaj/app-store-review-skill/blob/main/INSTALL.md">See every install method <span aria-hidden="true">↗</span></a>
-      </details>
     </section>
   </main>
 
