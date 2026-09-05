@@ -1,0 +1,2 @@
+# Preserve upstream OFL license bytes, including their standard trailing spaces.
+site/assets/fonts/*-OFL.txt whitespace=-trailing-space

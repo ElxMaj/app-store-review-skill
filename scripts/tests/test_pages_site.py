@@ -1,3 +1,4 @@
+import gzip
 import json
 import re
 import struct
@@ -24,13 +25,29 @@ X_CREATIVE = SITE / "assets" / X_CREATIVE_FILENAME
 SOCIAL_CARD_FILENAME = "review-gate-social.png"
 SOCIAL_CARD_WEB_PATH = f"/app-store-review-skill/assets/{SOCIAL_CARD_FILENAME}"
 SOCIAL_CARD_ALT = (
-    "A luminous review gate turning iOS project evidence into an inspectable "
-    "App Store review report"
+    "App Store Review Skill evidence crossing a red review gate into a "
+    "ParcelTrack report marked Not Ready"
 )
 SOCIAL_CARD = SITE / "assets" / SOCIAL_CARD_FILENAME
+SOCIAL_CARD_SOURCE = ROOT / "scripts" / "assets" / "review-gate-social.html"
 README_HERO = ROOT / "assets" / "review-gate-hero.png"
 CINEMATIC_ART = SITE / "assets" / "review-gate-cinematic.png"
 SITE_MARK = SITE / "assets" / "review-gate-mark.svg"
+HOME_CSS = SITE / "home.css"
+CAMPAIGN_FONT = SITE / "assets" / "fonts" / "BarlowCondensed-BlackItalic.woff2"
+BODY_FONT = SITE / "assets" / "fonts" / "Geist-Variable.woff2"
+BARLOW_LICENSE = SITE / "assets" / "fonts" / "Barlow-OFL.txt"
+GEIST_LICENSE = SITE / "assets" / "fonts" / "Geist-OFL.txt"
+FONT_PROVENANCE = SITE / "assets" / "fonts" / "README.md"
+IMPLEMENTATION_PLAN = (
+    ROOT / "docs" / "superpowers" / "plans" / "2026-09-05-from-alarm-to-evidence.md"
+)
+RESPONSIVE_GATE_ART = (
+    (SITE / "assets" / "review-gate-cinematic-768.avif", b"ftypavif", 100_000),
+    (SITE / "assets" / "review-gate-cinematic-768.webp", b"WEBP", 120_000),
+    (SITE / "assets" / "review-gate-cinematic-1440.avif", b"ftypavif", 180_000),
+    (SITE / "assets" / "review-gate-cinematic-1440.webp", b"WEBP", 220_000),
+)
 
 
 def read(path: Path) -> str:
@@ -63,6 +80,21 @@ def png_dimensions(path: Path) -> tuple[int, int]:
     return struct.unpack(">II", data[16:24])
 
 
+def assert_asset_signature(testcase, path: Path, signature: bytes) -> None:
+    data = path.read_bytes()[:16]
+    if signature == b"WEBP":
+        testcase.assertEqual(b"RIFF", data[:4])
+        testcase.assertEqual(b"WEBP", data[8:12])
+    elif signature == b"ftypavif":
+        testcase.assertIn(data[4:12], (b"ftypavif", b"ftypavis"))
+    else:
+        testcase.assertTrue(data.startswith(signature))
+
+
+def gzip_size(path: Path) -> int:
+    return len(gzip.compress(path.read_bytes(), compresslevel=9, mtime=0))
+
+
 class PagesSiteTests(unittest.TestCase):
     def test_landing_page_has_indexable_product_contract(self):
         landing_path = SITE / "index.html"
@@ -71,11 +103,15 @@ class PagesSiteTests(unittest.TestCase):
 
         self.assertEqual(1, len(re.findall(r"<h1(?:\s|>)", landing)))
         self.assertIn(
-            "<title>App Store Review Skill — Submit with evidence, not hope</title>",
+            "<title>App Store Review Skill: Find the risk before review.</title>",
             landing,
         )
-        self.assertIn("<h1>Submit with evidence.<span>Not hope.</span></h1>", landing)
-        self.assertIn("Runs in Codex and Claude Code", landing)
+        self.assertIn('<span>Find the risk</span>', landing)
+        self.assertIn('<span>before review.</span>', landing)
+        self.assertIn(
+            "Catch App Store blockers in your repo before you submit.",
+            landing,
+        )
         self.assertIn(f'<link rel="canonical" href="{SITE_URL}">', landing)
         self.assertRegex(landing, r'<meta name="description" content="[^\"]{140,180}">')
         for property_name in ("og:title", "og:description", "og:url", "og:image"):
@@ -90,37 +126,218 @@ class PagesSiteTests(unittest.TestCase):
             landing,
         )
 
+        visible_text = re.sub(r"<[^>]+>", " ", landing)
+        visible_text = re.sub(r"\s+", " ", visible_text)
         for visible_claim in (
             "npx skills add ElxMaj/app-store-review-skill",
-            "Pre-submission audit",
-            "Rejection recovery",
-            "Human-craft audit",
-            "97% quality",
-            "99% impact",
-            "Security scan passed",
-            "Star on GitHub",
+            "Risk",
+            "Source",
+            "Proof",
+            "Fictional ParcelTrack sample",
         ):
             with self.subTest(visible_claim=visible_claim):
-                self.assertIn(visible_claim, landing)
+                self.assertIn(visible_claim, visible_text)
 
+        self.assertEqual(1, landing.count('class="button button-primary"'))
+        self.assertIn(
+            'class="button button-primary" href="#install">Run the preflight</a>',
+            landing,
+        )
+        self.assertNotIn("Star on GitHub", landing)
+        self.assertNotIn("Security scan passed", landing)
+        self.assertNotIn('class="hero-proof"', landing)
         self.assertNotIn("98% impact", landing)
         self.assertNotIn("low-severity W011", landing)
+
+        section_order = (
+            "report",
+            "method",
+            "install",
+        )
+        positions = [landing.index(f'id="{section_id}"') for section_id in section_order]
+        self.assertEqual(sorted(positions), positions)
+
+        self.assertIn("https://tessl.io/registry/maj-labs/app-store-review", landing)
+        self.assertNotIn("aggregateRating", landing)
+        self.assertNotIn("approval rate</strong>", landing)
 
         self.assertIn('href="https://github.com/ElxMaj/app-store-review-skill"', landing)
         self.assertIn(f'href="/app-store-review-skill/{GUIDE_PATH}"', landing)
         self.assertIn('href="/app-store-review-skill/report/"', landing)
+        self.assertIn("AI-built app guide", landing)
+        self.assertNotIn("AI code is not the review category", landing)
+
+    def test_landing_page_keeps_the_decision_path_short(self):
+        landing = read(SITE / "index.html")
+        install_marker = '<section class="install-stage"'
+        self.assertIn(install_marker, landing)
+        install_section = landing.partition(install_marker)[2]
+
         self.assertIn(
-            "Apple’s published guidelines do not name AI-written code as a rejection category",
+            "Catch App Store blockers in your repo before you submit.",
             landing,
         )
-        self.assertNotIn("AI code is not the review category", landing)
+        self.assertEqual(4, len(re.findall(r"<section(?:\s|>)", landing)))
+        self.assertEqual(
+            1,
+            landing.count("npx skills add ElxMaj/app-store-review-skill"),
+        )
+        self.assertEqual(1, landing.count('class="command-dock command-dock-light"'))
+        self.assertEqual(1, landing.count("data-copy-target="))
+        self.assertEqual(1, len(re.findall(r"<code(?:\s|>)", install_section)))
+        self.assertIn(
+            '<code id="install-command" tabindex="0">',
+            landing,
+        )
+        self.assertEqual(1, landing.count('class="button button-primary"'))
+        self.assertNotIn('class="button button-secondary"', landing)
+        self.assertNotIn('class="command-dock"', landing.split("</section>", 1)[0])
+        self.assertNotIn('class="alternate-installs"', landing)
+        self.assertIn(
+            'href="https://github.com/ElxMaj/app-store-review-skill/blob/main/INSTALL.md"',
+            landing,
+        )
+        self.assertNotIn('class="hero-reassurance"', landing)
+        self.assertNotIn('class="evidence-packet"', landing)
+        self.assertNotIn('class="gate-aperture"', landing)
+        self.assertIn('class="campaign-hero"', landing)
+        self.assertIn('class="campaign-art" aria-hidden="true"', landing)
+        self.assertNotIn("<header", landing)
+        self.assertNotIn('class="brand"', landing)
+        self.assertIn(
+            'class="site-nav campaign-nav" aria-label="Primary navigation"',
+            landing,
+        )
+        hero_section = landing.partition('<section class="campaign-hero"')[2].partition(
+            "</section>"
+        )[0]
+        self.assertNotRegex(hero_section, r"<(?:article|aside)(?:\s|>)")
+        self.assertIn('class="report-stage" id="report"', landing)
+        self.assertIn('class="evidence-stage" id="method"', landing)
+        self.assertIn('class="evidence-rail"', landing)
+        self.assertNotIn('id="modes"', landing)
+        self.assertNotIn('id="evaluation"', landing)
+        self.assertNotIn('id="policy"', landing)
+        self.assertNotIn('id="faq"', landing)
+        self.assertNotIn('id="close"', landing)
+        self.assertNotIn("—", landing)
+        self.assertNotIn("–", landing)
+        self.assertNotIn("·", landing)
+
+    def test_cross_page_landing_fragments_resolve(self):
+        landing = read(SITE / "index.html")
+        landing_ids = set(re.findall(r'\bid="([^"]+)"', landing))
+        links: list[tuple[Path, str]] = []
+
+        for page in SITE.rglob("*.html"):
+            for fragment in re.findall(
+                r'href="/app-store-review-skill/#([^"]+)"', read(page)
+            ):
+                links.append((page, fragment))
+
+        self.assertTrue(links, "No cross-page landing fragments were found")
+        for page, fragment in links:
+            with self.subTest(page=page.relative_to(SITE), fragment=fragment):
+                self.assertIn(fragment, landing_ids)
+
+    def test_landing_styles_render_the_campaign_poster_system(self):
+        home_css = read(HOME_CSS)
+
+        self.assertRegex(
+            home_css,
+            r"(?s)\.home-page\s*\{[^}]*color-scheme:\s*light;[^}]*font-family:\s*\"Geist Sans\", sans-serif;",
+        )
+        self.assertIn('font-family: "Campaign Display"', home_css)
+        self.assertIn('font-family: "Geist Sans"', home_css)
+        self.assertNotIn("Hubot Sans", home_css)
+        self.assertRegex(
+            home_css,
+            r"(?s)\.campaign-hero\s*\{[^}]*min-height:\s*100dvh;",
+        )
+        self.assertRegex(
+            home_css,
+            r"(?s)\.home-page \.campaign-nav\s*\{[^}]*position:\s*absolute;[^}]*right:",
+        )
+        self.assertRegex(
+            home_css,
+            r"(?s)\.campaign-art\s*\{[^}]*position:\s*absolute;[^}]*inset:\s*0;",
+        )
+        self.assertRegex(
+            home_css,
+            r"(?s)\.campaign-title\s*\{[^}]*font-family:\s*\"Campaign Display\", sans-serif;[^}]*font-style:\s*italic;",
+        )
+        self.assertIn("100dvh", home_css)
+        self.assertIn(".report-stage", home_css)
+        self.assertIn(".report-artifact", home_css)
+        self.assertIn(".evidence-rail", home_css)
+        self.assertIn(".install-stage", home_css)
+        self.assertIn("text-wrap: balance", home_css)
+        self.assertRegex(
+            home_css,
+            r"(?s)@media \(max-width: 767px\).*?\.campaign-hero\s*\{[^}]*min-height:\s*100dvh;",
+        )
+        self.assertRegex(
+            home_css,
+            r"(?s)@media \(max-width: 767px\).*?\.evidence-rail\s*\{[^}]*grid-template-columns:\s*1fr;",
+        )
+        self.assertIn("@keyframes campaign-enter", home_css)
+        self.assertNotIn("@keyframes verdict-enter", home_css)
+        self.assertIn("@media (prefers-reduced-motion: reduce)", home_css)
+        self.assertNotIn("transition: all", home_css)
+        self.assertNotIn("backdrop-filter", home_css)
+        self.assertNotIn("border-radius: 999", home_css)
+        for retired_selector in (
+            ".hero-copy",
+            ".gate-sequence",
+            ".hero-report-sheet",
+            ".report-proof",
+            ".report-figure",
+            ".decision-path",
+            ".button-secondary",
+            ".hero-reassurance",
+            ".evidence-packet",
+            ".gate-aperture",
+            ".evidence-trace",
+            ".mode-path",
+            ".evaluation-record",
+            ".policy-number",
+            ".faq-list",
+            ".closing-field",
+            ".alternate-installs",
+            ".verdict-object",
+        ):
+            with self.subTest(retired_selector=retired_selector):
+                self.assertNotIn(retired_selector, home_css)
+
+    def test_validate_workflow_runs_real_landing_geometry_checks(self):
+        workflow = read(ROOT / ".github" / "workflows" / "validate.yml")
+        browser_test = read(ROOT / "scripts" / "tests" / "landing-layout.spec.cjs")
+
+        package = json.loads(read(ROOT / "package.json"))
+
+        self.assertEqual("1.55.1", package["devDependencies"]["@playwright/test"])
+        self.assertIn("npm ci", workflow)
+        self.assertIn("npx playwright install --with-deps chromium", workflow)
+        self.assertIn("npm run test:landing-layout", workflow)
+        self.assertIn(
+            "landing-layout.spec.cjs",
+            package["scripts"]["test:landing-layout"],
+        )
+        for width in (320, 390, 768, 901, 1024, 1280, 1440):
+            with self.subTest(width=width):
+                self.assertIn(f"width: {width}", browser_test)
+        self.assertIn("document.documentElement.scrollWidth", browser_test)
+        self.assertIn("callToActionInsideHero", browser_test)
+        self.assertIn("callToActionOverlapsTitle", browser_test)
+        self.assertIn('"Campaign Display"', browser_test)
+        self.assertIn('"Geist Sans"', browser_test)
 
     def test_landing_json_ld_uses_supported_source_truth(self):
         landing = read(SITE / "index.html")
         nodes = graph_nodes(json_ld_documents(landing))
         by_type = {node["@type"]: node for node in nodes}
 
-        self.assertEqual({"WebSite", "SoftwareSourceCode", "FAQPage"}, set(by_type))
+        self.assertEqual({"WebSite", "SoftwareSourceCode"}, set(by_type))
         software = by_type["SoftwareSourceCode"]
         self.assertEqual("App Store Review Skill", software["name"])
         self.assertEqual("1.2.2", software["version"])
@@ -135,13 +352,6 @@ class PagesSiteTests(unittest.TestCase):
         serialized = json.dumps(nodes)
         self.assertNotIn("aggregateRating", serialized)
         self.assertNotIn('"review"', serialized)
-
-        visible_text = re.sub(r"<[^>]+>", " ", landing)
-        visible_text = re.sub(r"\s+", " ", visible_text)
-        for item in by_type["FAQPage"]["mainEntity"]:
-            with self.subTest(question=item["name"]):
-                self.assertIn(item["name"], visible_text)
-                self.assertIn(item["acceptedAnswer"]["text"], visible_text)
 
     def test_ai_built_app_guide_states_apple_policy_without_inventing_a_ban(self):
         guide_path = SITE / GUIDE_PATH / "index.html"
@@ -194,19 +404,74 @@ class PagesSiteTests(unittest.TestCase):
         self.assertEqual((1440, 760), png_dimensions(README_HERO))
         self.assertIn("assets/review-gate-hero.png", readme)
 
-        self.assertTrue(CINEMATIC_ART.is_file(), "cinematic review-gate art is missing")
-        cinematic_width, cinematic_height = png_dimensions(CINEMATIC_ART)
-        self.assertGreaterEqual(cinematic_width, 1536)
-        self.assertGreaterEqual(cinematic_height, 1024)
-        self.assertIn(
-            'src="/app-store-review-skill/assets/review-gate-cinematic.png"',
-            landing,
+        self.assertTrue(CINEMATIC_ART.is_file(), "source cinematic gate art is missing")
+        self.assertEqual((1536, 1024), png_dimensions(CINEMATIC_ART))
+
+        for asset, signature, maximum_bytes in RESPONSIVE_GATE_ART:
+            with self.subTest(asset=asset.name):
+                self.assertTrue(asset.is_file(), f"{asset.name} is missing")
+                assert_asset_signature(self, asset, signature)
+                self.assertLessEqual(asset.stat().st_size, maximum_bytes)
+
+        for font, maximum_bytes in (
+            (CAMPAIGN_FONT, 60_000),
+            (BODY_FONT, 100_000),
+        ):
+            with self.subTest(font=font.name):
+                self.assertTrue(font.is_file(), f"{font.name} is missing")
+                self.assertEqual(b"wOF2", font.read_bytes()[:4])
+                self.assertLessEqual(font.stat().st_size, maximum_bytes)
+                self.assertIn(
+                    f'href="/app-store-review-skill/assets/fonts/{font.name}"',
+                    landing,
+                )
+        for license_path in (BARLOW_LICENSE, GEIST_LICENSE):
+            with self.subTest(license=license_path.name):
+                self.assertTrue(
+                    license_path.is_file(),
+                    f"{license_path.name} is missing",
+                )
+                if license_path.is_file():
+                    self.assertIn(
+                        "SIL OPEN FONT LICENSE Version 1.1",
+                        read(license_path),
+                    )
+        provenance = read(FONT_PROVENANCE)
+        self.assertIn("google/fonts", provenance)
+        self.assertIn("barlowcondensed", provenance)
+        self.assertIn("vercel/geist-font", provenance)
+        self.assertIn("v1.7.1", provenance)
+        self.assertIn("fonts.gstatic.com/s/barlowcondensed/v13/", provenance)
+        self.assertIn("8b8b75fa63e339db10a3cd52fb28536615b5cc63", provenance)
+        self.assertIn("curl -L --fail", provenance)
+        self.assertIn("shasum -a 256 -c", provenance)
+        self.assertNotIn(
+            "exact commands and output budgets are recorded",
+            provenance.lower(),
+        )
+        self.assertIn("superseded", read(IMPLEMENTATION_PLAN).lower())
+        self.assertFalse(
+            (SITE / "assets" / "fonts" / "Hubot-Sans-display.woff2").exists(),
+            "retired Hubot Sans should not ship",
         )
         self.assertNotIn("38 CHECKS", landing)
 
         self.assertTrue(SOCIAL_CARD.is_file(), "social preview card is missing")
         self.assertEqual((1200, 630), png_dimensions(SOCIAL_CARD))
         self.assertIn(SOCIAL_CARD_WEB_PATH, landing)
+        self.assertTrue(SOCIAL_CARD_SOURCE.is_file(), "social-card source is missing")
+        social_source = read(SOCIAL_CARD_SOURCE)
+        self.assertNotIn("Hubot Sans", social_source)
+        self.assertIn("BarlowCondensed-BlackItalic.woff2", social_source)
+        self.assertIn("Geist-Variable.woff2", social_source)
+        self.assertIn("Find the risk", social_source)
+        self.assertIn("before review.", social_source)
+        self.assertIn("Camera flow has no purpose string", social_source)
+        self.assertIn("NOT READY", social_source)
+        self.assertNotIn("97%", social_source)
+        self.assertNotIn("99%", social_source)
+        self.assertNotIn("Apple logo", social_source)
+        self.assertLessEqual(SOCIAL_CARD.stat().st_size, 650_000)
 
         self.assertTrue(SITE_MARK.is_file(), "review-gate site mark is missing")
         mark_root = ET.parse(SITE_MARK).getroot()
@@ -227,19 +492,88 @@ class PagesSiteTests(unittest.TestCase):
 
     def test_review_gate_motion_and_accessibility_contract(self):
         landing = read(SITE / "index.html")
-        css = read(SITE / "styles.css")
 
-        self.assertIn('class="review-gate"', landing)
-        self.assertRegex(landing, r'class="review-gate"[^>]+aria-label="[^"]+"')
-        self.assertIn('class="gate-visual" aria-hidden="true"', landing)
-        for section_id in ("modes", "report", "install", "faq"):
+        self.assertIn('class="campaign-art" aria-hidden="true"', landing)
+        self.assertIn('class="campaign-scrim" aria-hidden="true"', landing)
+        hero_section = landing.partition('<section class="campaign-hero"')[2].partition(
+            "</section>"
+        )[0]
+        self.assertNotRegex(hero_section, r"<(?:article|aside)(?:\s|>)")
+        self.assertIn('aria-live="polite"', landing)
+        self.assertIn('href="#install"', landing)
+        for section_id in (
+            "report",
+            "method",
+            "install",
+        ):
             with self.subTest(section_id=section_id):
                 self.assertIn(f'id="{section_id}"', landing)
 
-        self.assertNotIn("transition: all", css)
-        self.assertIn("@media (prefers-reduced-motion: reduce)", css)
-        self.assertIn("@media (prefers-reduced-transparency: reduce)", css)
-        self.assertIn("@media (prefers-contrast: more)", css)
+        shared_css = read(SITE / "styles.css")
+        home_css = read(HOME_CSS)
+
+        self.assertIn('href="/app-store-review-skill/home.css"', landing)
+        self.assertIn("@font-face", home_css)
+        self.assertIn('font-family: "Campaign Display"', home_css)
+        self.assertIn('font-family: "Geist Sans"', home_css)
+        self.assertNotIn("Hubot Sans", home_css)
+        self.assertIn("@media (max-width: 1279px)", home_css)
+        self.assertIn("@media (max-width: 767px)", home_css)
+        self.assertIn("@media (prefers-reduced-motion: reduce)", home_css)
+        self.assertIn("@media (prefers-reduced-transparency: reduce)", home_css)
+        self.assertIn("@media (prefers-contrast: more)", home_css)
+        self.assertIn("@media (forced-colors: active)", home_css)
+        self.assertRegex(
+            shared_css,
+            r"(?s)\.brand\s*\{[^}]*min-width: 44px;[^}]*min-height: 44px;",
+        )
+        self.assertNotIn("transition: all", shared_css + home_css)
+        self.assertNotIn("backdrop-filter", home_css)
+        self.assertRegex(
+            home_css,
+            r"(?s)@media \(max-width: 380px\).*?\.command-dock code\s*\{[^}]*overflow-wrap:\s*anywhere;[^}]*white-space:\s*normal;",
+        )
+        self.assertIn(".command-dock code:focus-visible", home_css)
+        self.assertNotIn(".hero-proof", home_css)
+        self.assertIn(".article-shell", shared_css)
+        self.assertNotIn(".hero-surface", shared_css)
+
+        site_js = read(SITE / "site.js")
+        self.assertIn('document.documentElement.classList.add("has-js")', landing)
+        self.assertRegex(
+            home_css,
+            r"(?s)\.home-page \.copy-button\s*\{[^}]*display:\s*none;",
+        )
+        self.assertRegex(
+            home_css,
+            r"(?s)\.has-js \.home-page \.copy-button\s*\{[^}]*display:\s*inline-flex;",
+        )
+        self.assertIn("@keyframes campaign-enter", home_css)
+        self.assertNotIn("@keyframes verdict-enter", home_css)
+        self.assertNotIn("infinite", home_css)
+        self.assertIn('data-copy-status="install-copy-status"', landing)
+        self.assertIn('status.textContent = "Install command copied."', site_js)
+        self.assertIn(
+            'status.textContent = "Command selected. Press Command-C or Control-C."',
+            site_js,
+        )
+        self.assertNotIn("setInterval", site_js)
+        self.assertNotIn('addEventListener("scroll"', site_js)
+
+    def test_landing_critical_resources_stay_within_budget(self):
+        critical = (
+            SITE / "index.html",
+            SITE / "styles.css",
+            SITE / "home.css",
+            SITE / "site.js",
+        )
+        self.assertLessEqual(sum(gzip_size(path) for path in critical), 120_000)
+        self.assertLessEqual((SITE / "site.js").stat().st_size, 12_000)
+        report_image = ROOT / "assets" / "visual-report-example.png"
+        mobile_gate = SITE / "assets" / "review-gate-cinematic-768.avif"
+        desktop_gate = SITE / "assets" / "review-gate-cinematic-1440.avif"
+        self.assertLessEqual(mobile_gate.stat().st_size + report_image.stat().st_size, 450_000)
+        self.assertLessEqual(desktop_gate.stat().st_size + report_image.stat().st_size, 900_000)
 
     def test_crawl_and_llm_discovery_files_use_canonical_urls(self):
         robots = read(SITE / "robots.txt")
