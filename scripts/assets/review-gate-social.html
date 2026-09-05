@@ -5,10 +5,17 @@
   <meta name="viewport" content="width=1200, initial-scale=1">
   <style>
     @font-face {
-      font-family: "Hubot Sans";
-      src: url("../../site/assets/fonts/Hubot-Sans-display.woff2") format("woff2-variations");
-      font-weight: 200 900;
-      font-stretch: 75% 125%;
+      font-family: "Campaign Display";
+      src: url("../../site/assets/fonts/BarlowCondensed-BlackItalic.woff2") format("woff2");
+      font-style: italic;
+      font-weight: 900;
+    }
+
+    @font-face {
+      font-family: "Geist Sans";
+      src: url("../../site/assets/fonts/Geist-Variable.woff2") format("woff2-variations");
+      font-style: normal;
+      font-weight: 100 900;
     }
 
     * { box-sizing: border-box; }
@@ -25,7 +32,7 @@
       position: relative;
       background: #070a10;
       color: #fff;
-      font-family: Arial, sans-serif;
+      font-family: "Geist Sans", Arial, sans-serif;
     }
 
     body::before {
@@ -73,11 +80,13 @@
       top: 142px;
       left: 56px;
       margin: 0;
-      font-family: "Hubot Sans", sans-serif;
+      font-family: "Campaign Display", "Arial Narrow", sans-serif;
       font-size: 82px;
-      font-weight: 850;
-      letter-spacing: -0.04em;
+      font-style: italic;
+      font-weight: 900;
+      letter-spacing: -0.035em;
       line-height: 0.82;
+      text-transform: uppercase;
     }
 
     h1 span {
@@ -85,8 +94,7 @@
       white-space: nowrap;
     }
 
-    h1 span:first-child { font-stretch: 78%; }
-    h1 span:last-child { font-stretch: 112%; }
+    h1 span:last-child { color: #ff2748; }
 
     .report {
       position: absolute;
@@ -147,7 +155,7 @@
 <body>
   <img class="machine" src="../../site/assets/review-gate-cinematic-1440.webp" alt="">
   <div class="wordmark">APP STORE REVIEW SKILL</div>
-  <h1><span>Find the risk.</span><span>Prove the fix.</span></h1>
+  <h1><span>Find the risk</span><span>before review.</span></h1>
   <p class="tagline">A read-only preflight for Codex and Claude Code.</p>
   <article class="report">
     <div class="report-meta"><span>ParcelTrack</span><span>Sample report</span></div>

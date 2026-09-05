@@ -1,5 +1,7 @@
 # From Alarm to Evidence Landing Page Implementation Plan
 
+> **Status note (2026-09-05):** The landing-page composition and typography in this plan were superseded after visual review by the campaign-poster refactor in `site/index.html` and `site/home.css`. `site/assets/fonts/README.md` is the canonical, reproducible record for the fonts that now ship. The product-truth, accessibility, route, and publication gates below remain active; this document is retained as the historical implementation plan for the previous composition.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Recompose the App Store Review Skill landing page so an ad visitor moves from rejection anxiety to a credible, report-backed install action in the first viewport.

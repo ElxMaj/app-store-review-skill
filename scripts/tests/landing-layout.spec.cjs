@@ -17,6 +17,11 @@ const VIEWPORTS = [
   { width: 1440, height: 900 },
 ];
 
+const FONT_FAILURE_VIEWPORTS = [
+  { width: 320, height: 568 },
+  { width: 390, height: 844 },
+];
+
 const MIME_TYPES = {
   ".avif": "image/avif",
   ".css": "text/css; charset=utf-8",
@@ -103,6 +108,11 @@ for (const viewport of VIEWPORTS) {
     expect(response.status()).toBe(200);
     await page.evaluate(() => document.fonts.ready);
 
+    await expect(page.locator(".campaign-hero")).toHaveCount(1);
+    await expect(page.locator(".campaign-title")).toHaveCount(1);
+    await expect(page.locator(".verdict-object")).toHaveCount(1);
+    await expect(page.locator(".report-stage")).toHaveCount(1);
+
     const geometry = await page.evaluate(() => {
       const rect = (selector) => {
         const bounds = document.querySelector(selector).getBoundingClientRect();
@@ -119,10 +129,21 @@ for (const viewport of VIEWPORTS) {
         Math.min(first.right, second.right) - Math.max(first.left, second.left) > 1 &&
         Math.min(first.bottom, second.bottom) - Math.max(first.top, second.top) > 1;
 
-      const hero = rect(".hero");
-      const copy = rect(".hero-copy");
+      const hero = rect(".campaign-hero");
+      const title = rect(".campaign-title");
       const callToAction = rect(".button-primary");
-      const report = rect(".hero-report-sheet");
+      const verdict = rect(".verdict-object");
+      const art = rect(".campaign-art");
+      const reportImage = document.querySelector(".report-artifact img");
+      const heroBackground = getComputedStyle(document.querySelector(".campaign-hero")).backgroundColor;
+      const reportBackground = getComputedStyle(document.querySelector(".report-stage")).backgroundColor;
+      const titleVisualLineCount = Array.from(
+        document.querySelectorAll(".campaign-title > span"),
+      ).reduce((count, span) => {
+        const range = document.createRange();
+        range.selectNodeContents(span);
+        return count + range.getClientRects().length;
+      }, 0);
 
       return {
         overflow: Math.max(
@@ -130,13 +151,21 @@ for (const viewport of VIEWPORTS) {
           document.body.scrollWidth,
         ) - window.innerWidth,
         callToAction,
-        report,
-        reportInsideHero:
-          report.top >= hero.top - 1 &&
-          report.right <= hero.right + 1 &&
-          report.bottom <= hero.bottom + 1 &&
-          report.left >= hero.left - 1,
-        reportOverlapsCopy: overlaps(report, copy),
+        verdict,
+        verdictInsideHero:
+          verdict.top >= hero.top - 1 &&
+          verdict.right <= hero.right + 1 &&
+          verdict.bottom <= hero.bottom + 1 &&
+          verdict.left >= hero.left - 1,
+        verdictOverlapsTitle: overlaps(verdict, title),
+        artCoversHero:
+          art.width >= hero.width - 1 && art.height >= hero.height - 1,
+        titleLineCount: document.querySelectorAll(".campaign-title > span").length,
+        titleVisualLineCount,
+        titleFont: getComputedStyle(document.querySelector(".campaign-title")).fontFamily,
+        bodyFont: getComputedStyle(document.body).fontFamily,
+        themeSwitchIsVisible: heroBackground !== reportBackground,
+        reportImageLoaded: reportImage.complete && reportImage.naturalWidth > 0,
       };
     });
 
@@ -144,9 +173,88 @@ for (const viewport of VIEWPORTS) {
     expect(geometry.overflow).toBeLessThanOrEqual(1);
     expect(geometry.callToAction.top).toBeGreaterThanOrEqual(0);
     expect(geometry.callToAction.bottom).toBeLessThanOrEqual(viewport.height + 1);
-    expect(geometry.report.width).toBeGreaterThan(0);
-    expect(geometry.report.height).toBeGreaterThan(0);
-    expect(geometry.reportInsideHero).toBe(true);
-    expect(geometry.reportOverlapsCopy).toBe(false);
+    expect(geometry.verdict.width).toBeGreaterThan(0);
+    expect(geometry.verdict.height).toBeGreaterThan(0);
+    expect(geometry.verdictInsideHero).toBe(true);
+    expect(geometry.verdictOverlapsTitle).toBe(false);
+    expect(geometry.artCoversHero).toBe(true);
+    expect(geometry.titleLineCount).toBe(2);
+    expect(geometry.titleVisualLineCount).toBe(2);
+    expect(geometry.titleFont).toContain("Campaign Display");
+    expect(geometry.bodyFont).toContain("Geist Sans");
+    expect(geometry.themeSwitchIsVisible).toBe(true);
+    expect(geometry.reportImageLoaded).toBe(true);
+  });
+}
+
+for (const viewport of FONT_FAILURE_VIEWPORTS) {
+  test(`hero stays usable without webfonts at ${viewport.width}px`, async ({ page }) => {
+    let blockedFontRequests = 0;
+    await page.route("**/*.woff2", (route) => {
+      blockedFontRequests += 1;
+      return route.abort("failed");
+    });
+    await page.setViewportSize(viewport);
+    await page.emulateMedia({ reducedMotion: "reduce" });
+
+    const response = await page.goto(landingUrl, { waitUntil: "networkidle" });
+    expect(response.status()).toBe(200);
+    await page.evaluate(() => document.fonts.ready);
+
+    const geometry = await page.evaluate(() => {
+      const bounds = (element) => {
+        const box = element.getBoundingClientRect();
+        return {
+          top: box.top,
+          right: box.right,
+          bottom: box.bottom,
+          left: box.left,
+        };
+      };
+      const textBounds = (element) => {
+        const range = document.createRange();
+        range.selectNodeContents(element);
+        const box = range.getBoundingClientRect();
+        return {
+          top: box.top,
+          right: box.right,
+          bottom: box.bottom,
+          left: box.left,
+        };
+      };
+      const overlaps = (first, second) =>
+        Math.min(first.right, second.right) - Math.max(first.left, second.left) > 1 &&
+        Math.min(first.bottom, second.bottom) - Math.max(first.top, second.top) > 1;
+
+      const hero = bounds(document.querySelector(".campaign-hero"));
+      const title = bounds(document.querySelector(".campaign-title"));
+      const callToAction = bounds(document.querySelector(".button-primary"));
+      const verdict = bounds(document.querySelector(".verdict-object"));
+      const titleLines = Array.from(
+        document.querySelectorAll(".campaign-title > span"),
+        textBounds,
+      );
+
+      return {
+        overflow: Math.max(
+          document.documentElement.scrollWidth,
+          document.body.scrollWidth,
+        ) - window.innerWidth,
+        titleFitsHero: titleLines.every(
+          (line) => line.left >= hero.left - 1 && line.right <= hero.right + 1,
+        ),
+        titleOverlapsVerdict: overlaps(title, verdict),
+        callToActionOverlapsVerdict: overlaps(callToAction, verdict),
+        callToActionVisible:
+          callToAction.top >= 0 && callToAction.bottom <= window.innerHeight + 1,
+      };
+    });
+
+    expect(blockedFontRequests).toBeGreaterThan(0);
+    expect(geometry.overflow).toBeLessThanOrEqual(1);
+    expect(geometry.titleFitsHero).toBe(true);
+    expect(geometry.titleOverlapsVerdict).toBe(false);
+    expect(geometry.callToActionOverlapsVerdict).toBe(false);
+    expect(geometry.callToActionVisible).toBe(true);
   });
 }

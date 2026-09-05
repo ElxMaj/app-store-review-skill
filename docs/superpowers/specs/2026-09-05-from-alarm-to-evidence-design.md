@@ -1,5 +1,7 @@
 # From Alarm to Evidence landing-page design
 
+> **Status note (2026-09-05):** The original dark evidence-gate composition was superseded after visual review by the campaign-poster implementation in `site/index.html` and `site/home.css`. Its product-truth, accessibility, route, and publication constraints still apply. Shipped font provenance lives in `site/assets/fonts/README.md`.
+
 **Date:** 2026-09-05
 
 **Status:** Concept approved; written specification awaiting review

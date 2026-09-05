@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>App Store Review Skill: Find the risk. Prove the fix.</title>
+  <title>App Store Review Skill: Find the risk before review.</title>
   <meta name="description" content="Run a read-only App Store review preflight in Codex or Claude Code. Trace iOS submission risks to project evidence, published guidance, and verification steps.">
   <meta name="robots" content="index,follow">
   <meta name="theme-color" content="#070a10">
@@ -12,7 +12,7 @@
   <link rel="sitemap" type="application/xml" href="/app-store-review-skill/sitemap.xml">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="App Store Review Skill">
-  <meta property="og:title" content="Find the risk. Prove the fix.">
+  <meta property="og:title" content="Find the risk before review.">
   <meta property="og:description" content="A read-only App Store review preflight for Codex and Claude Code.">
   <meta property="og:url" content="https://elxmaj.github.io/app-store-review-skill/">
   <meta property="og:image" content="https://elxmaj.github.io/app-store-review-skill/assets/review-gate-social.png">
@@ -20,11 +20,12 @@
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="App Store Review Skill evidence crossing a red review gate into a ParcelTrack report marked Not Ready">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Find the risk. Prove the fix.">
+  <meta name="twitter:title" content="Find the risk before review.">
   <meta name="twitter:description" content="A read-only App Store review preflight for Codex and Claude Code.">
   <meta name="twitter:image" content="https://elxmaj.github.io/app-store-review-skill/assets/review-gate-social.png">
   <meta name="twitter:image:alt" content="App Store Review Skill evidence crossing a red review gate into a ParcelTrack report marked Not Ready">
-  <link rel="preload" href="/app-store-review-skill/assets/fonts/Hubot-Sans-display.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/app-store-review-skill/assets/fonts/BarlowCondensed-BlackItalic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/app-store-review-skill/assets/fonts/Geist-Variable.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/app-store-review-skill/styles.css">
   <link rel="stylesheet" href="/app-store-review-skill/home.css">
   <script>document.documentElement.classList.add("has-js");</script>
@@ -78,78 +79,73 @@
   </header>
 
   <main id="main">
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="hero-copy">
-        <h1 id="hero-title">
-          <span class="headline-risk">Find the risk.</span>
-          <span class="headline-proof">Prove the fix.</span>
-        </h1>
-        <p class="hero-lede">Catch App Store review blockers before you submit.</p>
-        <div class="hero-actions">
-          <a class="button button-primary" href="#install">Run the preflight</a>
-        </div>
-      </div>
-
-      <div class="gate-sequence" data-gate-sequence>
-        <picture class="gate-machine" aria-hidden="true">
+    <section class="campaign-hero" aria-labelledby="hero-title">
+      <picture class="campaign-art" aria-hidden="true">
           <source media="(max-width: 767px)" type="image/avif" srcset="/app-store-review-skill/assets/review-gate-cinematic-768.avif">
           <source media="(max-width: 767px)" type="image/webp" srcset="/app-store-review-skill/assets/review-gate-cinematic-768.webp">
           <source type="image/avif" srcset="/app-store-review-skill/assets/review-gate-cinematic-1440.avif">
           <source type="image/webp" srcset="/app-store-review-skill/assets/review-gate-cinematic-1440.webp">
           <img src="/app-store-review-skill/assets/review-gate-cinematic.png" width="1536" height="1024" alt="" fetchpriority="high">
-        </picture>
-        <span class="gate-wash" aria-hidden="true"></span>
-        <span class="gate-floor" aria-hidden="true"></span>
-        <article class="hero-report-sheet" aria-label="Sample release verdict">
-          <strong>NOT READY</strong>
-          <p>Camera permission text missing</p>
-          <code>app.json:18</code>
-        </article>
+      </picture>
+      <span class="campaign-scrim" aria-hidden="true"></span>
+
+      <div class="campaign-copy">
+        <p class="campaign-kicker">App Store review preflight</p>
+        <h1 class="campaign-title" id="hero-title">
+          <span>Find the risk</span>
+          <span>before review.</span>
+        </h1>
+        <p class="campaign-lede">Catch App Store blockers in your repo before you submit.</p>
+        <a class="button button-primary" href="#install">Run the preflight</a>
       </div>
+
+      <article class="verdict-object" aria-label="Sample release verdict">
+        <strong>NOT READY</strong>
+        <p>Camera permission text missing</p>
+        <code>app.json:18</code>
+      </article>
     </section>
 
-    <section class="report-proof" id="report" aria-labelledby="report-title">
-      <div class="report-proof-copy">
-        <h2 id="report-title">See the blocker. Trace the fix.</h2>
-        <p>A decision-first report points to the file, rule, and verification step.</p>
+    <section class="report-stage" id="report" aria-labelledby="report-title">
+      <div class="report-intro">
+        <h2 id="report-title">The blocker comes with an address.</h2>
+        <p>The report points to the file, rule, and verification step.</p>
         <a class="text-link" href="/app-store-review-skill/report/">Open the sample report <span aria-hidden="true">↗</span></a>
       </div>
-      <figure class="report-figure">
+      <figure class="report-artifact">
         <img src="/app-store-review-skill/assets/visual-report-example.png" width="1440" height="1500" loading="lazy" decoding="async" alt="ParcelTrack sample review report marked Not Ready with one blocker and three manual checks">
         <figcaption>Fictional ParcelTrack sample. No private project data.</figcaption>
       </figure>
     </section>
 
-    <section class="method" id="method" aria-labelledby="method-title">
-      <div class="section-intro">
-        <h2 id="method-title">Each finding points to evidence.</h2>
-      </div>
-      <ol class="decision-path">
+    <section class="evidence-stage" id="method" aria-labelledby="method-title">
+      <h2 id="method-title">Risk. Source. Proof.</h2>
+      <p class="evidence-lede">Every finding says what can block review, where it lives, and how to close it.</p>
+      <ol class="evidence-rail">
         <li><strong>Risk</strong><p>What can block review.</p></li>
         <li><strong>Source</strong><p>The exact file and rule.</p></li>
         <li><strong>Proof</strong><p>The check that closes it.</p></li>
       </ol>
-      <a class="text-link" href="https://github.com/ElxMaj/app-store-review-skill/blob/main/SKILL.md">Read the review contract <span aria-hidden="true">↗</span></a>
+      <a class="text-link evidence-link" href="https://github.com/ElxMaj/app-store-review-skill/blob/main/SKILL.md">Read the review contract <span aria-hidden="true">↗</span></a>
     </section>
 
-    <section class="install" id="install" aria-labelledby="install-title">
-      <div class="install-copy">
+    <section class="install-stage" id="install" aria-labelledby="install-title">
+      <div class="install-intro">
         <h2 id="install-title">Run it before you submit.</h2>
         <p>Works in Codex and Claude Code. The first pass is read-only.</p>
       </div>
-      <div class="install-primary">
+      <div class="install-action">
         <div class="command-dock command-dock-light" role="group" aria-label="Recommended install command">
           <code id="install-command" tabindex="0">npx skills add ElxMaj/app-store-review-skill</code>
           <button class="copy-button" type="button" data-copy-target="install-command" data-copy-status="install-copy-status" aria-label="Copy recommended install command"><span aria-hidden="true">Copy</span></button>
           <span class="sr-only" id="install-copy-status" aria-live="polite"></span>
         </div>
-        <blockquote>Audit this iOS app before submission. Report first. Do not edit files.</blockquote>
         <a class="install-guide-link" href="https://github.com/ElxMaj/app-store-review-skill/blob/main/INSTALL.md">Other install methods <span aria-hidden="true">↗</span></a>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer site-footer-dark">
+  <footer class="site-footer site-footer-light">
     <p><strong>App Store Review Skill</strong><br>By <a href="https://github.com/ElxMaj">Elie Majorel</a> for <a href="https://tessl.io/registry/maj-labs">Maj Labs</a>.</p>
     <nav aria-label="Footer navigation">
       <a href="/app-store-review-skill/guides/will-apple-reject-ai-built-apps/">AI-built app guide</a>
