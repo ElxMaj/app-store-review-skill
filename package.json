@@ -5,6 +5,6 @@
     "test:landing-layout": "playwright test scripts/tests/landing-layout.spec.cjs --reporter=line --output=/tmp/landing-layout-results"
   },
   "devDependencies": {
-    "@playwright/test": "1.55.0"
+    "@playwright/test": "1.55.1"
   }
 }

@@ -299,7 +299,7 @@ class PagesSiteTests(unittest.TestCase):
 
         package = json.loads(read(ROOT / "package.json"))
 
-        self.assertEqual("1.55.0", package["devDependencies"]["@playwright/test"])
+        self.assertEqual("1.55.1", package["devDependencies"]["@playwright/test"])
         self.assertIn("npm ci", workflow)
         self.assertIn("npx playwright install --with-deps chromium", workflow)
         self.assertIn("npm run test:landing-layout", workflow)
