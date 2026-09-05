@@ -1101,7 +1101,7 @@
     top: auto;
     bottom: 70px;
     left: 4%;
-    transform: scale(0.7);
+    scale: 0.7;
     transform-origin: left bottom;
   }
 
@@ -1272,6 +1272,61 @@
 
   .gate-sequence {
     height: 286px;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .has-js .evidence-packet {
+    animation: evidence-enter 1100ms var(--ease-out) 180ms both;
+  }
+
+  .has-js .gate-aperture i {
+    animation: gate-scan 760ms var(--ease-out) 520ms both;
+  }
+
+  .has-js .hero-report-sheet {
+    animation: report-resolve 980ms var(--ease-out) 620ms both;
+  }
+}
+
+@keyframes evidence-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(-72px, 0, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes gate-scan {
+  0% {
+    opacity: 0;
+    transform: scaleY(0.2) translateY(-70%);
+  }
+
+  35%,
+  75% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.72;
+    transform: scaleY(1) translateY(70%);
+  }
+}
+
+@keyframes report-resolve {
+  from {
+    opacity: 0;
+    transform: translate3d(56px, 8px, 0) rotate(1.8deg);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotate(-0.6deg);
   }
 }
 

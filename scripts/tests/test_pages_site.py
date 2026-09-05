@@ -342,6 +342,23 @@ class PagesSiteTests(unittest.TestCase):
         self.assertIn(".article-shell", shared_css)
         self.assertNotIn(".hero-surface", shared_css)
 
+        site_js = read(SITE / "site.js")
+        self.assertIn('document.documentElement.classList.add("has-js")', landing)
+        self.assertIn("@keyframes evidence-enter", home_css)
+        self.assertIn("@keyframes gate-scan", home_css)
+        self.assertIn("@keyframes report-resolve", home_css)
+        self.assertNotIn("infinite", home_css)
+        self.assertIn('data-copy-status="hero-copy-status"', landing)
+        self.assertIn('data-copy-status="install-copy-status"', landing)
+        self.assertIn('data-copy-status="close-copy-status"', landing)
+        self.assertIn('status.textContent = "Install command copied."', site_js)
+        self.assertIn(
+            'status.textContent = "Command selected. Press Command-C or Control-C."',
+            site_js,
+        )
+        self.assertNotIn("setInterval", site_js)
+        self.assertNotIn('addEventListener("scroll"', site_js)
+
     def test_landing_critical_resources_stay_within_budget(self):
         critical = (
             SITE / "index.html",

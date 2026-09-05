@@ -23,8 +23,9 @@
   document.querySelectorAll("[data-copy-target]").forEach((button) => {
     button.addEventListener("click", async () => {
       const target = document.getElementById(button.dataset.copyTarget);
+      const status = document.getElementById(button.dataset.copyStatus);
       const label = button.querySelector("span");
-      if (!target || !label || button.disabled) return;
+      if (!target || !status || !label || button.disabled) return;
 
       const originalLabel = label.textContent;
       button.disabled = true;
@@ -32,21 +33,24 @@
       try {
         await copyText(target.textContent.trim());
         label.textContent = "Copied";
+        status.textContent = "Install command copied.";
         button.classList.add("is-copied");
       } catch {
-        label.textContent = "Select";
         const selection = window.getSelection();
         const range = document.createRange();
         range.selectNodeContents(target);
         selection.removeAllRanges();
         selection.addRange(range);
+        label.textContent = "Selected";
+        status.textContent = "Command selected. Press Command-C or Control-C.";
       }
 
       window.setTimeout(() => {
         label.textContent = originalLabel;
+        status.textContent = "";
         button.classList.remove("is-copied");
         button.disabled = false;
-      }, 1600);
+      }, 1800);
     });
   });
 })();
