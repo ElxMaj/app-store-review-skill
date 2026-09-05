@@ -143,6 +143,7 @@ for (const viewport of VIEWPORTS) {
       const heroBackground = getComputedStyle(document.querySelector(".campaign-hero")).backgroundColor;
       const reportBackground = getComputedStyle(document.querySelector(".report-stage")).backgroundColor;
       const titleStyles = getComputedStyle(document.querySelector(".campaign-title"));
+      const callToActionStyles = getComputedStyle(document.querySelector(".button-primary"));
       const titleVisualLineCount = Array.from(
         document.querySelectorAll(".campaign-title > span"),
       ).reduce((count, span) => {
@@ -157,6 +158,8 @@ for (const viewport of VIEWPORTS) {
           document.body.scrollWidth,
         ) - window.innerWidth,
         callToAction,
+        callToActionBackground: callToActionStyles.backgroundColor,
+        callToActionColor: callToActionStyles.color,
         callToActionInsideHero:
           callToAction.top >= hero.top - 1 &&
           callToAction.right <= hero.right + 1 &&
@@ -188,6 +191,8 @@ for (const viewport of VIEWPORTS) {
     expect(geometry.overflow).toBeLessThanOrEqual(1);
     expect(geometry.callToAction.top).toBeGreaterThanOrEqual(0);
     expect(geometry.callToAction.bottom).toBeLessThanOrEqual(viewport.height + 1);
+    expect(geometry.callToActionBackground).toBe("rgb(247, 248, 246)");
+    expect(geometry.callToActionColor).toBe("rgb(16, 21, 30)");
     expect(geometry.callToActionInsideHero).toBe(true);
     expect(geometry.callToActionOverlapsTitle).toBe(false);
     expect(geometry.heroStartsAtViewportTop).toBe(true);

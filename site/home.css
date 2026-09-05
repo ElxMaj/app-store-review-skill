@@ -175,11 +175,11 @@
   min-height: 54px;
   margin-top: clamp(23px, 3vh, 32px);
   padding-inline: 22px;
-  border: 1px solid #3c94ff;
+  border: 1px solid var(--campaign-white);
   border-radius: 0;
-  background: var(--campaign-blue);
+  background: var(--campaign-white);
   box-shadow: 7px 7px 0 rgb(0 25 62 / 72%);
-  color: var(--campaign-white);
+  color: var(--campaign-ink);
   transition:
     background-color 180ms var(--campaign-ease),
     box-shadow 180ms var(--campaign-ease),
@@ -464,7 +464,7 @@
 
 @media (hover: hover) and (pointer: fine) {
   .home-page .button-primary:hover {
-    background: #0875ff;
+    background: #fff;
     box-shadow: 4px 4px 0 rgb(0 25 62 / 72%);
     transform: translate(3px, 3px);
   }
