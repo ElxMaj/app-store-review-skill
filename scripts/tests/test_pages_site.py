@@ -31,6 +31,16 @@ SOCIAL_CARD = SITE / "assets" / SOCIAL_CARD_FILENAME
 README_HERO = ROOT / "assets" / "review-gate-hero.png"
 CINEMATIC_ART = SITE / "assets" / "review-gate-cinematic.png"
 SITE_MARK = SITE / "assets" / "review-gate-mark.svg"
+HOME_CSS = SITE / "home.css"
+HUBOT_FONT = SITE / "assets" / "fonts" / "Hubot-Sans-display.woff2"
+HUBOT_LICENSE = SITE / "assets" / "fonts" / "OFL.txt"
+HUBOT_PROVENANCE = SITE / "assets" / "fonts" / "README.md"
+RESPONSIVE_GATE_ART = (
+    (SITE / "assets" / "review-gate-cinematic-768.avif", b"ftypavif", 100_000),
+    (SITE / "assets" / "review-gate-cinematic-768.webp", b"WEBP", 120_000),
+    (SITE / "assets" / "review-gate-cinematic-1440.avif", b"ftypavif", 180_000),
+    (SITE / "assets" / "review-gate-cinematic-1440.webp", b"WEBP", 220_000),
+)
 
 
 def read(path: Path) -> str:
@@ -61,6 +71,17 @@ def png_dimensions(path: Path) -> tuple[int, int]:
     if len(data) != 24 or data[:8] != b"\x89PNG\r\n\x1a\n" or data[12:16] != b"IHDR":
         raise ValueError(f"{path} is not a valid PNG")
     return struct.unpack(">II", data[16:24])
+
+
+def assert_asset_signature(testcase, path: Path, signature: bytes) -> None:
+    data = path.read_bytes()[:16]
+    if signature == b"WEBP":
+        testcase.assertEqual(b"RIFF", data[:4])
+        testcase.assertEqual(b"WEBP", data[8:12])
+    elif signature == b"ftypavif":
+        testcase.assertIn(data[4:12], (b"ftypavif", b"ftypavis"))
+    else:
+        testcase.assertTrue(data.startswith(signature))
 
 
 class PagesSiteTests(unittest.TestCase):
@@ -194,14 +215,24 @@ class PagesSiteTests(unittest.TestCase):
         self.assertEqual((1440, 760), png_dimensions(README_HERO))
         self.assertIn("assets/review-gate-hero.png", readme)
 
-        self.assertTrue(CINEMATIC_ART.is_file(), "cinematic review-gate art is missing")
-        cinematic_width, cinematic_height = png_dimensions(CINEMATIC_ART)
-        self.assertGreaterEqual(cinematic_width, 1536)
-        self.assertGreaterEqual(cinematic_height, 1024)
-        self.assertIn(
-            'src="/app-store-review-skill/assets/review-gate-cinematic.png"',
-            landing,
-        )
+        self.assertTrue(CINEMATIC_ART.is_file(), "source cinematic gate art is missing")
+        self.assertEqual((1536, 1024), png_dimensions(CINEMATIC_ART))
+
+        for asset, signature, maximum_bytes in RESPONSIVE_GATE_ART:
+            with self.subTest(asset=asset.name):
+                self.assertTrue(asset.is_file(), f"{asset.name} is missing")
+                assert_asset_signature(self, asset, signature)
+                self.assertLessEqual(asset.stat().st_size, maximum_bytes)
+
+        self.assertTrue(HUBOT_FONT.is_file(), "Hubot Sans display subset is missing")
+        self.assertEqual(b"wOF2", HUBOT_FONT.read_bytes()[:4])
+        self.assertLessEqual(HUBOT_FONT.stat().st_size, 100_000)
+        self.assertIn("SIL OPEN FONT LICENSE Version 1.1", read(HUBOT_LICENSE))
+        provenance = read(HUBOT_PROVENANCE)
+        self.assertIn("github/hubot-sans", provenance)
+        self.assertIn("v1.0.1", provenance)
+        self.assertIn("fonttools[woff]==4.64.0", provenance)
+        self.assertIn("sharp-cli@5.2.0", provenance)
         self.assertNotIn("38 CHECKS", landing)
 
         self.assertTrue(SOCIAL_CARD.is_file(), "social preview card is missing")
