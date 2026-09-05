@@ -540,6 +540,14 @@ class PagesSiteTests(unittest.TestCase):
 
         site_js = read(SITE / "site.js")
         self.assertIn('document.documentElement.classList.add("has-js")', landing)
+        self.assertRegex(
+            home_css,
+            r"(?s)\.home-page \.copy-button\s*\{[^}]*display:\s*none;",
+        )
+        self.assertRegex(
+            home_css,
+            r"(?s)\.has-js \.home-page \.copy-button\s*\{[^}]*display:\s*inline-flex;",
+        )
         self.assertIn("@keyframes campaign-enter", home_css)
         self.assertNotIn("@keyframes verdict-enter", home_css)
         self.assertNotIn("infinite", home_css)

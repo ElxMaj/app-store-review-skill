@@ -73,6 +73,16 @@
   color: var(--campaign-white);
 }
 
+.home-page .copy-button {
+  display: none;
+}
+
+.has-js .home-page .copy-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .home-page .copy-button:disabled {
   cursor: wait;
   opacity: 0.82;

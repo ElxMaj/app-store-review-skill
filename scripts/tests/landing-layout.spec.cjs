@@ -217,6 +217,21 @@ for (const viewport of VIEWPORTS) {
   });
 }
 
+test("copy control is hidden when JavaScript is unavailable", async ({ browser }) => {
+  const context = await browser.newContext({
+    javaScriptEnabled: false,
+    viewport: { width: 390, height: 844 },
+  });
+  const page = await context.newPage();
+
+  const response = await page.goto(landingUrl, { waitUntil: "networkidle" });
+  expect(response.status()).toBe(200);
+  await expect(page.locator(".copy-button")).toBeHidden();
+  await expect(page.locator("#install-command")).toBeVisible();
+
+  await context.close();
+});
+
 for (const viewport of FONT_FAILURE_VIEWPORTS) {
   test(`hero stays usable without webfonts at ${viewport.width}px`, async ({ page }) => {
     let blockedFontRequests = 0;
