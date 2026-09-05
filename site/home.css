@@ -15,7 +15,7 @@
 }
 
 .home-page ::selection {
-  background: var(--evidence);
+  background: var(--evidence-deep);
   color: #fff;
 }
 
@@ -126,7 +126,7 @@
 }
 
 .home-page .button-primary {
-  background: var(--evidence);
+  background: var(--evidence-deep);
   color: #fff;
 }
 
@@ -187,8 +187,8 @@
 .hero-reassurance {
   max-width: 620px;
   margin: 12px 0 0;
-  color: rgb(248 247 243 / 46%);
-  font-size: 11px;
+  color: rgb(248 247 243 / 52%);
+  font-size: 12px;
 }
 
 .gate-sequence {
@@ -439,7 +439,7 @@
   margin: 18px 0 0;
   color: var(--quiet);
   font-family: ui-monospace, "SFMono-Regular", SFMono-Regular, Menlo, monospace;
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .report-figure {
@@ -469,7 +469,7 @@
   background: var(--ink);
   color: rgb(255 255 255 / 68%);
   font-family: ui-monospace, "SFMono-Regular", SFMono-Regular, Menlo, monospace;
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .report-figure figcaption span:first-child {
@@ -525,9 +525,9 @@
   border: 2px solid var(--evidence);
   border-radius: 50%;
   background: var(--paper);
-  color: var(--evidence);
+  color: var(--evidence-deep);
   font-family: ui-monospace, "SFMono-Regular", SFMono-Regular, Menlo, monospace;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 800;
 }
 
@@ -557,7 +557,7 @@
   gap: clamp(50px, 8vw, 120px);
   padding: clamp(70px, 9vw, 120px);
   overflow: hidden;
-  background: var(--evidence);
+  background: var(--evidence-deep);
   color: #fff;
 }
 
@@ -576,7 +576,7 @@
 }
 
 .install-copy > p {
-  color: rgb(255 255 255 / 76%);
+  color: #fff;
 }
 
 .install-primary {
@@ -613,7 +613,7 @@
   font-stretch: 94%;
   font-weight: 580;
   letter-spacing: -0.025em;
-  line-height: 1.25;
+  line-height: 1.3;
 }
 
 .alternate-installs {
@@ -674,9 +674,9 @@
 }
 
 .mode-path li > span {
-  color: var(--evidence);
+  color: var(--evidence-deep);
   font-family: ui-monospace, "SFMono-Regular", SFMono-Regular, Menlo, monospace;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 760;
 }
 
@@ -724,7 +724,7 @@
 .evaluation-record time {
   color: var(--quiet);
   font-family: ui-monospace, "SFMono-Regular", SFMono-Regular, Menlo, monospace;
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .evaluation-record strong {
@@ -837,7 +837,7 @@
 .closing-field > p {
   margin: 15px 0 0;
   color: rgb(255 255 255 / 48%);
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .home-page .site-footer-dark {
@@ -872,7 +872,7 @@
   }
 
   .evaluation-record:hover {
-    color: var(--evidence);
+    color: var(--evidence-deep);
   }
 }
 
@@ -1071,13 +1071,13 @@
     min-height: 44px;
     margin-right: 3px;
     padding: 5px;
-    font-size: 10px;
+    font-size: 12px;
   }
 
   .hero-reassurance {
     margin-top: 9px;
-    font-size: 10px;
-    line-height: 1.35;
+    font-size: 12px;
+    line-height: 1.45;
   }
 
   .gate-sequence {

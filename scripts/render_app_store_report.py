@@ -753,7 +753,7 @@ def render_report_html(report: Mapping[str, Any]) -> str:
         <p class="hero-summary">{escape(summary)}</p>
         <div class="mode-row">{render_modes(report)}</div>
     </section>
-    <div class="shell"><div class="metrics" aria-label="Finding counts">{render_metrics(counts)}</div></div>
+    <div class="shell"><div class="metrics" role="group" aria-label="Finding counts">{render_metrics(counts)}</div></div>
     <div class="shell document-grid">
       {render_index(report)}
       <main>

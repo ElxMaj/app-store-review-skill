@@ -12,6 +12,7 @@
   --blue: #3559d8;
   --blue-bright: #87a1ff;
   --evidence: #147cff;
+  --evidence-deep: #0b68d8;
   --risk: #ff2748;
   --verified: #61e6b5;
   --cobalt: var(--evidence);
@@ -53,8 +54,9 @@ a {
 a:focus-visible,
 button:focus-visible,
 summary:focus-visible {
-  outline: 3px solid var(--blue-bright);
-  outline-offset: 4px;
+  outline: 3px solid #fff;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px var(--ink);
 }
 
 button,
@@ -237,7 +239,7 @@ p {
 }
 
 .button-primary {
-  background: var(--evidence);
+  background: var(--evidence-deep);
   color: #fff;
 }
 
@@ -448,7 +450,7 @@ p {
   .site-header-dark,
   .site-footer-dark {
     width: 100%;
-    padding-inline: 14px;
+    padding-inline: 16px;
   }
 
   .site-header {
@@ -497,6 +499,15 @@ p {
     --muted: #44464b;
     --rule: rgb(17 19 24 / 48%);
     --rule-strong: rgb(17 19 24 / 78%);
+  }
+}
+
+@media (forced-colors: active) {
+  a:focus-visible,
+  button:focus-visible,
+  summary:focus-visible {
+    outline-color: Highlight;
+    box-shadow: none;
   }
 }
 
