@@ -111,6 +111,11 @@ for (const viewport of VIEWPORTS) {
     await expect(page.locator(".campaign-hero")).toHaveCount(1);
     await expect(page.locator(".campaign-title")).toHaveCount(1);
     await expect(page.locator(".campaign-hero article, .campaign-hero aside")).toHaveCount(0);
+    await expect(page.locator("body > .campaign-nav")).toHaveCount(1);
+    await expect(page.locator(".campaign-nav a")).toHaveCount(2);
+    await expect(page.getByRole("link", { name: "Report", exact: true })).toBeVisible();
+    await expect(page.getByRole("link", { name: /GitHub/ })).toBeVisible();
+    await expect(page.locator(".site-header, .brand")).toHaveCount(0);
     await expect(page.locator(".report-stage")).toHaveCount(1);
 
     const geometry = await page.evaluate(() => {
@@ -132,6 +137,7 @@ for (const viewport of VIEWPORTS) {
       const hero = rect(".campaign-hero");
       const title = rect(".campaign-title");
       const callToAction = rect(".button-primary");
+      const navigation = rect(".campaign-nav");
       const art = rect(".campaign-art");
       const reportImage = document.querySelector(".report-artifact img");
       const heroBackground = getComputedStyle(document.querySelector(".campaign-hero")).backgroundColor;
@@ -157,6 +163,13 @@ for (const viewport of VIEWPORTS) {
           callToAction.bottom <= hero.bottom + 1 &&
           callToAction.left >= hero.left - 1,
         callToActionOverlapsTitle: overlaps(callToAction, title),
+        heroStartsAtViewportTop: Math.abs(hero.top) <= 1,
+        navigationInsideViewport:
+          navigation.top >= 0 &&
+          navigation.right <= window.innerWidth + 1 &&
+          navigation.bottom <= window.innerHeight + 1 &&
+          navigation.left >= -1,
+        navigationOverlapsTitle: overlaps(navigation, title),
         artCoversHero:
           art.width >= hero.width - 1 && art.height >= hero.height - 1,
         titleLineCount: document.querySelectorAll(".campaign-title > span").length,
@@ -177,6 +190,9 @@ for (const viewport of VIEWPORTS) {
     expect(geometry.callToAction.bottom).toBeLessThanOrEqual(viewport.height + 1);
     expect(geometry.callToActionInsideHero).toBe(true);
     expect(geometry.callToActionOverlapsTitle).toBe(false);
+    expect(geometry.heroStartsAtViewportTop).toBe(true);
+    expect(geometry.navigationInsideViewport).toBe(true);
+    expect(geometry.navigationOverlapsTitle).toBe(false);
     expect(geometry.artCoversHero).toBe(true);
     expect(geometry.titleLineCount).toBe(2);
     expect(geometry.titleVisualLineCount).toBe(2);

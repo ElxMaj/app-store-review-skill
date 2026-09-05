@@ -202,6 +202,12 @@ class PagesSiteTests(unittest.TestCase):
         self.assertNotIn('class="gate-aperture"', landing)
         self.assertIn('class="campaign-hero"', landing)
         self.assertIn('class="campaign-art" aria-hidden="true"', landing)
+        self.assertNotIn("<header", landing)
+        self.assertNotIn('class="brand"', landing)
+        self.assertIn(
+            'class="site-nav campaign-nav" aria-label="Primary navigation"',
+            landing,
+        )
         hero_section = landing.partition('<section class="campaign-hero"')[2].partition(
             "</section>"
         )[0]
@@ -230,7 +236,11 @@ class PagesSiteTests(unittest.TestCase):
         self.assertNotIn("Hubot Sans", home_css)
         self.assertRegex(
             home_css,
-            r"(?s)\.campaign-hero\s*\{[^}]*min-height:\s*calc\(100dvh - 72px\);",
+            r"(?s)\.campaign-hero\s*\{[^}]*min-height:\s*100dvh;",
+        )
+        self.assertRegex(
+            home_css,
+            r"(?s)\.home-page \.campaign-nav\s*\{[^}]*position:\s*absolute;[^}]*right:",
         )
         self.assertRegex(
             home_css,
@@ -248,7 +258,7 @@ class PagesSiteTests(unittest.TestCase):
         self.assertIn("text-wrap: balance", home_css)
         self.assertRegex(
             home_css,
-            r"(?s)@media \(max-width: 767px\).*?\.campaign-hero\s*\{[^}]*min-height:\s*calc\(100dvh - 64px\);",
+            r"(?s)@media \(max-width: 767px\).*?\.campaign-hero\s*\{[^}]*min-height:\s*100dvh;",
         )
         self.assertRegex(
             home_css,

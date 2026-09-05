@@ -55,26 +55,20 @@
   overflow-x: clip;
 }
 
-.home-page .brand-mark::after {
-  display: none;
-}
-
-.home-page .site-header-dark {
-  position: relative;
+.home-page .campaign-nav {
+  position: absolute;
   z-index: 20;
-  width: 100%;
-  min-height: 72px;
-  padding-inline: max(var(--gutter), calc((100% - var(--max)) / 2));
-  border-color: rgb(247 248 246 / 17%);
-  background: var(--campaign-night);
-  color: var(--campaign-white);
-}
-
-.home-page .site-nav {
+  top: clamp(14px, 2.2vh, 22px);
+  right: max(var(--gutter), calc((100% - var(--max)) / 2));
+  gap: clamp(18px, 2vw, 28px);
   color: rgb(247 248 246 / 66%);
 }
 
-.home-page .site-nav a:hover,
+.home-page .campaign-nav a {
+  display: inline-flex;
+}
+
+.home-page .campaign-nav a:hover,
 .home-page .nav-github {
   color: var(--campaign-white);
 }
@@ -87,7 +81,7 @@
 .campaign-hero {
   position: relative;
   display: grid;
-  min-height: calc(100dvh - 72px);
+  min-height: 100dvh;
   align-items: center;
   padding: clamp(38px, 6vh, 72px) max(var(--gutter), calc((100% - var(--max)) / 2));
   overflow: hidden;
@@ -577,18 +571,16 @@
     --gutter: 16px;
   }
 
-  .home-page .site-header-dark {
-    min-height: 64px;
-  }
-
-  .home-page .site-nav a:first-child {
-    display: none;
+  .home-page .campaign-nav {
+    top: 10px;
+    right: var(--gutter);
+    gap: 16px;
   }
 
   .campaign-hero {
-    min-height: calc(100dvh - 64px);
+    min-height: 100dvh;
     align-items: start;
-    padding-top: clamp(30px, 5.5vh, 48px);
+    padding-top: clamp(92px, 12vh, 108px);
     padding-bottom: clamp(40px, 6vh, 56px);
   }
 
@@ -767,10 +759,6 @@
 }
 
 @media (max-width: 380px) {
-  .brand > span:last-child {
-    display: none;
-  }
-
   .command-dock-light {
     grid-template-columns: 1fr;
     padding: 13px;
@@ -841,7 +829,8 @@
   .campaign-title,
   .campaign-title span:last-child,
   .campaign-lede,
-  .campaign-kicker {
+  .campaign-kicker,
+  .home-page .campaign-nav {
     color: CanvasText;
     text-shadow: none;
   }
@@ -855,7 +844,7 @@
 }
 
 @media print {
-  .home-page .site-header,
+  .home-page .campaign-nav,
   .home-page .site-footer,
   .campaign-art,
   .campaign-scrim,
