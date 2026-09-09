@@ -1,10 +1,10 @@
 <div align="center">
 
-<a href="https://elxmaj.github.io/app-store-review-skill/"><img src="assets/review-gate-hero.png" alt="Submit with evidence, not hope — project evidence passing through a luminous review gate into an inspectable verdict" width="100%"></a>
-
 # App Store Review Skill
 
 **The evidence-first preflight for iOS apps.** Audit before submission, recover from rejection, and find the product details that still feel generic or unfinished.
+
+<a href="https://elxmaj.github.io/app-store-review-skill/"><img src="site/assets/review-gate-social.png" alt="App Store Review Skill evidence crossing a red review gate into a ParcelTrack report marked Not Ready" width="960"></a>
 
 [![MIT License](https://img.shields.io/badge/license-MIT-111318.svg)](LICENSE) [![Guidelines verified August 10, 2026](https://img.shields.io/badge/guidelines-verified%202026--08--10-3559D8.svg)](https://developer.apple.com/app-store/review/guidelines/) [![Tessl evaluation](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.tessl.io%2Fv1%2Fbadges%2Fmaj-labs%2Fapp-store-review)](https://tessl.io/registry/maj-labs/app-store-review) [![ClaudePluginHub](https://www.claudepluginhub.com/badge/elxmaj-app-store-review)](https://www.claudepluginhub.com/plugins/elxmaj-app-store-review?ref=badge)
 
