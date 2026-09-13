@@ -409,6 +409,10 @@ class PagesSiteTests(unittest.TestCase):
         self.assertEqual("site/assets/review-gate-social.png", attributes.get("src"))
         self.assertLessEqual(int(attributes["width"]), 960)
         self.assertLess(readme.index("# App Store Review Skill"), readme_art.start())
+        self.assertLess(
+            readme.index("**The evidence-first preflight for iOS apps.**"),
+            readme_art.start(),
+        )
 
         self.assertTrue(CINEMATIC_ART.is_file(), "source cinematic gate art is missing")
         self.assertEqual((1536, 1024), png_dimensions(CINEMATIC_ART))
