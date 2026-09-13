@@ -30,7 +30,6 @@ SOCIAL_CARD_ALT = (
 )
 SOCIAL_CARD = SITE / "assets" / SOCIAL_CARD_FILENAME
 SOCIAL_CARD_SOURCE = ROOT / "scripts" / "assets" / "review-gate-social.html"
-README_HERO = ROOT / "assets" / "review-gate-hero.png"
 CINEMATIC_ART = SITE / "assets" / "review-gate-cinematic.png"
 SITE_MARK = SITE / "assets" / "review-gate-mark.svg"
 HOME_CSS = SITE / "home.css"
@@ -400,9 +399,20 @@ class PagesSiteTests(unittest.TestCase):
         guide = read(SITE / GUIDE_PATH / "index.html")
         readme = read(ROOT / "README.md")
 
-        self.assertTrue(README_HERO.is_file(), "README review-gate hero is missing")
-        self.assertEqual((1440, 760), png_dimensions(README_HERO))
-        self.assertIn("assets/review-gate-hero.png", readme)
+        readme_art = re.search(
+            r'<a href="https://elxmaj\.github\.io/app-store-review-skill/">'
+            r'<img (?P<attributes>[^>]+)></a>',
+            readme,
+        )
+        self.assertIsNotNone(readme_art, "README product-page artwork is missing")
+        attributes = dict(re.findall(r'(\w+)="([^"]+)"', readme_art.group("attributes")))
+        self.assertEqual("site/assets/review-gate-social.png", attributes.get("src"))
+        self.assertLessEqual(int(attributes["width"]), 960)
+        self.assertLess(readme.index("# App Store Review Skill"), readme_art.start())
+        self.assertLess(
+            readme.index("**The evidence-first preflight for iOS apps.**"),
+            readme_art.start(),
+        )
 
         self.assertTrue(CINEMATIC_ART.is_file(), "source cinematic gate art is missing")
         self.assertEqual((1536, 1024), png_dimensions(CINEMATIC_ART))
