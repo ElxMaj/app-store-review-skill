@@ -10,13 +10,19 @@
     "Will Apple approve my React Native subscription app?",
     "Audit third-party AI consent before App Review",
     "Create a visual App Store review report for this Expo project",
-    "Audit my iOS app's Apple design and Human Interface Guidelines quality, including motion, gestures, materials, and iPad adaptation"
+    "Audit my iOS app's Apple design and Human Interface Guidelines quality, including motion, gestures, materials, and iPad adaptation",
+    "Audit this iOS 27 release archive and new App Store assets",
+    "Check Foundation Models provider privacy and Siri readiness before App Review",
+    "Is my app ready for iPhone Duo submission?",
+    "Review this Xcode 27 migration for App Store compatibility"
   ],
   "should_not_trigger": [
     "Summarize the latest customer reviews of my app",
     "Optimize my Google Play listing",
     "Review this macOS kernel extension for security",
     "Fix this SwiftUI animation bug without discussing App Review",
-    "Write an ASO keyword strategy only"
+    "Write an ASO keyword strategy only",
+    "List every consumer feature in iOS 27",
+    "Pretend you were an Apple engineer without reviewing an app"
   ]
 }

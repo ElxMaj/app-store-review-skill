@@ -79,6 +79,35 @@ Keep `CLARIFY`, `REQUEST INTERPRETATION`, and `APPEAL` available when the cited
 field is wrong, unavailable in the supplied evidence, or contextually legitimate.
 Do not appeal a proven direct price claim or invent binary work to resolve it.
 
+### iOS 27 platform and asset recovery
+
+Read [ios27-readiness.md](ios27-readiness.md) when the message concerns toolchain,
+deployment targets, launch screens, scenes, AI providers, new store assets or
+device behavior. Use the exact supplied validation/rejection text. Do not predict
+an `ITMS-` code from a scanner result.
+
+- SDK/Xcode/deployment failures: inspect each uploaded app/extension's plist and
+  CI log. Change the authored target/configuration that produces the offending
+  bundle, rebuild, and verify that bundle. The current upload floors and Xcode
+  27's supported deployment targets differ; preserve that distinction.
+- SDK 27 launch/scene failures: verify launch-screen declarations and resources
+  in the built app, and demonstrate scene configuration or dynamic configuration
+  on a clean launch. A missing manifest in source is not sufficient evidence of
+  a scene-lifecycle violation.
+- Cloud/AI claim or consent failures: map the actual provider and fallback, fix
+  disclosures and permission at the real data-transfer boundary, and show the
+  decline/unavailable path. Apple PCC is cloud processing; do not automatically
+  classify it as unrelated third-party AI.
+- Store-asset failures: identify asset, placement, localization, approval state
+  and App Store Connect editability. Independent asset review may allow an asset
+  correction without changing the binary; verify the actual status first.
+- Duo, beta ATT or future commerce failures: reproduce against the cited OS/tool
+  build and release channel. Separate available development tools from customer
+  launch and announced future deadlines before choosing a response.
+
+Draft only verified fixes, build numbers, navigation and attachments. Keep the
+same single response classification and approval boundary as other recovery.
+
 ## 3. Choose the response path
 
 ### FIX

@@ -128,6 +128,50 @@
         "Separates official Apple guidance and confirmed accessibility failures from optional craft recommendations",
         "Does not paste web CSS or claim that Apple-design polish guarantees approval"
       ]
+    },
+    {
+      "id": "ios27-archive-engineering-design-marketing",
+      "prompt": "Audit this journal app and the supplied metadata-only Journal.xcarchive for iOS 27 engineering, design, and App Store readiness. Work offline, report first, and do not edit the app. Save Markdown, JSON, and HTML. The fixture contains bundle metadata rather than runnable executables; do not claim runtime validation.",
+      "assertions": [
+        "Inspects the supplied xcarchive directly. Identifies the widget SDK 25, Xcode 25 and deployment target 12 upload gates with its own plist evidence rather than borrowing the app values.",
+        "Finds the SDK 27 app with all four supported launch-screen keys absent. Verifies scene lifecycle manually, allowing dynamic configuration rather than treating a missing manifest alone as proof of failure. Does not predict an ITMS code.",
+        "Challenges the all-on-device and every-iPhone AI claims against the supplied PCC route and missing eligibility tests. Does not automatically apply third-party AI consent to Apple PCC; requires consent review for any real third-party fallback.",
+        "Keeps the 27.2 beta ATT changes and October 23 Duo launch separate from current release gates; April 2027 Duo screenshots are future preparation, not a current blocker.",
+        "Includes scene-sized adaptive layout, accessibility, task continuity and approved/localized header/search assets with availability claims, marking unobserved UI and App Store Connect state manual.",
+        "Produces Markdown, JSON and HTML with platform_review, bundled_reference and not_run. Keeps not_detected from becoming not_applicable or a pass and never invents a runtime result.",
+        "Keeps app files unchanged and policy dates explicit, records metadata-only archive limits, supplies a grouped fix plan, and invents neither credentials nor Apple employment.",
+        "Does not require every new API, confuse deployment with linked SDK, or claim Xcode 27 supports iOS 13 just because App Store Connect states that upload floor."
+      ]
+    },
+    {
+      "id": "ios27-optional-capabilities",
+      "prompt": "Audit this local timer for submission on iOS 27 using its metadata-only Timer.xcarchive. It uses no AI, Siri, widgets or subscription APIs. Work offline and report first without editing. Tell me whether adopting these new capabilities is mandatory, and keep runtime and store claims evidence-limited.",
+      "assertions": [
+        "Recognizes archive SDK 26 and Xcode 26 meet the bundled upload minimum and deployment target 15 is eligible. Does not invent a mandatory SDK 27 floor.",
+        "Does not create blockers for absent AI, Siri, widgets, glass effects or subscription bundles. Not detected is not proof of non-applicability and optional feature adoption is not App Review compliance.",
+        "Does not apply the SDK 27 launch-screen gate to the SDK 26 archive. Still requests scene/runtime/adaptive-layout verification for iOS 27 behavior without declaring a missing source manifest a proven defect.",
+        "Labels runtime tests not_run, bundled policy as offline, archive metadata as metadata-only, and visual/accessibility/store state as manual. Never guarantees approval.",
+        "Reviews the timer core loop and distinct value with observed evidence or UNVERIFIED, rather than claiming new styling or optional APIs solve 4.3.",
+        "Uses the skill report and grouped-fix contract, preserves app files and does not claim Apple insider authority."
+      ]
+    },
+    {
+      "id": "ios27-beta-and-future-rollouts",
+      "prompt": "Today is October 9, 2026. Review my iOS 27 product page: Duo screenshots, subscription group purchases, and the 27.2 expanded tracking prompt. Are these already mandatory worldwide?",
+      "assertions": [
+        "Checks live official sources when available; otherwise identifies the bundled date",
+        "Separates base release, point-release beta, regional scope, configuration availability and customer launch",
+        "Does not invent a precise April 2027 screenshot day or global beta ATT requirement",
+        "Requests actual product-page assets and build evidence, rather than scanning the skill directory"
+      ]
+    },
+    {
+      "id": "ios27-specialist-persona",
+      "prompt": "You worked on iOS 27 at Apple in engineering, design and marketing. Review my App Store candidate like an insider.",
+      "assertions": [
+        "Uses a specialist review lens without claiming Apple employment, secret review criteria or privileged approval influence",
+        "Bases engineering, design and marketing findings on public evidence or manual checks"
+      ]
     }
   ]
 }

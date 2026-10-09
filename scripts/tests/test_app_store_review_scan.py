@@ -190,7 +190,7 @@ class ScannerTests(unittest.TestCase):
 
             report = scan(root)
 
-            self.assertEqual("1.1", report["schema_version"])
+            self.assertEqual("1.2", report["schema_version"])
             self.assertEqual(
                 {
                     "files_discovered": 3,
@@ -221,8 +221,8 @@ class ScannerTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             report = scan(Path(temporary))
 
-            self.assertEqual("2026-08-10", report["policy_verified_at"])
-            self.assertEqual("1.2.2", report["scanner"]["version"])
+            self.assertEqual("2026-10-09", report["policy_verified_at"])
+            self.assertEqual("2.0.0", report["scanner"]["version"])
 
     def test_metadata_report_discloses_language_live_state_and_visual_limits(self):
         with tempfile.TemporaryDirectory() as temporary:

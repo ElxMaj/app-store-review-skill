@@ -1,0 +1,3 @@
+// Metadata fixture; not a buildable Xcode project.
+IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+SDKROOT = iphoneos;

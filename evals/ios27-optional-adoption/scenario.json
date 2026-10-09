@@ -1,0 +1,6 @@
+{
+  "description": "Audit this local timer for submission on iOS 27 using its metadata-only Timer.xcarchive. It uses no AI, Siri, widgets or subscription APIs. Work offline and report first without editing. Tell me whether adopting these new capabilities is mandatory, and keep runtime and store claims evidence-limited.",
+  "include": [
+    "./inputs"
+  ]
+}

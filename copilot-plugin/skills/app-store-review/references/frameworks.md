@@ -25,6 +25,8 @@ Inspect:
 - `CODE_SIGN_ENTITLEMENTS`
 - `PRODUCT_BUNDLE_IDENTIFIER`
 - `IPHONEOS_DEPLOYMENT_TARGET`
+- `.xcconfig` inheritance and platform-conditional deployment/SDK settings
+- scene lifecycle, launch-screen configuration and resources when linking SDK 27+
 - configuration used by the Archive action
 - `PrivacyInfo.xcprivacy` membership and contents
 - dependency privacy manifests where the built products are available
@@ -42,6 +44,7 @@ Inspect authored configuration:
 - `expo.ios.bundleIdentifier`
 - `expo.ios.privacyManifests`, when present
 - config plugins that modify iOS settings
+- `expo-build-properties` iOS deployment target, native-module compatibility and authored splash/scene setup
 - permission declarations from installed Expo modules
 
 If `ios/` exists, inspect the generated Xcode project too. If it does not exist, label native-target, target-membership, merged-plist, and archive checks `MANUAL CHECK`.
@@ -116,3 +119,7 @@ An `.ipa` is a ZIP archive. Inspect it for:
 - duplicated or obsolete frameworks
 
 Archive evidence outranks repository guesses about what ships.
+
+The scanner also accepts an exported ZIP or `.xcarchive` directory. It reads each app/extension's direct `Info.plist` including binary plists and records `DTSDKName`, `DTXcode`, and `MinimumOSVersion`. Nested extension bundles keep their own evidence. It skips framework metadata for upload gates and does not follow archive symlinks or extract ZIP entries.
+
+Native bridge source and package presence may route a manual iOS 27 review, but do not establish runtime adoption, capability authorization, scene behavior, cloud data flows or device eligibility. Verify signed entitlements and the exact generated build. For dynamic Expo configuration, the scanner does not execute JavaScript; inspect resolved output with the project's permitted workflow.

@@ -69,6 +69,7 @@ body {
 a { color: var(--link); text-underline-offset: 0.16em; }
 code, pre, .mono {
   font-family: ui-monospace, "SFMono-Regular", SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  overflow-wrap: anywhere;
 }
 
 .report {
@@ -229,7 +230,8 @@ main { min-width: 0; padding-bottom: 100px; counter-reset: report-section; }
 
 .manual-grid, .craft-grid { border-top: 1px solid var(--rule); }
 .manual-card, .craft-card { display: grid; grid-template-columns: 155px minmax(0, 1fr); gap: 25px; padding: 21px 0 23px; border-bottom: 1px solid var(--rule); }
-.row-copy { min-width: 0; }
+.row-copy { min-width: 0; overflow-wrap: anywhere; }
+.print-only { display: none; }
 .manual-card h3, .craft-card h3 { margin: 0 0 7px; font-size: 17px; font-weight: 600; letter-spacing: -0.012em; }
 .manual-card p, .craft-card p { margin: 0; color: var(--muted); font-size: 14px; }
 .manual-verify { margin-top: 11px !important; color: var(--ink) !important; }
@@ -330,6 +332,8 @@ main { min-width: 0; padding-bottom: 100px; counter-reset: report-section; }
   .hero { padding-top: 35px; }
   .document-grid { display: block; }
   .report-index { display: none; }
+  .technology-disclosure { display: none; }
+  .print-only { display: block; font-size: 11px; }
   #findings, #fix-plan { break-before: page; page-break-before: always; }
   .section-heading { break-after: avoid-page; page-break-after: avoid; }
   .finding, .manual-card, .craft-card, .panel, .fix-group { break-inside: avoid; }
@@ -441,6 +445,73 @@ def render_scope(report: Mapping[str, Any]) -> str:
         <div class="scope-item"><span class="scope-label">Targets</span><span class="scope-value">{escape(targets)}</span></div>
       </div>
       <ul class="limitations">{limitations_html}</ul>
+    </section>
+    """
+
+
+def render_platform_review(report: Mapping[str, Any]) -> str:
+    platform = report.get("platform_review")
+    if not isinstance(platform, Mapping):
+        return ""
+    build_rows = []
+    for item in as_list(platform.get("build_evidence")):
+        if not isinstance(item, Mapping):
+            continue
+        evidence = item.get("evidence") if isinstance(item.get("evidence"), Mapping) else {}
+        build_rows.append(
+            '<article class="manual-card"><span class="grade">'
+            f'{escape(item.get("kind"))}</span><div class="row-copy">'
+            f'<h3>{escape(item.get("key"))}: {escape(item.get("version"), "Unresolved")}</h3>'
+            f'<p class="mono">{escape(evidence_location(evidence))}</p></div></article>'
+        )
+    technology_rows = []
+    undetected = []
+    for item in as_list(platform.get("technologies")):
+        if not isinstance(item, Mapping):
+            continue
+        if item.get("status") == "not_detected":
+            undetected.append(escape(item.get("title")))
+            continue
+        locations = ", ".join(evidence_location(evidence) for evidence in as_list(item.get("evidence")) if isinstance(evidence, Mapping))
+        technology_rows.append(
+            '<article class="manual-card"><span class="grade">'
+            f'{escape(str(item.get("status", "manual")).replace("_", " "))}</span><div class="row-copy">'
+            f'<h3>{escape(item.get("title"))}</h3><p>{escape(item.get("verification"))}</p>'
+            f'<p class="mono">{escape(locations, "No source location supplied")}</p></div></article>'
+        )
+    additional = ""
+    if undetected:
+        additional = ('<details class="technology-disclosure"><summary>Other technology checks (' + str(len(undetected)) + ')</summary>'
+                      '<p>No source signal was detected for these areas. This does not establish absence or non-applicability.</p>'
+                      '<ul class="limitations">' + "".join(f"<li>{title}</li>" for title in undetected) + '</ul></details>'
+                      '<div class="print-only"><h3>Other technology checks — not detected</h3>'
+                      '<p>No source signal was detected; absence or non-applicability is unverified.</p>'
+                      '<p>' + "; ".join(undetected) + '</p></div>')
+    watch_rows = []
+    for item in as_list(platform.get("release_watchlist")):
+        if not isinstance(item, Mapping):
+            continue
+        watch_rows.append(
+            '<article class="manual-card"><span class="grade">'
+            f'{escape(str(item.get("status", "manual")).replace("_", " "))}</span><div class="row-copy">'
+            f'<h3>{escape(item.get("title"))}</h3>'
+            f'<p>{escape(item.get("release_channel"))} · {escape(item.get("timing"))}</p>'
+            f'<p>{escape(item.get("verification"))}</p><p class="mono">{escape(item.get("source"))}</p></div></article>'
+        )
+    watchlist = ('<h3>Release channels and future dates</h3><div class="manual-grid">' + "".join(watch_rows) + '</div>') if watch_rows else ""
+    runtime = str(platform.get("runtime_test_status", "not_run")).replace("_", " ")
+    verification = str(platform.get("verification_status", "unverified")).replace("_", " ")
+    return f"""
+    <section class="section" id="platform-review">
+      <div class="section-heading">
+        <p class="section-kicker">Platform readiness</p>
+        <h2>{escape(platform.get("target_os"), "iOS platform review")}</h2>
+        <p class="section-intro">Runtime tests: {escape(runtime)}. Reference checked: {escape(platform.get("reference_verified_at"))} ({escape(verification)}). Technology signals guide review; optional adoption is not a submission requirement.</p>
+      </div>
+      <div class="manual-grid">{''.join(build_rows) or '<p class="empty-state">No resolved build metadata supplied.</p>'}</div>
+      <div class="manual-grid">{''.join(technology_rows)}</div>
+      {additional}
+      {watchlist}
     </section>
     """
 
@@ -693,6 +764,8 @@ def render_fix_groups(report: Mapping[str, Any]) -> str:
 
 def render_index(report: Mapping[str, Any]) -> str:
     entries = [("scope", "Scope"), ("findings", "Findings")]
+    if isinstance(report.get("platform_review"), Mapping):
+        entries.insert(1, ("platform-review", "Platform readiness"))
     if as_list(report.get("manual_checks")):
         entries.append(("manual-checks", "Manual checks"))
     craft = report.get("craft")
@@ -724,6 +797,8 @@ def render_report_html(report: Mapping[str, Any]) -> str:
     label = "Sample report" if sample else "Independent review report"
     generated = report.get("generated_at") or "Date not supplied"
     policy = report.get("policy_verified_at") or "Unverified"
+    platform = report.get("platform_review")
+    policy_label = "Bundled policy" if isinstance(platform, Mapping) and platform.get("verification_status") == "bundled_reference" else "Policy"
     summary = report.get("summary") or "Review evidence, open checks, and the next safe action are collected below."
     disclaimer = report.get("disclaimer") or "Independent review based on supplied evidence and public guidance. Approval is not guaranteed. Not affiliated with Apple."
 
@@ -742,7 +817,7 @@ def render_report_html(report: Mapping[str, Any]) -> str:
         <p class="identity-title">App Store review</p>
         <p class="identity-subtitle">Independent release assessment</p>
       </div>
-      <div class="policy">Policy / {escape(policy)}</div>
+      <div class="policy">{policy_label} / {escape(policy)}</div>
     </header>
     <section class="shell hero">
         <p class="sample-flag">{escape(label)}</p>
@@ -758,6 +833,7 @@ def render_report_html(report: Mapping[str, Any]) -> str:
       {render_index(report)}
       <main>
         {render_scope(report)}
+        {render_platform_review(report)}
         {render_findings(report)}
         {render_manual_checks(report)}
         {render_craft(report)}

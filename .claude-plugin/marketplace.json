@@ -5,19 +5,20 @@
     "url": "https://github.com/ElxMaj"
   },
   "metadata": {
-    "description": "Evidence-based App Store review with self-contained visual reports"
+    "description": "Evidence-based App Store and iOS 27 review with self-contained visual reports"
   },
   "plugins": [
     {
       "name": "app-store-review",
       "source": "./",
-      "description": "Audit submissions, recover from rejections, evaluate Guideline 4.3 craft risks, and generate visual reports.",
+      "description": "Review iOS 27 engineering, design and store assets, audit submissions, recover from rejections, and evaluate Guideline 4.3 craft risks.",
       "category": "development",
       "tags": [
         "ios",
         "app-store",
         "compliance",
-        "app-review"
+        "app-review",
+        "ios27"
       ]
     }
   ]

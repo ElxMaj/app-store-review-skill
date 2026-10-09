@@ -15,18 +15,19 @@ import plistlib
 import re
 import sys
 import unicodedata
-import zipfile
 from collections import defaultdict
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Sequence, Set, Tuple
+from xml.parsers.expat import ExpatError
 
 from render_app_store_report import render_report_html
+from ios_platform_review import ArchiveEvidence, collect_platform_review, read_archive
 
 
-VERSION = "1.2.2"
-POLICY_VERIFIED_AT = "2026-08-10"
+VERSION = "2.0.0"
+POLICY_VERIFIED_AT = "2026-10-09"
 
 DEFAULT_IGNORED_DIRS = {
     ".git",
@@ -75,6 +76,7 @@ TEXT_SUFFIXES = {
     ".ts",
     ".tsx",
     ".xib",
+    ".xcconfig",
     ".xml",
     ".yaml",
     ".yml",
@@ -610,7 +612,7 @@ def collect_configuration(ctx: ScanContext) -> None:
         try:
             with path.open("rb") as handle:
                 value = plistlib.load(handle)
-        except (OSError, plistlib.InvalidFileException, ValueError):
+        except (OSError, plistlib.InvalidFileException, ValueError, ExpatError):
             if path.name == "PrivacyInfo.xcprivacy":
                 ctx.add_finding(
                     Finding(
@@ -1117,6 +1119,7 @@ def scan_feature_heuristics(ctx: ScanContext) -> None:
             r"api\.openai\.com|\bOpenAIClient\b|from\s+[\"']openai[\"']",
             r"api\.anthropic\.com|\bAnthropic\s*\(",
             r"generativelanguage\.googleapis\.com|GoogleGenerativeAI|GoogleGenerativeAI",
+            r"\b(?:AnthropicLanguageModel|ClaudeLanguageModel|GeminiLanguageModel|GoogleLanguageModel)\b",
         ),
         limit=10,
     )
@@ -1173,7 +1176,7 @@ def scan_feature_heuristics(ctx: ScanContext) -> None:
         )
 
 
-def scan_archive(ctx: ScanContext) -> None:
+def scan_archive(ctx: ScanContext, archive_data: ArchiveEvidence) -> None:
     if not ctx.archive:
         ctx.add_manual(
             "ASR-MANUAL-ARCHIVE",
@@ -1182,33 +1185,29 @@ def scan_archive(ctx: ScanContext) -> None:
             "Create the release archive and rerun the scanner with --archive, then inspect merged configuration with Apple tooling.",
         )
         return
-    if not ctx.archive.exists():
-        ctx.limitations.append(f"Archive does not exist: {ctx.archive}")
-        return
-    if not zipfile.is_zipfile(ctx.archive):
-        ctx.limitations.append("The supplied archive is not a readable IPA or ZIP archive.")
-        return
+    ctx.limitations.extend(archive_data.limitations)
+    ctx.limitations.append("Archive inspection collects bundle metadata and file paths; executable validity, signing, provisioning, and launch have not been validated.")
+    ctx.add_manual(
+        "ASR-MANUAL-ARCHIVE-VALIDATION",
+        "Validate the complete candidate with Apple tooling",
+        "Readable bundle plists establish recorded values, not a runnable executable, valid signature, entitlement approval, or accepted upload.",
+        "Inspect the complete app and every extension, then validate signing, provisioning, resources, install/launch and upload using the actual release candidate.",
+    )
     artifacts: List[Evidence] = []
     bundles: Set[str] = set()
     manifests: Set[str] = set()
-    try:
-        with zipfile.ZipFile(ctx.archive) as archive:
-            for name in archive.namelist():
-                normalized = name.replace("\\", "/")
-                if ".app/" in normalized or ".appex/" in normalized:
-                    bundle_match = re.search(r"(.+?\.(?:app|appex))/", normalized)
-                    if bundle_match:
-                        bundles.add(bundle_match.group(1))
-                if normalized.endswith("PrivacyInfo.xcprivacy"):
-                    parent_match = re.search(r"(.+?\.(?:app|appex))/.+PrivacyInfo\.xcprivacy$", normalized)
-                    if parent_match:
-                        manifests.add(parent_match.group(1))
-                lowered = normalized.lower()
-                if any(pattern.lower() in lowered for pattern in ASSISTANT_ARTIFACT_PATTERNS):
-                    artifacts.append(Evidence(f"archive:{ctx.archive.name}", None, "Assistant artifact path matched"))
-    except (OSError, zipfile.BadZipFile) as exc:
-        ctx.limitations.append(f"Archive inspection failed: {exc}")
-        return
+    for normalized in archive_data.entries:
+        if ".app/" in normalized or ".appex/" in normalized:
+            bundle_match = re.search(r"(.+\.(?:app|appex))/", normalized)
+            if bundle_match:
+                bundles.add(bundle_match.group(1))
+        if normalized.endswith("PrivacyInfo.xcprivacy"):
+            parent_match = re.search(r"(.+\.(?:app|appex))/[^/]*PrivacyInfo\.xcprivacy$", normalized)
+            if parent_match:
+                manifests.add(parent_match.group(1))
+        lowered = normalized.lower()
+        if any(pattern.lower() in lowered for pattern in ASSISTANT_ARTIFACT_PATTERNS):
+            artifacts.append(Evidence(f"archive:{ctx.archive.name}", None, "Assistant artifact path matched"))
     if artifacts:
         ctx.add_finding(
             Finding(
@@ -1289,8 +1288,8 @@ def add_baseline_manual_checks(ctx: ScanContext) -> None:
     ctx.add_manual(
         "ASR-MANUAL-SDK",
         "Verify the submission SDK from the archive",
-        "Source files do not reliably establish the Xcode and SDK used to upload the build. Apple requires Xcode 26 or later with an iOS 26-family SDK since April 28, 2026.",
-        "Inspect the archive and CI build environment, then recheck Apple's Upcoming Requirements before submission.",
+        "Archive plist evidence is collected when supplied; unresolved fields and actual upload validation remain manual. The bundled policy checked on 2026-10-09 requires Xcode 26 or later with iOS SDK 26 or later since April 28, 2026.",
+        "Inspect every executable bundle's archive metadata and CI build environment, then recheck Apple's Upcoming Requirements before submission. SDK 27 adoption does not replace this dated minimum.",
     )
     ctx.add_manual(
         "ASR-MANUAL-METADATA",
@@ -1324,7 +1323,14 @@ def run_scan(ctx: ScanContext) -> Dict[str, Any]:
     scan_technical_patterns(ctx)
     scan_feature_heuristics(ctx)
     scan_metadata_pricing(ctx)
-    scan_archive(ctx)
+    if not ctx.metadata_inputs:
+        ctx.limitations.append("No typed App Store metadata input was scanned. Supplied free-form copy and live store fields still require manual review; zero scanned files does not establish metadata coverage.")
+    archive_data = read_archive(ctx.archive)
+    scan_archive(ctx, archive_data)
+    platform_review = collect_platform_review(ctx, archive_data)
+    for item in platform_review.pop("findings"):
+        item["evidence"] = [Evidence(**evidence) for evidence in item["evidence"]]
+        ctx.add_finding(Finding(**item))
     scan_asset_reuse(ctx)
     add_baseline_manual_checks(ctx)
 
@@ -1345,7 +1351,7 @@ def run_scan(ctx: ScanContext) -> Dict[str, Any]:
         verdict = "NO STATIC BLOCKERS FOUND"
 
     return {
-        "schema_version": "1.1",
+        "schema_version": "1.2",
         "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
         "root": str(ctx.root),
         "verdict": verdict,
@@ -1356,6 +1362,7 @@ def run_scan(ctx: ScanContext) -> Dict[str, Any]:
             "targets": ctx.targets,
         },
         "metadata_scan": metadata_scan_summary(ctx),
+        "platform_review": platform_review,
         "counts": counts,
         "findings": [finding_to_dict(item) for item in ctx.findings],
         "manual_checks": ctx.manual_checks,
@@ -1381,10 +1388,12 @@ def render_markdown(report: Dict[str, Any]) -> str:
     project = report["project"]
     target_names = ", ".join(item["name"] for item in project["targets"]) or "not resolved"
     lines = [
+        "Mode A: Pre-submission audit",
+        "",
         f"# App Store review: {Path(report['root']).name}",
         "",
         f"Verdict: {report['verdict']}",
-        f"Policy verified: {report['policy_verified_at']}",
+        f"Bundled policy checked: {report['policy_verified_at']} (no live verification by the scanner)",
         f"Frameworks: {', '.join(project['frameworks'])}",
         f"Targets: {target_names}",
         "",
@@ -1395,6 +1404,31 @@ def render_markdown(report: Dict[str, Any]) -> str:
         lines.extend(f"- {item}" for item in report["limitations"])
     else:
         lines.append("- Static repository scan completed. Runtime and App Store Connect checks remain manual.")
+
+    platform = report.get("platform_review", {})
+    if platform:
+        verification = str(platform.get("verification_status", "unverified")).replace("_", " ")
+        runtime = str(platform.get("runtime_test_status", "not_run")).replace("_", " ")
+        lines.extend(["", "## iOS 27 platform review", "",
+                      f"Target: {platform['target_os']}",
+                      f"Reference checked: {platform['reference_verified_at']} ({verification})",
+                      f"Runtime tests: {runtime}", "",
+                      "Technology signals route manual review; not_detected does not mean absent or not applicable.", ""])
+        for item in platform["build_evidence"]:
+            location = item["evidence"]["path"]
+            if item["evidence"]["line"]:
+                location += f":{item['evidence']['line']}"
+            lines.append(f"- Build ({item['kind']}): {item['key']} = {item['version'] or 'unresolved'} — {location}")
+        for item in platform["technologies"]:
+            lines.append(f"- {item['title']}: {item['status']}")
+            if item["status"] == "manual":
+                lines.append(f"  Verify: {item['verification']}")
+        watchlist = platform.get("release_watchlist", [])
+        if watchlist:
+            lines.extend(["", "### Release channels and future dates", ""])
+            for item in watchlist:
+                lines.append(f"- {item['title']}: {item['status'].replace('_', ' ')}; {item['release_channel']}; {item['timing']}")
+                lines.append(f"  Verify: {item['verification']} Source: {item['source']}")
 
     for severity, heading in (("blocker", "Blockers"), ("warning", "Warnings"), ("info", "Info")):
         selected = [item for item in report["findings"] if item["severity"] == severity]
@@ -1493,7 +1527,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--output-dir",
         help="Directory for app-store-review-report.md, .json, and optional .html",
     )
-    parser.add_argument("--archive", help="Optional IPA or ZIP release archive to inspect")
+    parser.add_argument("--archive", help="Optional IPA, ZIP, or xcarchive directory to inspect")
     parser.add_argument(
         "--compare-root",
         action="append",

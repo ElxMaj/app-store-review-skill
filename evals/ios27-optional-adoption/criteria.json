@@ -1,0 +1,36 @@
+{
+  "context": "Audit this local timer for submission on iOS 27 using its metadata-only Timer.xcarchive. It uses no AI, Siri, widgets or subscription APIs. Work offline and report first without editing. Tell me whether adopting these new capabilities is mandatory, and keep runtime and store claims evidence-limited.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "Accepted upload baseline",
+      "description": "Recognizes archive SDK 26 and Xcode 26 meet the bundled upload minimum and deployment target 15 is eligible. Does not invent a mandatory SDK 27 floor.",
+      "max_score": 25
+    },
+    {
+      "name": "Optional adoption",
+      "description": "Does not create blockers for absent AI, Siri, widgets, glass effects or subscription bundles. Not detected is not proof of non-applicability and optional feature adoption is not App Review compliance.",
+      "max_score": 25
+    },
+    {
+      "name": "SDK-specific launch and scenes",
+      "description": "Does not apply the SDK 27 launch-screen gate to the SDK 26 archive. Still requests scene/runtime/adaptive-layout verification for iOS 27 behavior without declaring a missing source manifest a proven defect.",
+      "max_score": 15
+    },
+    {
+      "name": "Evidence-limited verdict",
+      "description": "Labels runtime tests not_run, bundled policy as offline, archive metadata as metadata-only, and visual/accessibility/store state as manual. Never guarantees approval.",
+      "max_score": 15
+    },
+    {
+      "name": "Product craft without camouflage",
+      "description": "Reviews the timer core loop and distinct value with observed evidence or UNVERIFIED, rather than claiming new styling or optional APIs solve 4.3.",
+      "max_score": 10
+    },
+    {
+      "name": "Reviewable result",
+      "description": "Uses the skill report and grouped-fix contract, preserves app files and does not claim Apple insider authority.",
+      "max_score": 10
+    }
+  ]
+}

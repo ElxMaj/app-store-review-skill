@@ -7,22 +7,25 @@ Use this contract for final audit reports and scanner output.
 Start with:
 
 ```text
+Mode A: Pre-submission audit
+
 # App Store review: <app or project>
 Verdict: <NO STATIC BLOCKERS FOUND | NEEDS REVIEW | NOT READY>
-Policy verified: <YYYY-MM-DD | offline, bundled references dated 2026-08-10>
+Policy verified: <live YYYY-MM-DD with sources | offline, bundled references dated 2026-10-09>
 Scope: <framework, targets, supplied metadata, archive status>
 ```
 
 Order sections as follows:
 
 1. Scope and limitations
-2. Blockers
-3. Warnings
-4. Manual checks
-5. Info
-6. Reviewer experience
-7. App Review Notes draft
-8. Approval-required fix plan
+2. iOS 27 platform review
+3. Blockers
+4. Warnings
+5. Manual checks
+6. Info
+7. Reviewer experience
+8. App Review Notes draft
+9. Approval-required fix plan
 
 Each finding uses:
 
@@ -43,11 +46,11 @@ Emit UTF-8 JSON with this top-level shape:
 
 ```json
 {
-  "schema_version": "1.1",
-  "generated_at": "2026-08-10T12:00:00Z",
+  "schema_version": "1.2",
+  "generated_at": "2026-10-09T12:00:00Z",
   "root": "/absolute/project/path",
   "verdict": "NEEDS REVIEW",
-  "policy_verified_at": "2026-08-10",
+  "policy_verified_at": "2026-10-09",
   "project": {
     "frameworks": ["xcode", "react-native"],
     "native_ios_root": "ios",
@@ -72,10 +75,89 @@ Emit UTF-8 JSON with this top-level shape:
   "limitations": [],
   "scanner": {
     "name": "app_store_review_scan",
-    "version": "1.2.2"
+    "version": "2.0.0"
   }
 }
 ```
+
+Schema 1.2 adds `platform_review` to scanner output. The renderer continues to
+accept earlier reports without this field. Its shape is:
+
+```json
+{
+  "platform_review": {
+    "target_os": "iOS 27 / iPadOS 27",
+    "reference_verified_at": "2026-10-09",
+    "verification_status": "bundled_reference",
+    "runtime_test_status": "not_run",
+    "submission_requirements": {
+      "sdk_major": {"minimum": 26, "effective_at": "2026-04-28", "source": "https://developer.apple.com/news/upcoming-requirements/"},
+      "xcode_major": {"minimum": 26, "effective_at": "2026-04-28", "source": "https://developer.apple.com/news/upcoming-requirements/"},
+      "deployment_major": {"minimum": 13, "effective_at": "2026-09-09", "source": "https://developer.apple.com/news/upcoming-requirements/"}
+    },
+    "build_evidence": [
+      {
+        "kind": "archive",
+        "key": "DTSDKName",
+        "version": "27.0",
+        "evidence": {"path": "Candidate.ipa:Payload/App.app/Info.plist", "line": null, "signal": "Linked iOS SDK version"}
+      }
+    ],
+    "release_watchlist": [
+      {
+        "id": "duo_screenshots",
+        "title": "Duo screenshot submission requirement",
+        "status": "future_requirement",
+        "release_channel": "App Store submission",
+        "timing": "April 2027 (day not announced)",
+        "source": "https://developer.apple.com/news/?id=kkphp5qo",
+        "verification": "Recheck enforcement and prepare assets; not a current blocker."
+      }
+    ],
+    "technologies": [
+      {
+        "id": "foundation_models",
+        "title": "Foundation Models",
+        "status": "manual",
+        "evidence_confidence": "inference",
+        "evidence": [{"path": "Sources/Assistant.swift", "line": 1, "signal": "Foundation Models source signal"}],
+        "evidence_total": 1,
+        "evidence_omitted": 0,
+        "verification": "Verify actual provider, availability, data routing, fallback, and tool behavior."
+      }
+    ],
+    "reference": "references/ios27-readiness.md"
+  }
+}
+```
+
+`policy_verified_at` and `reference_verified_at` identify the bundled source
+snapshot in a scanner report, never an internet check performed by the scanner.
+Retain `verification_status = bundled_reference` unless a later reviewer actually
+checks live sources and records URLs and the verification date. The scanner always
+emits `runtime_test_status = not_run`. A reviewed report may use `partial` or
+`executed` only with a recorded test matrix and results; `executed` does not imply
+every test passed.
+
+Build evidence distinguishes `authored` from `archive` values. Versions are
+normalized; unresolved values stay manual rather than being guessed from the
+local toolchain. Current upload minima, Xcode-supported deployment versions,
+linked SDK, and runtime test OS are separate facts. An extension's own plist
+cannot be replaced by its parent app's metadata.
+
+Technology statuses from the scanner are `manual` or `not_detected`. A reviewed
+report may use `verified` or `not_applicable` with supporting evidence and a
+reason. Missing source signals never establish a pass or non-applicability.
+Keep each technology's evidence count and display cap, and retain baseline design,
+adaptivity, runtime, product-page, and archive checks even when no feature is
+detected. See [ios27-readiness.md](ios27-readiness.md) for future and beta items.
+
+`release_watchlist` records announced dates, preview/beta channels and verification
+steps. These contextual rows are not findings and do not count as blockers.
+Preserve month-only or approximate dates in `timing` rather than inventing a day.
+Render them in Markdown and HTML, including print output. Source-negative
+technology coverage must remain visible in print even when its screen disclosure
+is collapsed. No typed metadata scanned means manual coverage is still required.
 
 Each finding object contains:
 

@@ -115,6 +115,10 @@ At the end of each pass, remove anything that does not help the reader understan
 ## Content integrity
 
 - JSON is canonical. Never infer or decorate missing values into facts.
+- Render optional `platform_review` after scope with authored/archive values,
+  dated reference status, runtime status and technology evidence. Keep manual,
+  not-detected and future/beta states visible; do not turn coverage into an
+  adoption score. Earlier report schemas remain readable.
 - Do not add pass rates, risk percentages, approval odds, or invented test results.
 - A scanner-only report is preliminary until each finding is reviewed and manual paths are executed.
 - Keep evidence confidence visible for every finding.
@@ -126,7 +130,11 @@ At the end of each pass, remove anything that does not help the reader understan
 - Inspect at roughly 1440 px and 390 px in light and dark appearances.
 - Check long paths, rejection text, empty sections, and zero counts.
 - Confirm body and document scroll widths never exceed the viewport.
+- Inspect evidence elements too: clipping can hide long paths while page widths
+  still pass. Check text/container bounds at phone widths.
 - Print to PDF and inspect page breaks.
+- Verify not-detected coverage and future/beta timing survive print while screen
+  disclosures are collapsed.
 - Confirm there are no script tags, remote styles, images, fonts, or tracking calls.
 - Compare the result against the anti-slop list before approving the screenshot.
 

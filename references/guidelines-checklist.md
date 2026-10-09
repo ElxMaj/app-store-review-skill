@@ -1,8 +1,10 @@
 # Pre-submission checklist
 
-Last verified against Apple's official pages: 2026-08-10.
+Core policy and platform update checked against Apple's official pages: 2026-10-09. Retained source/case dates are recorded in `references/evidence-policy.md`.
 
 This checklist supports iOS and iPadOS. Apply only the sections relevant to the app. Use `references/evidence-policy.md` for claim wording and `references/frameworks.md` for generated configuration.
+
+Use `references/ios27-readiness.md` for the iOS 27 engineering, design, accessibility, Duo, commerce and product-page review. It distinguishes active gates from optional features, point-release behavior, beta changes and future deadlines.
 
 ## Contents
 
@@ -20,6 +22,9 @@ This checklist supports iOS and iPadOS. Apply only the sections relevant to the 
 ## 1. Submission gates
 
 - [ ] `BLOCKER`, `OFFICIAL`: The uploaded build uses the current minimum Xcode and platform SDK. Since April 28, 2026 Apple requires Xcode 26 or later and an iOS 26 or iPadOS 26 SDK. Recheck `https://developer.apple.com/news/upcoming-requirements/` before reporting.
+- [ ] `BLOCKER`, `OFFICIAL`: Since September 9, 2026, iOS/iPadOS uploads target iOS 13 or later. Verify each iOS executable bundle's `MinimumOSVersion`; source settings alone remain manual.
+- [ ] `BLOCKER`, `OFFICIAL`: An app linked with SDK 27+ declares a launch screen using one of the four supported plist keys. Check the shipped app bundle and resources; do not assign this app-only gate to an extension. See Apple's TN3208.
+- [ ] `MANUAL CHECK`, `OFFICIAL`: SDK 27+ apps adopt the scene lifecycle. Verify static or dynamic scene configuration and actual launch behavior; missing source configuration alone does not prove a failure.
 - [ ] `BLOCKER`, `OFFICIAL`: Required Reason API use is declared in the privacy manifest with an approved reason. Check app and extension bundles separately.
 - [ ] `BLOCKER`, `OFFICIAL`: SDKs on Apple's required-signature and privacy-manifest list meet the current requirements. Inspect the resolved build products, not package names alone.
 - [ ] `BLOCKER`, `OFFICIAL`: The App Store icon and asset catalog pass Xcode and App Store Connect validation.
@@ -47,6 +52,7 @@ Do not report `ITMS-91053` unless the user supplied that upload error or the arc
 - [ ] `WARNING`, `OFFICIAL`: The age rating answers reflect UGC, messaging, web access, simulated gambling, medical content, and other relevant capabilities.
 - [ ] `WARNING`, `OFFICIAL`: Subscription and purchase claims match the products, prices, and trial terms configured in App Store Connect.
 - [ ] `MANUAL CHECK`, `OFFICIAL`: Accessibility Nutrition Labels, privacy answers, categories, and regional fields match the build.
+- [ ] `MANUAL CHECK`, `OFFICIAL`: Product-page headers, search creative assets, Asset Library approvals and localized device/orientation previews match the actual build and current specifications. Track the announced April 2027 Duo screenshot requirement separately from today's gates.
 
 ### Guideline 2.3.7 price-reference field and context matrix
 
@@ -82,6 +88,7 @@ screenshot and preview assets. Local Fastlane files do not prove storefront stat
 - [ ] `WARNING`, `OFFICIAL`: SDK initialization does not send tracking data before the ATT decision.
 - [ ] `WARNING`, `OFFICIAL`: The app offers a usable way to withdraw consent where the guideline requires it.
 - [ ] `WARNING`, `OFFICIAL`: Sensitive credentials and tokens use an appropriate protected store rather than plaintext files or UserDefaults.
+- [ ] `MANUAL CHECK`, `INFERENCE`: Foundation Models provider/profile switches and cloud fallbacks preserve recipient-specific permission, privacy disclosures and accurate on-device/cloud claims. Inspect local models, PCC and third-party providers separately.
 
 ### Accounts
 
@@ -120,6 +127,7 @@ screenshot and preview assets. Local Fastlane files do not prove storefront stat
 - [ ] `WARNING`, `OFFICIAL`: "Free" and discount claims accurately describe the usable experience and amount billed.
 - [ ] `BLOCKER`, `OFFICIAL`: Paid randomized virtual items disclose odds when the guideline applies.
 - [ ] `MANUAL CHECK`, `OFFICIAL`: Products, review screenshots, localization, and availability are submitted with the build as required.
+- [ ] `MANUAL CHECK`, `OFFICIAL`: Bundles/Suites, assigned or revoked subscription seats, and monthly commitments use the applicable StoreKit/server lifecycle, eligibility and dated rollout. Do not advertise an announced capability as universally available.
 
 ## 7. Guideline 1.2, user-generated content
 
@@ -154,6 +162,7 @@ Execute when possible and otherwise mark `MANUAL CHECK`:
 - [ ] Verify support, privacy, terms, and external links.
 - [ ] Check Dynamic Type, VoiceOver, contrast, Reduce Motion, Reduce Transparency, keyboard navigation where applicable, and rotation.
 - [ ] Confirm review notes explain unusual hardware, geography, accounts, permissions, and IAP.
+- [ ] Follow the platform runtime matrix for iOS 27, adaptive scenes, AI states, relevant Duo poses and exact point-release behavior; record OS/SDK/device and whether each observation used hardware or simulation.
 
 ## 10. Special categories
 
