@@ -41,10 +41,12 @@ Write: "A possible explanation is..." Include what evidence would confirm or fal
 7. Do not assign approval probabilities or success rates without a defined dataset and denominator.
 8. If a source reports several simultaneous changes before approval, do not attribute the outcome to one change.
 9. Mark policy facts that can age, such as SDK minimums and regional purchase rules, with a verification date.
+10. Record announcement, customer availability, enforcement date, SDK linking and runtime version separately. Beta release notes are not automatically a current global submission requirement.
+11. Official API documentation establishes capabilities, not that the app uses them correctly. Static feature absence, absent optional adoption, and unavailable test evidence must not become invented violations.
 
 ## Official sources
 
-Last verified: 2026-08-10.
+App Review Guidelines, Upcoming Requirements, App Store asset guidance and the iOS 27 platform update rechecked: 2026-10-09. Other retained entries below use the original 2026-08-10 baseline and need rechecking when material to a new audit. Community recovery cases were not revalidated merely by refreshing platform guidance.
 
 | Subject | Source |
 |---|---|
@@ -55,6 +57,9 @@ Last verified: 2026-08-10.
 | Submitting an app for review | https://developer.apple.com/help/app-store-connect/manage-submissions-to-app-review/submit-an-app-for-review/ |
 | App privacy details | https://developer.apple.com/app-store/app-privacy-details/ |
 | Privacy manifests and Required Reason APIs | https://developer.apple.com/documentation/bundleresources/privacy_manifest_files |
+| iOS 27 capabilities, engineering/design sources, point releases and dated rollout | `references/ios27-sources.md` |
+
+The scanner's `policy_verified_at` and platform `reference_verified_at` identify its bundled baseline. A live audit must separately record the sources actually opened and its verification date; never present a static scan as fresh network verification.
 
 ## Selected case evidence
 

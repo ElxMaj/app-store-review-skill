@@ -1,7 +1,7 @@
 {
   "name": "app-store-review",
-  "version": "1.2.2",
-  "description": "Audit iOS and iPadOS apps before review, recover from rejections, diagnose 4.3 similarity risks, and produce visual review reports.",
+  "version": "2.0.0",
+  "description": "Evidence-based App Store review and iOS 27 engineering, design, accessibility, and product-page readiness for iOS and iPadOS apps.",
   "author": {
     "name": "Elie Majorel",
     "url": "https://github.com/ElxMaj"
@@ -17,6 +17,10 @@
     "xcode",
     "expo",
     "react-native",
-    "flutter"
+    "flutter",
+    "ios27",
+    "apple-intelligence",
+    "app-intents",
+    "accessibility"
   ]
 }

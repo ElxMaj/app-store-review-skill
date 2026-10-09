@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleIdentifier</key>
+	<string>com.example.timer</string>
+	<key>CFBundleName</key>
+	<string>Timer</string>
+	<key>DTPlatformName</key>
+	<string>iphoneos</string>
+	<key>DTSDKName</key>
+	<string>iphoneos26.0</string>
+	<key>DTXcode</key>
+	<string>2600</string>
+	<key>MinimumOSVersion</key>
+	<string>15.0</string>
+	<key>UILaunchScreen</key>
+	<dict/>
+</dict>
+</plist>

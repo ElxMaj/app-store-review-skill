@@ -1,0 +1,6 @@
+{
+  "description": "Audit this journal app and the supplied metadata-only Journal.xcarchive for iOS 27 engineering, design, and App Store readiness. Work offline, report first, and do not edit the app. Save Markdown, JSON, and HTML. The fixture contains bundle metadata rather than runnable executables; do not claim runtime validation.",
+  "include": [
+    "./inputs"
+  ]
+}

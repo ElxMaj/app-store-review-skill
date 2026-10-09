@@ -9,3 +9,6 @@ playwright-report/
 test-results/
 *.swp
 *~
+
+__pycache__/
+*.pyc

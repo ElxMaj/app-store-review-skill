@@ -1,7 +1,7 @@
 {
   "name": "app-store-review",
-  "description": "Evidence-based App Store review audits, rejection recovery, and shareable visual reports for iOS and iPadOS projects.",
-  "version": "1.2.2",
+  "description": "Evidence-based App Store review and iOS 27 engineering, design, accessibility, and product-page readiness for iOS and iPadOS apps.",
+  "version": "2.0.0",
   "keywords": [
     "ios",
     "ipados",
@@ -10,7 +10,11 @@
     "compliance",
     "expo",
     "react-native",
-    "flutter"
+    "flutter",
+    "ios27",
+    "apple-intelligence",
+    "app-intents",
+    "accessibility"
   ],
   "author": {
     "name": "Elie Majorel",

@@ -1,15 +1,15 @@
 {
-  "schema_version": "1.1",
+  "schema_version": "1.2",
   "sample": true,
   "app_name": "ParcelTrack",
   "modes": [
     "pre_submission",
     "human_craft"
   ],
-  "generated_at": "2026-08-10T12:00:00Z",
+  "generated_at": "2026-10-09T12:00:00Z",
   "root": "/example/ParcelTrack",
   "verdict": "NOT READY",
-  "policy_verified_at": "2026-08-10",
+  "policy_verified_at": "2026-10-09",
   "summary": "One confirmed privacy blocker remains. Two warnings need product and target-level review before this build is ready for App Store Connect.",
   "project": {
     "frameworks": [
@@ -39,7 +39,7 @@
   "counts": {
     "blocker": 1,
     "warning": 2,
-    "manual_check": 3,
+    "manual_check": 8,
     "info": 1
   },
   "findings": [
@@ -129,10 +129,40 @@
   ],
   "manual_checks": [
     {
-      "id": "ASR-MANUAL-PURCHASE",
-      "title": "Subscription terms and restore path",
-      "reason": "Static source cannot prove the storefront terms, localized price, and restored entitlement state shown by the release build.",
-      "verification": "Use a sandbox account to purchase, cancel, reinstall, and restore on iPhone and iPad."
+      "id": "ASR-MANUAL-DEPLOYMENT",
+      "title": "Verify the upload toolchain and supported OS",
+      "reason": "The fictional sample has no candidate archive. Authored settings cannot establish linked SDK, Xcode, or each extension deployment target.",
+      "verification": "Inspect each executable bundle and CI log against current upload requirements and the selected toolchain support table."
+    },
+    {
+      "id": "ASR-MANUAL-IOS27-ADAPTIVITY",
+      "title": "Verify scenes and adaptive layouts",
+      "reason": "Screens and source cannot establish fold/unfold, Mirroring, per-scene state or SDK-linked lifecycle behavior.",
+      "verification": "Verify launch, restoration, live resizing, keyboard and task continuity on the candidate, separating simulation from hardware evidence."
+    },
+    {
+      "id": "ASR-MANUAL-IOS27-DESIGN",
+      "title": "Inspect materials and accessibility",
+      "reason": "iOS 27 readability, icon appearance and assistive task completion are unverified.",
+      "verification": "Test Dynamic Type, VoiceOver, contrast, transparency and motion preferences through the core tracking flow."
+    },
+    {
+      "id": "ASR-MANUAL-IOS27-PRODUCT-PAGE",
+      "title": "Review localized store assets and claims",
+      "reason": "Headers, search assets and Asset Library approval states were not supplied.",
+      "verification": "Inspect approved localized previews and feature/device claims. Treat April 2027 Duo screenshots as a future requirement."
+    },
+    {
+      "id": "ASR-MANUAL-IOS27-RUNTIME",
+      "title": "Run the iOS 27 compatibility matrix",
+      "reason": "No iOS 27 runtime tests are included in this sample.",
+      "verification": "Execute the candidate on the supported OS/device matrix and record actual results."
+    },
+    {
+      "id": "ASR-MANUAL-IPAD",
+      "title": "Core tracking path works on iPad",
+      "reason": "The repository does not prove layout, rotation, keyboard, or split-view behavior in the submitted build.",
+      "verification": "Complete add, edit, notification, and delete flows on a supported iPad in portrait, landscape, and split view."
     },
     {
       "id": "ASR-MANUAL-PRIVACY",
@@ -141,16 +171,18 @@
       "verification": "Trace production analytics and crash payloads, then compare them with the submitted privacy answers."
     },
     {
-      "id": "ASR-MANUAL-IPAD",
-      "title": "Core tracking path works on iPad",
-      "reason": "The repository does not prove layout, rotation, keyboard, or split-view behavior in the submitted build.",
-      "verification": "Complete add, edit, notification, and delete flows on a supported iPad in portrait, landscape, and split view."
+      "id": "ASR-MANUAL-PURCHASE",
+      "title": "Subscription terms and restore path",
+      "reason": "Static source cannot prove the storefront terms, localized price, and restored entitlement state shown by the release build.",
+      "verification": "Use a sandbox account to purchase, cancel, reinstall, and restore on iPhone and iPad."
     }
   ],
   "limitations": [
     "No App Store Connect metadata export was supplied.",
     "Subscription and notification paths were not executed on a release build.",
-    "The sample contains fictional project evidence for demonstration only."
+    "The sample contains fictional project evidence for demonstration only.",
+    "No candidate archive or signed capabilities were supplied.",
+    "iOS 27 runtime, Duo adaptation and new App Store asset checks were not executed."
   ],
   "craft": {
     "dimensions": [
@@ -234,7 +266,332 @@
   ],
   "scanner": {
     "name": "app_store_review_scan",
-    "version": "1.2.2"
+    "version": "2.0.0"
   },
-  "disclaimer": "Fictional sample based on public guidance. Approval is not guaranteed. Not affiliated with Apple."
+  "disclaimer": "Fictional sample based on public guidance. Approval is not guaranteed. Not affiliated with Apple.",
+  "platform_review": {
+    "target_os": "iOS 27 / iPadOS 27",
+    "reference_verified_at": "2026-10-09",
+    "verification_status": "bundled_reference",
+    "runtime_test_status": "not_run",
+    "submission_requirements": {
+      "sdk_major": {
+        "minimum": 26,
+        "effective_at": "2026-04-28",
+        "source": "https://developer.apple.com/news/upcoming-requirements/"
+      },
+      "xcode_major": {
+        "minimum": 26,
+        "effective_at": "2026-04-28",
+        "source": "https://developer.apple.com/news/upcoming-requirements/"
+      },
+      "deployment_major": {
+        "minimum": 13,
+        "effective_at": "2026-09-09",
+        "source": "https://developer.apple.com/news/upcoming-requirements/"
+      }
+    },
+    "build_evidence": [],
+    "technologies": [
+      {
+        "id": "foundation_models",
+        "title": "Foundation Models",
+        "status": "not_detected",
+        "evidence_confidence": "inference",
+        "evidence": [],
+        "evidence_total": 0,
+        "evidence_omitted": 0,
+        "verification": "Test model availability, multimodal input permissions, context limits, guardrail failures, tool side effects, and provider switching."
+      },
+      {
+        "id": "private_cloud_compute",
+        "title": "Private Cloud Compute",
+        "status": "not_detected",
+        "evidence_confidence": "inference",
+        "evidence": [],
+        "evidence_total": 0,
+        "evidence_omitted": 0,
+        "verification": "Verify eligibility and signed capability, network and usage-limit failures, fallback, and accurate cloud-processing disclosure."
+      },
+      {
+        "id": "core_ai",
+        "title": "Core AI and custom models",
+        "status": "not_detected",
+        "evidence_confidence": "inference",
+        "evidence": [],
+        "evidence_total": 0,
+        "evidence_omitted": 0,
+        "verification": "Check model licensing, downloaded asset integrity, hardware support, memory, cancellation, thermal load, and background inference authorization."
+      },
+      {
+        "id": "evaluations",
+        "title": "AI evaluations",
+        "status": "not_detected",
+        "evidence_confidence": "inference",
+        "evidence": [],
+        "evidence_total": 0,
+        "evidence_omitted": 0,
+        "verification": "Inspect real evaluation results and system-path intent tests; test-only imports do not establish shipping feature adoption."
+      },
+      {
+        "id": "app_intents",
+        "title": "Siri and App Intents",
+        "status": "not_detected",
+        "evidence_confidence": "inference",
+        "evidence": [],
+        "evidence_total": 0,
+        "evidence_omitted": 0,
+        "verification": "Test schemas, view annotations, entity access, authentication, confirmation of destructive actions, and real Siri/Shortcuts pathways."
+      },
+      {
+        "id": "spotlight",
+        "title": "Spotlight and semantic search",
+        "status": "not_detected",
+        "evidence_confidence": "inference",
+        "evidence": [],
+        "evidence_total": 0,
+        "evidence_omitted": 0,
+        "verification": "Test attribution, private-content eligibility, index deletion after logout/account deletion, stale entities, and natural-language retrieval."
+      },
+      {
+        "id": "swiftui",
+        "title": "SwiftUI and document interfaces",
+        "status": "not_detected",
+        "evidence_confidence": "inference",
+        "evidence": [],
+        "evidence_total": 0,
+        "evidence_omitted": 0,
+        "verification": "Test visible tab selection, state initialization, text gestures, image caching, async document operations, and scrolling under the actual linked SDK."
+      },
+      {
+        "id": "uikit",
+        "title": "UIKit, scenes, and adaptive layout",
+        "status": "not_detected",
+        "evidence_confidence": "inference",
+        "evidence": [],
+        "evidence_total": 0,
+        "evidence_omitted": 0,
+        "verification": "Verify scene lifecycle and resizing; replace layout assumptions based on the main screen, device idiom, or orientation when they fail in resizable scenes."
+      },
+      {
+        "id": "widgets_live_activities",
+        "title": "Widgets, controls, and Live Activities",
+        "status": "manual",
+        "evidence_confidence": "inference",
+        "evidence": [
+          {
+            "path": "ios/ParcelTrackWidget/ParcelTrackWidget.swift",
+            "line": 1,
+            "signal": "Illustrative Widgets, controls, and Live Activities source signal"
+          }
+        ],
+        "evidence_total": 1,
+        "evidence_omitted": 0,
+        "verification": "Test each extension's signed configuration, App Intents, dynamic styling, privacy redaction, updates, deep links, and expired data."
+      },
+      {
+        "id": "background_assets",
+        "title": "Background Assets and background work",
+        "status": "not_detected",
+        "evidence_confidence": "inference",
+        "evidence": [],
+        "evidence_total": 0,
+        "evidence_omitted": 0,
+        "verification": "Check localized asset packs, low storage, interrupted downloads, legitimate background modes, and the transition from deprecated On Demand Resources."
+      },
+      {
+        "id": "storekit",
+        "title": "StoreKit and subscriptions",
+        "status": "manual",
+        "evidence_confidence": "inference",
+        "evidence": [
+          {
+            "path": "src/purchases.ts",
+            "line": 1,
+            "signal": "Illustrative StoreKit and subscriptions source signal"
+          }
+        ],
+        "evidence_total": 1,
+        "evidence_omitted": 0,
+        "verification": "Verify StoreKit 2, offers, refunds, restore, assigned/revoked seats, bundles/suites eligibility and rollout, and monthly commitment disclosures."
+      },
+      {
+        "id": "music_understanding",
+        "title": "Music Understanding",
+        "status": "not_detected",
+        "evidence_confidence": "inference",
+        "evidence": [],
+        "evidence_total": 0,
+        "evidence_omitted": 0,
+        "verification": "Verify audio provenance, permissions, model availability, analysis accuracy, cancellation, and licensed use of music."
+      },
+      {
+        "id": "now_playing",
+        "title": "Now Playing and media sharing",
+        "status": "not_detected",
+        "evidence_confidence": "inference",
+        "evidence": [],
+        "evidence_total": 0,
+        "evidence_omitted": 0,
+        "verification": "Test playback state and controls on the Lock Screen, Control Center, Dynamic Island, and CarPlay; inspect each sharing extension separately."
+      },
+      {
+        "id": "camera_photos",
+        "title": "Camera, photos, RAW, and video",
+        "status": "not_detected",
+        "evidence_confidence": "inference",
+        "evidence": [],
+        "evidence_total": 0,
+        "evidence_omitted": 0,
+        "verification": "Test limited photo access, Center Stage orientation/cropping, capture startup, RAW export, and device-supported video processing."
+      },
+      {
+        "id": "games_spatial",
+        "title": "Games, Metal, and spatial content",
+        "status": "not_detected",
+        "evidence_confidence": "inference",
+        "evidence": [],
+        "evidence_total": 0,
+        "evidence_omitted": 0,
+        "verification": "Test touch and controller input, resizing, GPU memory/frame pacing, content rights, and availability of announced spatial APIs."
+      },
+      {
+        "id": "pencil_paper",
+        "title": "PencilKit and PaperKit",
+        "status": "not_detected",
+        "evidence_confidence": "inference",
+        "evidence": [],
+        "evidence_total": 0,
+        "evidence_omitted": 0,
+        "verification": "Test handwriting language support, latency, editing/export, assistive input, and touch/keyboard alternatives."
+      },
+      {
+        "id": "health_home",
+        "title": "HealthKit and HomeKit",
+        "status": "not_detected",
+        "evidence_confidence": "inference",
+        "evidence": [],
+        "evidence_total": 0,
+        "evidence_omitted": 0,
+        "verification": "Test limited health-history authorization, unavailable samples, sensitive-data handling, accessory compatibility, and subscription/region conditions."
+      },
+      {
+        "id": "trust_insights",
+        "title": "Trust Insights",
+        "status": "not_detected",
+        "evidence_confidence": "inference",
+        "evidence": [],
+        "evidence_total": 0,
+        "evidence_omitted": 0,
+        "verification": "Verify the signed entitlement, connectivity failure behavior, privacy disclosures, and how results affect user access."
+      },
+      {
+        "id": "identity_security",
+        "title": "Identity, age assurance, and security",
+        "status": "not_detected",
+        "evidence_confidence": "inference",
+        "evidence": [],
+        "evidence_total": 0,
+        "evidence_omitted": 0,
+        "verification": "Test credential recovery, age/parental-consent flows when applicable, protected actions, signed entitlements, and storefront-specific obligations."
+      },
+      {
+        "id": "network_accessories",
+        "title": "Networking and accessories",
+        "status": "not_detected",
+        "evidence_confidence": "inference",
+        "evidence": [],
+        "evidence_total": 0,
+        "evidence_omitted": 0,
+        "verification": "Check accessory/region availability, denied permissions, pairing, reconnect, and stricter TLS in affected managed-device services."
+      },
+      {
+        "id": "metrics",
+        "title": "MetricKit and performance",
+        "status": "not_detected",
+        "evidence_confidence": "inference",
+        "evidence": [],
+        "evidence_total": 0,
+        "evidence_omitted": 0,
+        "verification": "Validate crash/memory diagnostics, state reporting, hitch metrics, privacy-safe telemetry, and compatibility of renamed/removed APIs."
+      },
+      {
+        "id": "web",
+        "title": "WebKit and embedded web content",
+        "status": "not_detected",
+        "evidence_confidence": "inference",
+        "evidence": [],
+        "evidence_total": 0,
+        "evidence_omitted": 0,
+        "verification": "Test web permissions, auth redirects, content rules, downloads, resizing, and legitimate navigation under the candidate OS."
+      },
+      {
+        "id": "tracking",
+        "title": "Tracking and ATT",
+        "status": "not_detected",
+        "evidence_confidence": "inference",
+        "evidence": [],
+        "evidence_total": 0,
+        "evidence_omitted": 0,
+        "verification": "Trace tracking behavior and denial first; separately verify iOS 27.2 beta expanded-interface rules for affected EU countries and exact SDK API names before adopting them."
+      }
+    ],
+    "reference": "references/ios27-readiness.md",
+    "release_watchlist": [
+      {
+        "id": "duo_launch",
+        "title": "iPhone Duo customer availability",
+        "status": "announced",
+        "release_channel": "27.1 development support",
+        "timing": "October 23, 2026",
+        "source": "https://developer.apple.com/news/?id=kkphp5qo",
+        "verification": "Use available development tools; record physical-device evidence only when the device was actually tested."
+      },
+      {
+        "id": "duo_screenshots",
+        "title": "Duo screenshot submission requirement",
+        "status": "future_requirement",
+        "release_channel": "App Store submission",
+        "timing": "April 2027 (day not announced)",
+        "source": "https://developer.apple.com/news/?id=kkphp5qo",
+        "verification": "Prepare device/orientation assets and recheck the enforcement date; this is not an October 2026 blocker."
+      },
+      {
+        "id": "xcode271",
+        "title": "Xcode 27.1 simulator and extension limits",
+        "status": "release_candidate",
+        "release_channel": "27.1 RC",
+        "timing": "Snapshot checked October 9, 2026",
+        "source": "https://developer.apple.com/documentation/xcode-release-notes/xcode-27_1-release-notes",
+        "verification": "Distinguish simulator/Device Hub limitations from app failures and check the actual tool revision."
+      },
+      {
+        "id": "ios272_att",
+        "title": "iOS/iPadOS 27.2 tracking changes",
+        "status": "beta",
+        "release_channel": "27.2 beta 3",
+        "timing": "Snapshot checked October 9, 2026",
+        "source": "https://developer.apple.com/documentation/ios-ipados-release-notes/ios-ipados-27_2-release-notes",
+        "verification": "Verify the expanded ATT interface, annual EU re-prompt and renamed APIs against the actual beta SDK and applicable region; do not impose a current worldwide requirement."
+      },
+      {
+        "id": "subscription_rollout",
+        "title": "Expanded subscription purchasing",
+        "status": "announced",
+        "release_channel": "App Store commerce rollout",
+        "timing": "Volume: October 22, 2026; Groups: winter; Bundles/Suites: later in 2026",
+        "source": "https://developer.apple.com/news/?id=likeohx4",
+        "verification": "Check eligibility and actual customer availability separately from access to configuration; test StoreKit 2 ownership, seats, refunds and restore."
+      },
+      {
+        "id": "preview_capabilities",
+        "title": "Preview and future framework surfaces",
+        "status": "preview",
+        "release_channel": "27 SDK release notes",
+        "timing": "Verify the owning feature's release and region",
+        "source": "https://developer.apple.com/documentation/ios-ipados-release-notes/ios-ipados-27-release-notes",
+        "verification": "Check AudioAccessoryKit, spatial APIs and other used preview capabilities individually. Resolved beta issues are not current app defects."
+      }
+    ]
+  }
 }

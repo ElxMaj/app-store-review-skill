@@ -1,4 +1,4 @@
 interface:
   display_name: "App Store Review"
-  short_description: "Audit App Store risks with evidence and visual reports"
-  default_prompt: "Use $app-store-review to audit this iOS app before submission, produce the visual report, and show evidence before proposing fixes."
+  short_description: "Audit iOS 27 and App Store risks with evidence and reports"
+  default_prompt: "Use $app-store-review to audit this iOS app and candidate archive for iOS 27 engineering, design, and product-page readiness. Produce the visual report with evidence before proposing fixes."

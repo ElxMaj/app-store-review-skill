@@ -6,7 +6,7 @@
 
 <a href="https://elxmaj.github.io/app-store-review-skill/"><img src="site/assets/review-gate-social.png" alt="App Store Review Skill evidence crossing a red review gate into a ParcelTrack report marked Not Ready" width="960"></a>
 
-[![MIT License](https://img.shields.io/badge/license-MIT-111318.svg)](LICENSE) [![Guidelines verified August 10, 2026](https://img.shields.io/badge/guidelines-verified%202026--08--10-3559D8.svg)](https://developer.apple.com/app-store/review/guidelines/) [![Tessl evaluation](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.tessl.io%2Fv1%2Fbadges%2Fmaj-labs%2Fapp-store-review)](https://tessl.io/registry/maj-labs/app-store-review) [![ClaudePluginHub](https://www.claudepluginhub.com/badge/elxmaj-app-store-review)](https://www.claudepluginhub.com/plugins/elxmaj-app-store-review?ref=badge)
+[![MIT License](https://img.shields.io/badge/license-MIT-111318.svg)](LICENSE) [![Apple sources checked October 9, 2026](https://img.shields.io/badge/Apple%20sources-checked%202026--10--09-3559D8.svg)](https://developer.apple.com/app-store/review/guidelines/) [![Tessl evaluation](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.tessl.io%2Fv1%2Fbadges%2Fmaj-labs%2Fapp-store-review)](https://tessl.io/registry/maj-labs/app-store-review) [![ClaudePluginHub](https://www.claudepluginhub.com/badge/elxmaj-app-store-review)](https://www.claudepluginhub.com/plugins/elxmaj-app-store-review?ref=badge)
 
 [Product page](https://elxmaj.github.io/app-store-review-skill/) · [Star on GitHub](https://github.com/ElxMaj/app-store-review-skill) · [Open the complete sample report](https://elxmaj.github.io/app-store-review-skill/report/) · [Inspect its source JSON](https://elxmaj.github.io/app-store-review-skill/report/parceltrack-report.json)
 
@@ -65,6 +65,7 @@ The reviewed JSON becomes a self-contained editorial report, not a fake dashboar
 
 ```text
 /app-store-review Audit this Expo app before submission. Report first and do not edit files.
+/app-store-review Check this release archive for iOS 27 engineering, design, and product-page readiness.
 /app-store-review Apple rejected build 42 under 4.3(a). Find the cause and draft my reply.
 /app-store-review Run the human-craft audit. Show what feels generic or unfinished.
 /app-store-review Audit this iPad app's Apple design quality, including motion and gestures.
@@ -76,7 +77,7 @@ For deterministic scanning outside an agent:
 python3 scripts/app_store_review_scan.py <project-path> --format all --output-dir <report-directory>
 ```
 
-Add typed metadata with `--metadata FIELD[:LOCALE]=PATH` and Fastlane trees with `--metadata-root PATH`.
+Add typed metadata with `--metadata FIELD[:LOCALE]=PATH`, Fastlane trees with `--metadata-root PATH`, and an IPA, ZIP or `.xcarchive` with `--archive PATH`.
 
 ## Coverage
 
@@ -91,6 +92,14 @@ Add typed metadata with `--metadata FIELD[:LOCALE]=PATH` and Fastlane trees with
 
 Apple’s published guidelines do not name AI-written code as a rejection category. They do assess the product that ships. Read the source-based guide to [Guidelines 4.2.6 and 4.3](https://elxmaj.github.io/app-store-review-skill/guides/will-apple-reject-ai-built-apps/).
 
+## iOS 27 coverage
+
+**Version 2.0.0** adds engineering, design and product-page review across 23 technology families. The [readiness guide](references/ios27-readiness.md) and [Apple source register](references/ios27-sources.md) cover Foundation Models/PCC, Core AI, Siri/search, native interfaces, widgets, background assets, media, games, health, identity, tracking and commerce.
+
+The scanner reads each app/extension plist from an IPA, ZIP or `.xcarchive`, checks dated SDK/Xcode/deployment gates and SDK 27 launch-screen declarations, and routes runtime, scenes, accessibility, adaptive/Duo layouts and store assets to manual verification. Optional API adoption is not a submission requirement.
+
+JSON schema 1.2 adds `platform_review` and dated `release_watchlist` context; earlier reports remain readable. All formats preserve beta/future scope and print coverage. No project code, build, app or network request is executed; static evidence cannot prove runtime compatibility, signing or asset approval.
+
 ## Keep the evidence current
 
 [`references/research-prompt.md`](references/research-prompt.md) is a quarterly research prompt for checking official policy changes and refreshing rejection evidence. New cases must include the guideline, Apple’s wording when available, the response, outcome, date, and source URL.
@@ -101,6 +110,7 @@ Apple’s published guidelines do not name AI-written code as a rejection catego
 SKILL.md                          Workflow and review rules
 references/                       Policy, recovery, craft, and framework guidance
 scripts/app_store_review_scan.py  Read-only deterministic scanner
+scripts/ios_platform_review.py    Archive gates and iOS 27 evidence routing
 scripts/render_app_store_report.py Self-contained report renderer
 scripts/tests/                    Regression tests
 evals/                            Behavior and trigger cases
@@ -108,6 +118,10 @@ evals/                            Behavior and trigger cases
 ```
 
 ## Contributing
+
+After changing canonical resources, run `python3 .github/scripts/package_skill.py`
+to refresh the Copilot package and portable archive, then run the test suite.
+The packaging step is deterministic and does not publish a release.
 
 Real rejection cases and false-positive reports are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) first, and never publish credentials, signing material, personal data, or private app details.
 

@@ -44,6 +44,7 @@ body {
 a { color: var(--link); text-underline-offset: 0.16em; }
 code, pre, .mono {
   font-family: ui-monospace, "SFMono-Regular", SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  overflow-wrap: anywhere;
 }
 
 .report {
@@ -204,7 +205,8 @@ main { min-width: 0; padding-bottom: 100px; counter-reset: report-section; }
 
 .manual-grid, .craft-grid { border-top: 1px solid var(--rule); }
 .manual-card, .craft-card { display: grid; grid-template-columns: 155px minmax(0, 1fr); gap: 25px; padding: 21px 0 23px; border-bottom: 1px solid var(--rule); }
-.row-copy { min-width: 0; }
+.row-copy { min-width: 0; overflow-wrap: anywhere; }
+.print-only { display: none; }
 .manual-card h3, .craft-card h3 { margin: 0 0 7px; font-size: 17px; font-weight: 600; letter-spacing: -0.012em; }
 .manual-card p, .craft-card p { margin: 0; color: var(--muted); font-size: 14px; }
 .manual-verify { margin-top: 11px !important; color: var(--ink) !important; }
@@ -305,6 +307,8 @@ main { min-width: 0; padding-bottom: 100px; counter-reset: report-section; }
   .hero { padding-top: 35px; }
   .document-grid { display: block; }
   .report-index { display: none; }
+  .technology-disclosure { display: none; }
+  .print-only { display: block; font-size: 11px; }
   #findings, #fix-plan { break-before: page; page-break-before: always; }
   .section-heading { break-after: avoid-page; page-break-after: avoid; }
   .finding, .manual-card, .craft-card, .panel, .fix-group { break-inside: avoid; }
@@ -320,7 +324,7 @@ main { min-width: 0; padding-bottom: 100px; counter-reset: report-section; }
         <p class="identity-title">App Store review</p>
         <p class="identity-subtitle">Independent release assessment</p>
       </div>
-      <div class="policy">Policy / 2026-08-10</div>
+      <div class="policy">Bundled policy / 2026-10-09</div>
     </header>
     <section class="shell hero">
         <p class="sample-flag">Sample report</p>
@@ -331,9 +335,9 @@ main { min-width: 0; padding-bottom: 100px; counter-reset: report-section; }
         <p class="hero-summary">One confirmed privacy blocker remains. Two warnings need product and target-level review before this build is ready for App Store Connect.</p>
         <div class="mode-row"><span class="mode-item">Pre-submission</span><span class="mode-item">Human-craft audit</span></div>
     </section>
-    <div class="shell"><div class="metrics" aria-label="Finding counts"><div class="metric"><span class="metric-value">1</span><span class="metric-label">Blocker</span></div><div class="metric"><span class="metric-value">2</span><span class="metric-label">Warning</span></div><div class="metric"><span class="metric-value">3</span><span class="metric-label">Manual check</span></div><div class="metric"><span class="metric-value">1</span><span class="metric-label">Info</span></div></div></div>
+    <div class="shell"><div class="metrics" aria-label="Finding counts"><div class="metric"><span class="metric-value">1</span><span class="metric-label">Blocker</span></div><div class="metric"><span class="metric-value">2</span><span class="metric-label">Warning</span></div><div class="metric"><span class="metric-value">8</span><span class="metric-label">Manual check</span></div><div class="metric"><span class="metric-value">1</span><span class="metric-label">Info</span></div></div></div>
     <div class="shell document-grid">
-      <nav class="report-index" aria-label="Report contents"><p class="index-label">Contents</p><ol><li><a href="#scope">Scope</a></li><li><a href="#findings">Findings</a></li><li><a href="#manual-checks">Manual checks</a></li><li><a href="#craft">Product craft</a></li><li><a href="#reviewer-path">Reviewer path</a></li><li><a href="#review-notes">Review notes</a></li><li><a href="#fix-plan">Proposed fixes</a></li></ol></nav>
+      <nav class="report-index" aria-label="Report contents"><p class="index-label">Contents</p><ol><li><a href="#scope">Scope</a></li><li><a href="#platform-review">Platform readiness</a></li><li><a href="#findings">Findings</a></li><li><a href="#manual-checks">Manual checks</a></li><li><a href="#craft">Product craft</a></li><li><a href="#reviewer-path">Reviewer path</a></li><li><a href="#review-notes">Review notes</a></li><li><a href="#fix-plan">Proposed fixes</a></li></ol></nav>
       <main>
 
     <section class="section" id="scope">
@@ -347,7 +351,20 @@ main { min-width: 0; padding-bottom: 100px; counter-reset: report-section; }
         <div class="scope-item"><span class="scope-label">Native iOS root</span><span class="scope-value mono">ios</span></div>
         <div class="scope-item"><span class="scope-label">Targets</span><span class="scope-value">ParcelTrack, ParcelTrackWidget</span></div>
       </div>
-      <ul class="limitations"><li>No App Store Connect metadata export was supplied.</li><li>Subscription and notification paths were not executed on a release build.</li><li>The sample contains fictional project evidence for demonstration only.</li></ul>
+      <ul class="limitations"><li>No App Store Connect metadata export was supplied.</li><li>Subscription and notification paths were not executed on a release build.</li><li>The sample contains fictional project evidence for demonstration only.</li><li>No candidate archive or signed capabilities were supplied.</li><li>iOS 27 runtime, Duo adaptation and new App Store asset checks were not executed.</li></ul>
+    </section>
+
+
+    <section class="section" id="platform-review">
+      <div class="section-heading">
+        <p class="section-kicker">Platform readiness</p>
+        <h2>iOS 27 / iPadOS 27</h2>
+        <p class="section-intro">Runtime tests: not run. Reference checked: 2026-10-09 (bundled reference). Technology signals guide review; optional adoption is not a submission requirement.</p>
+      </div>
+      <div class="manual-grid"><p class="empty-state">No resolved build metadata supplied.</p></div>
+      <div class="manual-grid"><article class="manual-card"><span class="grade">manual</span><div class="row-copy"><h3>Widgets, controls, and Live Activities</h3><p>Test each extension&#x27;s signed configuration, App Intents, dynamic styling, privacy redaction, updates, deep links, and expired data.</p><p class="mono">ios/ParcelTrackWidget/ParcelTrackWidget.swift:1</p></div></article><article class="manual-card"><span class="grade">manual</span><div class="row-copy"><h3>StoreKit and subscriptions</h3><p>Verify StoreKit 2, offers, refunds, restore, assigned/revoked seats, bundles/suites eligibility and rollout, and monthly commitment disclosures.</p><p class="mono">src/purchases.ts:1</p></div></article></div>
+      <details class="technology-disclosure"><summary>Other technology checks (21)</summary><p>No source signal was detected for these areas. This does not establish absence or non-applicability.</p><ul class="limitations"><li>Foundation Models</li><li>Private Cloud Compute</li><li>Core AI and custom models</li><li>AI evaluations</li><li>Siri and App Intents</li><li>Spotlight and semantic search</li><li>SwiftUI and document interfaces</li><li>UIKit, scenes, and adaptive layout</li><li>Background Assets and background work</li><li>Music Understanding</li><li>Now Playing and media sharing</li><li>Camera, photos, RAW, and video</li><li>Games, Metal, and spatial content</li><li>PencilKit and PaperKit</li><li>HealthKit and HomeKit</li><li>Trust Insights</li><li>Identity, age assurance, and security</li><li>Networking and accessories</li><li>MetricKit and performance</li><li>WebKit and embedded web content</li><li>Tracking and ATT</li></ul></details><div class="print-only"><h3>Other technology checks — not detected</h3><p>No source signal was detected; absence or non-applicability is unverified.</p><p>Foundation Models; Private Cloud Compute; Core AI and custom models; AI evaluations; Siri and App Intents; Spotlight and semantic search; SwiftUI and document interfaces; UIKit, scenes, and adaptive layout; Background Assets and background work; Music Understanding; Now Playing and media sharing; Camera, photos, RAW, and video; Games, Metal, and spatial content; PencilKit and PaperKit; HealthKit and HomeKit; Trust Insights; Identity, age assurance, and security; Networking and accessories; MetricKit and performance; WebKit and embedded web content; Tracking and ATT</p></div>
+      <h3>Release channels and future dates</h3><div class="manual-grid"><article class="manual-card"><span class="grade">announced</span><div class="row-copy"><h3>iPhone Duo customer availability</h3><p>27.1 development support · October 23, 2026</p><p>Use available development tools; record physical-device evidence only when the device was actually tested.</p><p class="mono">https://developer.apple.com/news/?id=kkphp5qo</p></div></article><article class="manual-card"><span class="grade">future requirement</span><div class="row-copy"><h3>Duo screenshot submission requirement</h3><p>App Store submission · April 2027 (day not announced)</p><p>Prepare device/orientation assets and recheck the enforcement date; this is not an October 2026 blocker.</p><p class="mono">https://developer.apple.com/news/?id=kkphp5qo</p></div></article><article class="manual-card"><span class="grade">release candidate</span><div class="row-copy"><h3>Xcode 27.1 simulator and extension limits</h3><p>27.1 RC · Snapshot checked October 9, 2026</p><p>Distinguish simulator/Device Hub limitations from app failures and check the actual tool revision.</p><p class="mono">https://developer.apple.com/documentation/xcode-release-notes/xcode-27_1-release-notes</p></div></article><article class="manual-card"><span class="grade">beta</span><div class="row-copy"><h3>iOS/iPadOS 27.2 tracking changes</h3><p>27.2 beta 3 · Snapshot checked October 9, 2026</p><p>Verify the expanded ATT interface, annual EU re-prompt and renamed APIs against the actual beta SDK and applicable region; do not impose a current worldwide requirement.</p><p class="mono">https://developer.apple.com/documentation/ios-ipados-release-notes/ios-ipados-27_2-release-notes</p></div></article><article class="manual-card"><span class="grade">announced</span><div class="row-copy"><h3>Expanded subscription purchasing</h3><p>App Store commerce rollout · Volume: October 22, 2026; Groups: winter; Bundles/Suites: later in 2026</p><p>Check eligibility and actual customer availability separately from access to configuration; test StoreKit 2 ownership, seats, refunds and restore.</p><p class="mono">https://developer.apple.com/news/?id=likeohx4</p></div></article><article class="manual-card"><span class="grade">preview</span><div class="row-copy"><h3>Preview and future framework surfaces</h3><p>27 SDK release notes · Verify the owning feature&#x27;s release and region</p><p>Check AudioAccessoryKit, spatial APIs and other used preview capabilities individually. Resolved beta issues are not current app defects.</p><p class="mono">https://developer.apple.com/documentation/ios-ipados-release-notes/ios-ipados-27-release-notes</p></div></article></div>
     </section>
 
 
@@ -467,7 +484,7 @@ main { min-width: 0; padding-bottom: 100px; counter-reset: report-section; }
         <h2>Checks still open</h2>
         <p class="section-intro">These require a release build, device, reviewer account, or App Store Connect evidence.</p>
       </div>
-      <div class="manual-grid"><article class="manual-card"><span class="grade">ASR-MANUAL-PURCHASE</span><div class="row-copy"><h3>Subscription terms and restore path</h3><p>Static source cannot prove the storefront terms, localized price, and restored entitlement state shown by the release build.</p><p class="manual-verify"><strong>Verify:</strong> Use a sandbox account to purchase, cancel, reinstall, and restore on iPhone and iPad.</p></div></article><article class="manual-card"><span class="grade">ASR-MANUAL-PRIVACY</span><div class="row-copy"><h3>App Privacy answers match production data flows</h3><p>Repository signals do not establish every analytics payload, retention period, or linked-data choice in App Store Connect.</p><p class="manual-verify"><strong>Verify:</strong> Trace production analytics and crash payloads, then compare them with the submitted privacy answers.</p></div></article><article class="manual-card"><span class="grade">ASR-MANUAL-IPAD</span><div class="row-copy"><h3>Core tracking path works on iPad</h3><p>The repository does not prove layout, rotation, keyboard, or split-view behavior in the submitted build.</p><p class="manual-verify"><strong>Verify:</strong> Complete add, edit, notification, and delete flows on a supported iPad in portrait, landscape, and split view.</p></div></article></div>
+      <div class="manual-grid"><article class="manual-card"><span class="grade">ASR-MANUAL-DEPLOYMENT</span><div class="row-copy"><h3>Verify the upload toolchain and supported OS</h3><p>The fictional sample has no candidate archive. Authored settings cannot establish linked SDK, Xcode, or each extension deployment target.</p><p class="manual-verify"><strong>Verify:</strong> Inspect each executable bundle and CI log against current upload requirements and the selected toolchain support table.</p></div></article><article class="manual-card"><span class="grade">ASR-MANUAL-IOS27-ADAPTIVITY</span><div class="row-copy"><h3>Verify scenes and adaptive layouts</h3><p>Screens and source cannot establish fold/unfold, Mirroring, per-scene state or SDK-linked lifecycle behavior.</p><p class="manual-verify"><strong>Verify:</strong> Verify launch, restoration, live resizing, keyboard and task continuity on the candidate, separating simulation from hardware evidence.</p></div></article><article class="manual-card"><span class="grade">ASR-MANUAL-IOS27-DESIGN</span><div class="row-copy"><h3>Inspect materials and accessibility</h3><p>iOS 27 readability, icon appearance and assistive task completion are unverified.</p><p class="manual-verify"><strong>Verify:</strong> Test Dynamic Type, VoiceOver, contrast, transparency and motion preferences through the core tracking flow.</p></div></article><article class="manual-card"><span class="grade">ASR-MANUAL-IOS27-PRODUCT-PAGE</span><div class="row-copy"><h3>Review localized store assets and claims</h3><p>Headers, search assets and Asset Library approval states were not supplied.</p><p class="manual-verify"><strong>Verify:</strong> Inspect approved localized previews and feature/device claims. Treat April 2027 Duo screenshots as a future requirement.</p></div></article><article class="manual-card"><span class="grade">ASR-MANUAL-IOS27-RUNTIME</span><div class="row-copy"><h3>Run the iOS 27 compatibility matrix</h3><p>No iOS 27 runtime tests are included in this sample.</p><p class="manual-verify"><strong>Verify:</strong> Execute the candidate on the supported OS/device matrix and record actual results.</p></div></article><article class="manual-card"><span class="grade">ASR-MANUAL-IPAD</span><div class="row-copy"><h3>Core tracking path works on iPad</h3><p>The repository does not prove layout, rotation, keyboard, or split-view behavior in the submitted build.</p><p class="manual-verify"><strong>Verify:</strong> Complete add, edit, notification, and delete flows on a supported iPad in portrait, landscape, and split view.</p></div></article><article class="manual-card"><span class="grade">ASR-MANUAL-PRIVACY</span><div class="row-copy"><h3>App Privacy answers match production data flows</h3><p>Repository signals do not establish every analytics payload, retention period, or linked-data choice in App Store Connect.</p><p class="manual-verify"><strong>Verify:</strong> Trace production analytics and crash payloads, then compare them with the submitted privacy answers.</p></div></article><article class="manual-card"><span class="grade">ASR-MANUAL-PURCHASE</span><div class="row-copy"><h3>Subscription terms and restore path</h3><p>Static source cannot prove the storefront terms, localized price, and restored entitlement state shown by the release build.</p><p class="manual-verify"><strong>Verify:</strong> Use a sandbox account to purchase, cancel, reinstall, and restore on iPhone and iPad.</p></div></article></div>
     </section>
 
 
@@ -517,7 +534,7 @@ To test the widget, add ParcelTrack from the Home Screen widget gallery. The dem
 
       </main>
     </div>
-    <footer class="shell footer"><div class="footer-row"><span>Fictional sample based on public guidance. Approval is not guaranteed. Not affiliated with Apple.</span><span class="mono">Generated 2026-08-10T12:00:00Z</span></div></footer>
+    <footer class="shell footer"><div class="footer-row"><span>Fictional sample based on public guidance. Approval is not guaranteed. Not affiliated with Apple.</span><span class="mono">Generated 2026-10-09T12:00:00Z</span></div></footer>
     </div>
 
 </body>

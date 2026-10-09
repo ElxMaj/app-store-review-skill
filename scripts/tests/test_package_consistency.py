@@ -1,6 +1,8 @@
 import json
 import re
 import sys
+import subprocess
+import tempfile
 import unittest
 import zipfile
 from pathlib import Path
@@ -23,7 +25,7 @@ MANIFESTS = (
     ROOT / ".tessl-plugin" / "plugin.json",
     ROOT / "copilot-plugin" / ".github" / "plugin" / "plugin.json",
 )
-EXPECTED_VERSION = "1.2.2"
+EXPECTED_VERSION = "2.0.0"
 
 
 class PackageConsistencyTests(unittest.TestCase):
@@ -132,8 +134,8 @@ class PackageConsistencyTests(unittest.TestCase):
             (ROOT / "examples" / "parceltrack-report.json").read_text(encoding="utf-8")
         )
 
-        self.assertEqual("1.1", sample["schema_version"])
-        self.assertEqual("2026-08-10", sample["policy_verified_at"])
+        self.assertEqual("1.2", sample["schema_version"])
+        self.assertEqual("2026-10-09", sample["policy_verified_at"])
         self.assertEqual("NOT READY", sample["verdict"])
         self.assertEqual(
             {
@@ -152,8 +154,8 @@ class PackageConsistencyTests(unittest.TestCase):
         )
         rendered = (ROOT / "examples" / "parceltrack-report.html").read_text(encoding="utf-8")
         self.assertEqual(render_report_html(sample), rendered)
-        self.assertIn("Policy / 2026-08-10", rendered)
-        self.assertIn("Generated 2026-08-10T12:00:00Z", rendered)
+        self.assertIn("Bundled policy / 2026-10-09", rendered)
+        self.assertIn("Generated 2026-10-09T12:00:00Z", rendered)
         self.assertIn('<span class="verdict">NOT READY</span>', rendered)
 
     def test_report_contract_metadata_coverage_matches_the_example(self):
@@ -165,6 +167,39 @@ class PackageConsistencyTests(unittest.TestCase):
         self.assertIn('"fields": ["description", "subtitle"]', contract)
         self.assertIn('"pricing_rule_fields": ["subtitle"]', contract)
         self.assertNotIn('"verdict": "NEEDS_REVIEW"', contract)
+
+    def test_portable_and_copilot_scanners_run_from_an_unrelated_directory(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            temporary = Path(tmp)
+            project = temporary / "App"
+            project.mkdir()
+            (project / "app.json").write_text('{"expo":{"name":"Example","ios":{"bundleIdentifier":"com.example.app"}}}')
+            installed = temporary / "installed"
+            with zipfile.ZipFile(ARCHIVE) as archive:
+                for member in archive.namelist():
+                    if member.startswith(f"{PACKAGE_ROOT}/scripts/") and member.endswith(".py"):
+                        destination = installed / member
+                        destination.parent.mkdir(parents=True, exist_ok=True)
+                        destination.write_bytes(archive.read(member))
+            for script in [COPILOT_SKILL / "scripts/app_store_review_scan.py", installed / PACKAGE_ROOT / "scripts/app_store_review_scan.py"]:
+                with self.subTest(script=script):
+                    result = subprocess.run([sys.executable, str(script), str(project), "--format", "json"], cwd=temporary, capture_output=True, text=True, check=True)
+                    report = json.loads(result.stdout)
+                    self.assertEqual(EXPECTED_VERSION, report["scanner"]["version"])
+                    self.assertEqual("not_run", report["platform_review"]["runtime_test_status"])
+                    self.assertEqual(23, len(report["platform_review"]["technologies"]))
+
+    def test_ios27_scenarios_use_weighted_contract_and_real_bundle_metadata(self):
+        for name in ("ios27-platform-migration", "ios27-optional-adoption"):
+            with self.subTest(scenario=name):
+                base = ROOT / "evals" / name
+                criteria = json.loads((base / "criteria.json").read_text())
+                scenario = json.loads((base / "scenario.json").read_text())
+                self.assertEqual({"context", "type", "checklist"}, set(criteria))
+                self.assertEqual("weighted_checklist", criteria["type"])
+                self.assertEqual(100, sum(item["max_score"] for item in criteria["checklist"]))
+                self.assertEqual(["./inputs"], scenario["include"])
+                self.assertTrue(list((base / "inputs").glob("*.xcarchive/Products/Applications/*.app/Info.plist")))
 
     def test_metadata_rejection_eval_uses_established_weighted_schema(self):
         eval_root = ROOT / "evals" / "rejection-recovery-metadata"

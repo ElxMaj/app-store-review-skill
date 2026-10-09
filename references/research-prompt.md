@@ -1,6 +1,6 @@
 # Quarterly App Review evidence refresh
 
-Run this after each material App Review Guidelines update and at least quarterly. Replace `<LAST VERIFIED DATE>` with the current value from `references/evidence-policy.md`.
+Run this after each material App Review Guidelines update and at least quarterly. For platform guidance also refresh after point releases, device introductions and dated App Store Connect changes. Replace `<LAST VERIFIED DATE>` with the applicable source date from `references/evidence-policy.md` or `references/ios27-sources.md`.
 
 ## Research prompt
 
@@ -20,6 +20,10 @@ For official policy:
 - Record every changed clause, date, old meaning, new meaning, and direct URL.
 - Recheck submission SDKs, privacy manifests, age ratings, purchase rules by storefront, and App Store Connect fields.
 - Do not infer a new requirement from a product announcement or an unrelated Apple content-labeling program.
+- Recheck iOS/iPadOS 27 and Xcode release notes, 27.1 Duo support, 27.2 tracking changes, HIG, AI provider/capability terms, StoreKit rollout and new store assets. Record beta/RC/final titles and applicability.
+- Separate latest SDK from enforced upload/deployment floors. Keep launch-screen and scene-lifecycle linking conditions explicit.
+- Maintain announced dates separately: Duo customer availability, future screenshot enforcement, subscription seats and Bundles/Suites. Do not invent an exact day where Apple specifies only a month or season.
+- Search the release notes for every framework the app actually uses, including new/changed/deprecated APIs and known/resolved issues. Check source heuristics against native bridges and generated output.
 
 For rejection cases, search Apple Developer Forums, Reddit communities for iOS development, RevenueCat Community, Hacker News, and developer postmortems. Focus on:
 

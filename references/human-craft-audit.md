@@ -88,12 +88,17 @@ Do not recommend code obfuscation.
 
 Inspect screenshots or run the app. Do not grade from source filenames alone.
 
+For iOS/iPadOS 27, use [ios27-readiness.md](ios27-readiness.md) to distinguish
+system styling, linked-SDK changes, runtime behavior, device eligibility, and
+future Duo support. New API adoption alone does not justify a craft grade.
+
 ### Icon
 
 - recognizable at small size
 - distinct silhouette and purpose
 - no unreadable generated lettering or irrelevant stock symbol
 - works in the supported appearance modes
+- inspect the real composed icon at small sizes, in light/dark/tinted appearances and supported system treatments; a source export is not rendered evidence
 
 ### Typography and hierarchy
 
@@ -108,6 +113,7 @@ Inspect screenshots or run the app. Do not grade from source filenames alone.
 - translucency and materials preserve hierarchy
 - Reduce Transparency is respected where relevant
 - state is not communicated by color alone
+- refreshed system materials remain readable over changing content, with Increase Contrast and Reduce Transparency; brand identity appears in content and hierarchy as well as color
 
 ### Motion and haptics
 
@@ -126,6 +132,7 @@ Inspect screenshots or run the app. Do not grade from source filenames alone.
 - layout uses the available space intentionally
 - popovers, sheets, keyboard, rotation, split views, and pointer interactions behave coherently
 - the app does not look like a stretched phone screen unless the product justifies it
+- resizable iPhone scenes, Mirroring, external displays and Duo transitions preserve the task, selection and focus; grade simulated and physical-device evidence separately
 
 Evidence of craft is coherence, not decoration. Native controls can be distinctive when the product's content, hierarchy, and interaction are specific.
 
@@ -182,6 +189,9 @@ Inspect:
 - keywords and categories
 - privacy, support, and terms pages
 - What's New history
+- product-page headers, search-result assets, preview/poster frames, light/dark crops, localizations, fallback assets and their actual Asset Library approval status
+- AI provider, Siri, hardware, language, region and subscription claims match demonstrated availability; optional capabilities are not requirements
+- accessibility-label claims are supported by completed common tasks on each claimed device
 
 `DISTINCT` evidence:
 
